@@ -1,0 +1,21 @@
+# unity ignore dir
+/[Bb]in/
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+
+# build dir
+PC_*
+WebGL_*
+Test_*
+
+# vscode dir
+.vs
+
+
+# unity ignore file
+*.meta
+*.tmp
+ 
+# need include the meta of file
+!*.*.meta
