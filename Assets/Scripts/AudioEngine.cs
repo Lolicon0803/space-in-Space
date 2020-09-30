@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
 
-enum TouchStates
+public enum TouchStates
 {
     Touched,
     Disable,
@@ -19,7 +19,7 @@ public class AudioEngine: MonoBehaviour
     private double delay;
     private double bufferTime;
     private double time;
-    private TouchStates touchState;
+    public TouchStates touchState;
     AudioSource BGM;
     public void setBPM(int newBPM) {
         BPM = newBPM;
