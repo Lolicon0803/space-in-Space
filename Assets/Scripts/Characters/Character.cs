@@ -5,7 +5,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public Vector2 Coordinate { get; protected set; }
-    public float speed;
+    
 
     // Start is called before the first frame update
     protected virtual void Start()
