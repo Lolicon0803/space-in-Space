@@ -5,10 +5,10 @@ using UnityEngine;
 public enum PlayerDirection
 {
     None = 0,
-    Up = 1,
-    Down = 2,
-    Left = 4,
-    Right = 8,
+    Up = 0b_0001,
+    Down = 0b_0010,
+    Left = 0b_0100,
+    Right = 0b_1000,
 }
 
 public class PlayerMovement : MonoBehaviour
@@ -51,13 +51,15 @@ public class PlayerMovement : MonoBehaviour
         // Move left.
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            direction = (direction & 0 << (int)PlayerDirection.Right) | PlayerDirection.Left;
-            movePressed = true;
+            // direction = (direction & 0 << (int)PlayerDirection.Right) | PlayerDirection.Left;
+            direction = PlayerDirection.Left;
+             movePressed = true;
         }
         // Move right.
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            direction = (direction & 0 << (int)PlayerDirection.Left) | PlayerDirection.Right;
+            // direction = (direction & 0 << (int)PlayerDirection.Left) | PlayerDirection.Right;
+            direction = PlayerDirection.Right;
             movePressed = true;
         }
         //Stop.

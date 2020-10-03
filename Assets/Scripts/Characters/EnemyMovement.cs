@@ -7,9 +7,13 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField]
     private float bpm;
     public float Bpm { get { return bpm; } set { bpm = value; } }
+
+
+
     [SerializeField]
     private Vector2 pushPower;
     public Vector2 PushPower { get { return pushPower; } set { pushPower = value; } }
+
 
     public GameObject AttackDetecter;
 
@@ -26,6 +30,8 @@ public class EnemyMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         animator.SetFloat("IdleSpeedMultiplier", bpm / 60);
         StartCoroutine("Move");
+   
+        
     }
 
     // Update is called once per frame
@@ -41,7 +47,7 @@ public class EnemyMovement : MonoBehaviour
         while (true)
         {
             while (!direction)
-            {
+            {  
                 rigid.velocity = new Vector2(-moveFactor, 0);
                 if (transform.position.x <= xBound.x)
                     direction = !direction;
@@ -54,6 +60,8 @@ public class EnemyMovement : MonoBehaviour
                     direction = !direction;
                 yield return null;
             }
+
+
             yield return null;
         }
         //yield return new WaitForSeconds(bpm / 60.0f);
