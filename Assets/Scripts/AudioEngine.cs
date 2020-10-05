@@ -66,14 +66,17 @@ public class AudioEngine: MonoBehaviour
             case TouchStates.Enable:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
+                    //避免反覆檢測
                     touchState = TouchStates.Touched;
                     Debug.Log(getThisTouchDelayTime());
+                    /*
+                     * 應該會接在這
+                     */
                 }
                 sprite.color = new Color(1, 0, 0, 1);
                 break;
             case TouchStates.Touched:
                 sprite.color = new Color(0, 1, 0, 1);
-                //Debug.Log("Perfect");
                 break;
         }
 
