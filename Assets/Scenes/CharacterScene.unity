@@ -763,7 +763,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -789,7 +789,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -815,7 +815,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -841,7 +841,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -867,7 +867,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -893,7 +893,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1665717158}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -1082,7 +1082,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 1830178715}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -1103,9 +1103,9 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 12295c5e92485be439f7cb06eacda391, type: 2}
+  m_AngularDrag: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -1168,7 +1168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1830178715}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.29, y: -0.99, z: 0}
+  m_LocalPosition: {x: -0.29, y: -1.295647, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1705419432}
@@ -1188,8 +1188,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundDetecter: {fileID: 1705419431}
-  moveSpeed: 1
-  pushPower: 4
-  pushUpFactor: 1.25
-  pushHorizontalFactor: {x: 1.05, y: 0.5}
-  pushDiagonalFactor: {x: 1.05, y: 1.25}
+  waitForSlowDownTime: 2.5
+  moveTime: 5
+  pushPower: 1
+  pushVerticalFactor: {x: 1, y: 1}
+  pushHorizontalFactor: {x: 1, y: 1}
+  pushDiagonalFactor: {x: 1, y: 1}

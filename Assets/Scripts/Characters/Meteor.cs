@@ -12,8 +12,8 @@ public class Meteor : MonoBehaviour, ObjectBehavier
 {
     public Rigidbody2D rigid;
     public Vector2 first;
-   // private float X = 0;
-   // private float Y = 0;
+    // private float X = 0;
+    // private float Y = 0;
     public float goal;
 
 
@@ -34,7 +34,7 @@ public class Meteor : MonoBehaviour, ObjectBehavier
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Rigidbody2D>().AddForce(new Vector2(500,100));
+            collision.GetComponent<Rigidbody2D>().AddForce(new Vector2(500, 100));
             //collision.GetComponent<Rigidbody2D>().velocity = new Vector2(50, 10);
 
         }
@@ -43,25 +43,23 @@ public class Meteor : MonoBehaviour, ObjectBehavier
 
     public IEnumerator Move()
     {
-       // bool direction = false;
+        // bool direction = false;
         float moveFactor = 1;
-       
-            while (true)
-            {
-                rigid.velocity = new Vector2(moveFactor, 0);
-                if (rigid.position.x > goal) 
-                {
-                  //  direction = !direction;
-                    moveFactor = 1;
-                    rigid.position=first;
-               // Debug.Log(X);
-                //Debug.Log(Y);
-                 }
-                moveFactor += (float)0.01;
-              yield return null;
-            }
- 
 
+        while (true)
+        {
+            rigid.velocity = new Vector2(moveFactor, 0);
+            if (rigid.position.x > goal)
+            {
+                //  direction = !direction;
+                moveFactor = 1;
+                rigid.position = first;
+                // Debug.Log(X);
+                //Debug.Log(Y);
+            }
+            moveFactor += (float)0.01;
+            yield return null;
+        }
     }
 
- }
+}
