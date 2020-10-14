@@ -33,7 +33,7 @@ public class Meteor : MonoBehaviour, ObjectBehavier
     {
         if (collision.CompareTag("Player"))
         {
-            collision.GetComponent<Playermove3>().knock(5,10);
+            collision.GetComponent<PlayerMovement>().Knock(Vector2.left, 5,10);
         }
 
     }
