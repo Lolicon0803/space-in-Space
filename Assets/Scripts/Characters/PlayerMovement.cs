@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     private bool canInput = false;
     // 是否要滑行(懲罰)
     private bool isSlide = false;
+    // 黑洞中，優先度最高
+    private bool isBlackHole = false;
 
     private Vector2 oldMoveVector;
     private float distanceCoef = 0f;
@@ -224,9 +226,9 @@ public class PlayerMovement : MonoBehaviour
     /// <summary>
     /// Force knock player.
     /// </summary>
-    /// <param name="direction">推的方向.</param>
-    /// <param name="impactFactor">推動幾個單位.</param>
-    /// <param name="impactSpeed">推動速度.</param>
+    /// <param name="direction">推或吸的方向.</param>
+    /// <param name="impactFactor">推動或吸動幾個單位.</param>
+    /// <param name="impactSpeed">推動或吸動速度.</param>
     public void Knock(Vector2 direction, float impactFactor, float impactSpeed)
     {
         isSlide = false;
@@ -251,5 +253,61 @@ public class PlayerMovement : MonoBehaviour
             coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition));
         else
             coroutineMovePlayer = StartCoroutine(MovePlayer());
+    }
+
+    /// <summary>
+    /// For black hole. Perform fall into black hold effect and
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="speed"></param>
+    public void FallIntoBlackHole(BlackHole entrance, BlackHole exit)
+    {
+        if (isBlackHole)
+            return;
+        isBlackHole = true;
+        canInput = false;
+        isSlide = false;
+        // Stop all movement.
+        if (coroutineHitObstacle != null)
+            StopCoroutine(coroutineHitObstacle);
+        if (coroutineMovePlayer != null)
+            StopCoroutine(coroutineMovePlayer);
+
+        StartCoroutine(DisplayFallIntoBlackHole(entrance, exit));
+    }
+
+    private IEnumerator DisplayFallIntoBlackHole(BlackHole entrance, BlackHole exit)
+    {
+        movePoint.position = entrance.transform.position;
+        // Rotate and move.
+        while (Vector2.Distance(transform.position, movePoint.position) > entrance.impactSpeed * Time.deltaTime)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, entrance.impactSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.forward, entrance.impactRotationSpeed * Time.deltaTime);
+            yield return null;
+        }
+        // Rotate and become smaller then disappear.
+        while (transform.localScale.magnitude > 0.1f * Time.deltaTime)
+        {
+            transform.Rotate(Vector3.forward, entrance.impactRotationSpeed * Time.deltaTime);
+            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.zero, 1 * Time.deltaTime);
+            yield return null;
+        }
+        transform.localScale = Vector2.zero;
+        yield return new WaitForSeconds(0.5f);
+        movePoint.position = exit.transform.position;
+        transform.position = exit.transform.position;
+        yield return new WaitForSeconds(0.5f);
+        // Rotate, appear and become bigger.
+        while (transform.localScale.magnitude < Vector2.one.magnitude)
+        {
+            transform.Rotate(Vector3.forward, exit.pushRotationSpeed * Time.deltaTime);
+            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.one, 1 * Time.deltaTime);
+            yield return null;
+        }
+        transform.localScale = Vector2.one;
+        transform.rotation = Quaternion.identity;
+        isBlackHole = false;
+        Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
     }
 }
