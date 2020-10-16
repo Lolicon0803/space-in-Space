@@ -38,6 +38,9 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         
+
+
+
     }
 
     private IEnumerator Move()
