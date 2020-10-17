@@ -4,39 +4,21 @@ using UnityEngine;
 using Assets.Scripts.Characters;
 
 
-public enum Direction
-{
-    UP = 1,
-    DOWN = 2,
-    LEFT = 3,
-    RIGHT = 4
-}
-
-[System.Serializable]
-public class RouteData
-{
-    public Dictionary<int, Vector2> directionMap = new Dictionary<int, Vector2> {
-        {(int)Direction.UP, Vector2.up },
-        { (int)Direction.DOWN, Vector2.down },
-        { (int)Direction.LEFT, Vector2.left },
-        { (int)Direction.RIGHT, Vector2.right }
-        };
-
-    public Direction direction;
-    public float distance = 0f;
-}
-
-
-
-public class Meteor : MonoBehaviour, ObjectBehavier
+public class SpaceJunk : MonoBehaviour, ObjectBehavier
 {
     public Rigidbody2D rigid;
 
-    public RouteData[] route;
+    public GameData.RouteData[] route;
 
     public float knockDistance;
 
     public float knockPower;
+
+    public float moveSpeed;
+
+    public bool isGoStartPoint;
+
+    private Vector2 startPoint;
 
     // 下一個移動點
     private Vector2 movePoint;
@@ -47,6 +29,7 @@ public class Meteor : MonoBehaviour, ObjectBehavier
     void Awake()
     {
         transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
+        startPoint = transform.position;
     }
 
     // Start is called before the first frame update
@@ -66,7 +49,7 @@ public class Meteor : MonoBehaviour, ObjectBehavier
         if (collider.CompareTag("Player"))
         {
             collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
-
+            Debug.Log("撞到敵人 撞牆");
             // Call損血系統(bool 扣多少血)
         }
     }
@@ -76,9 +59,14 @@ public class Meteor : MonoBehaviour, ObjectBehavier
 
         while (true)
         {
-            foreach (RouteData item in route)
+            if (isGoStartPoint)
             {
-                moveDiraction = item.directionMap[(int)item.direction];
+                transform.position = startPoint;
+            }
+
+            foreach (GameData.RouteData item in route)
+            {
+                moveDiraction = GameData.Map.directionMap[(int)item.direction];
 
                 for (int i = 0; i < item.distance; i++)
                 {

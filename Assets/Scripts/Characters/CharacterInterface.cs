@@ -6,7 +6,9 @@ namespace Assets.Scripts.Characters
 {
     interface ObjectBehavier
     {
-      IEnumerator Move();
+        IEnumerator Move();
     }
- 
+
+
 }
+
