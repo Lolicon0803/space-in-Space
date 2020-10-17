@@ -60,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
     public event PlayerBehavierDelegate OnWalk;
     public event PlayerBehavierDelegate OnFireBag;
     public event PlayerBehavierDelegate OnFallIntoBlackHole;
+    public event PlayerBehavierDelegate OnMiss;
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +72,9 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!canInput)
+            return;
+
         if (Vector2.Distance(transform.position, movePoint.position) <= 0.2 * Time.deltaTime)
         {
             float maxDistanceCoef = 0;
@@ -154,6 +158,9 @@ public class PlayerMovement : MonoBehaviour
             // 自然滑行一格
             if (isSlide)
             {
+                if (OnMiss != null)
+                    OnMiss.Invoke();
+
                 speedCoef = Constants.slideSpeed;
                 isSlide = false;
 
@@ -286,35 +293,38 @@ public class PlayerMovement : MonoBehaviour
         if (!noObstacle)
             coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition));
         else
+        {
             coroutineMovePlayer = StartCoroutine(MovePlayer());
+            canInput = true;
+        }
     }
 
     /// <summary>
     /// For black hole. Perform fall into black hold effect and
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="speed"></param>
-    public void FallIntoBlackHole(BlackHole entrance, BlackHole exit)
+    /// <param name="entrance"></param>
+    public void FallIntoBlackHole(BlackHole entrance)
     {
         if (isBlackHole)
             return;
         isBlackHole = true;
         canInput = false;
         isSlide = false;
+        oldMoveVector = Vector2.zero;
         // Stop all movement.
         if (coroutineHitObstacle != null)
             StopCoroutine(coroutineHitObstacle);
         if (coroutineMovePlayer != null)
             StopCoroutine(coroutineMovePlayer);
 
-        StartCoroutine(DisplayFallIntoBlackHole(entrance, exit));
+        StartCoroutine(DisplayFallIntoBlackHole(entrance));
     }
 
-    private IEnumerator DisplayFallIntoBlackHole(BlackHole entrance, BlackHole exit)
+    private IEnumerator DisplayFallIntoBlackHole(BlackHole entrance)
     {
         if (OnFallIntoBlackHole != null)
             OnFallIntoBlackHole.Invoke();
-    
+
         movePoint.position = entrance.transform.position;
         // Rotate and move.
         while (Vector2.Distance(transform.position, movePoint.position) > entrance.impactSpeed * Time.deltaTime)
@@ -331,10 +341,59 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         transform.localScale = Vector2.zero;
-        movePoint.position = exit.transform.position;
-        transform.position = exit.transform.position;
+
+        // 死亡，回起點。
+
+        //movePoint.position = exit.transform.position;
+        //transform.position = exit.transform.position;
+        //// Wait.
+        //yield return StartCoroutine(entrance.WaitToExit());
+        //// Rotate, appear and become bigger.
+        //while (transform.localScale.magnitude < Vector2.one.magnitude)
+        //{
+        //    transform.Rotate(Vector3.forward, exit.pushRotationSpeed * Time.deltaTime);
+        //    transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.one, 1 * Time.deltaTime);
+        //    yield return null;
+        //}
+        //transform.localScale = Vector2.one;
+        //transform.rotation = Quaternion.identity;
+        //isBlackHole = false;
+        //Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
+    }
+
+    /// <summary>
+    /// Telepot player to exit.
+    /// </summary>
+    /// <param name="entrance">Entrance.</param>
+    /// <param name="exit">Where player to go.</param>
+    public void Teleport(Teleporter entrance, Teleporter exit)
+    {
+        canInput = false;
+        isSlide = false;
+        oldMoveVector = Vector2.zero;
+        StartCoroutine(DisplayTeleport(entrance, exit));
+    }
+
+    private IEnumerator DisplayTeleport(Teleporter entrance, Teleporter exit)
+    {
+        while (Vector2.Distance(transform.position, movePoint.position) >= speedCoef * Time.deltaTime)
+            yield return null;
+        if (coroutineHitObstacle != null)
+            yield return coroutineHitObstacle;
+        if (coroutineMovePlayer != null)
+            StopCoroutine(coroutineMovePlayer);
+        // Rotate and become smaller then disappear.
+        while (transform.localScale.magnitude > 0.1f * Time.deltaTime)
+        {
+            transform.Rotate(Vector3.forward, entrance.impactRotationSpeed * Time.deltaTime);
+            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.zero, 1 * Time.deltaTime);
+            yield return null;
+        }
+        transform.localScale = Vector2.zero;
         // Wait.
         yield return StartCoroutine(entrance.WaitToExit());
+        movePoint.position = exit.transform.position;
+        transform.position = exit.transform.position;
         // Rotate, appear and become bigger.
         while (transform.localScale.magnitude < Vector2.one.magnitude)
         {
@@ -344,7 +403,6 @@ public class PlayerMovement : MonoBehaviour
         }
         transform.localScale = Vector2.one;
         transform.rotation = Quaternion.identity;
-        isBlackHole = false;
         Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
     }
 }
