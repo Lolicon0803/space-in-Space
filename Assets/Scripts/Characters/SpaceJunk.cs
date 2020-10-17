@@ -4,7 +4,7 @@ using UnityEngine;
 using Assets.Scripts.Characters;
 
 
-public class SpaceJunk : MonoBehaviour, ObjectBehavier
+public class SpaceJunk : MonoBehaviour, IObjectBehavier
 {
     public Rigidbody2D rigid;
 

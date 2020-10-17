@@ -5,7 +5,7 @@ using Assets.Scripts.Characters;
 
 
 
-public class Anemy : MonoBehaviour, ObjectBehavier
+public class Anemy : MonoBehaviour, IObjectBehavier
 {
     public Rigidbody2D rigid;
 
@@ -88,7 +88,6 @@ public class Anemy : MonoBehaviour, ObjectBehavier
     {
         Bullet bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         bullet.Set(bulletData);
-        Debug.Log("CREATE");
     }
 
 }

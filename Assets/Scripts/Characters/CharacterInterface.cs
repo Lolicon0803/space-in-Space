@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Assets.Scripts.Characters
 {
-    interface ObjectBehavier
+    interface IObjectBehavier
     {
         IEnumerator Move();
     }
