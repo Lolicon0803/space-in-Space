@@ -11,7 +11,7 @@ Test_*
 
 # vscode dir
 .vs
-
+.vscode
 
 # unity ignore file
 *.meta

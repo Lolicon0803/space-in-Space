@@ -23,8 +23,6 @@ public class PlayerMovement : MonoBehaviour
     // 移動距離係數
     private readonly Dictionary<string, float> distanceDictionary = new Dictionary<string, float> { { "rocket", 2f }, { "move", 1f } };
 
-
-
     // 下一個移動點
     public Transform movePoint;
 
@@ -137,17 +135,17 @@ public class PlayerMovement : MonoBehaviour
                 //FIX:更改變數名 傳送參數改vector傳 
                 bool yes = GetNextMovePointDistance(0, Coordinate.y, distanceCoef, out maxDistanceCoef, ref obstaclePoint);
 
-                oldMoveVector =  oldMoveVector = Coordinate * maxDistanceCoef * Constants.moveUnit;
+                oldMoveVector = oldMoveVector = Coordinate * maxDistanceCoef * Constants.moveUnit;
                 movePoint.position += (Vector3)oldMoveVector;
 
-                
+
                 // 會撞牆，演示撞牆後回到正確位置
                 if (!yes)
                 {
                     if (coroutineHitObstacle != null)
                         StopCoroutine(coroutineHitObstacle);
                     coroutineHitObstacle = StartCoroutine(HitObstacle(new Vector2(0, Coordinate.y), obstaclePoint));
-                    oldMoveVector.y = distanceCoef * Constants.moveUnit * y;
+                    oldMoveVector.y = distanceCoef * Constants.moveUnit * Coordinate.y;
                 }
             }
             else
@@ -157,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
                 speedCoef = Constants.slideSpeed;
                 isSlide = false;
 
-                 //FIX:更改變數名 傳送參數改vector傳 
+                //FIX:更改變數名 傳送參數改vector傳 
                 bool yes = GetNextMovePointDistance(oldMoveVector.x / 2, oldMoveVector.y / 2, Constants.moveUnit, out maxDistanceCoef, ref obstaclePoint, true);
                 if (yes)
                     movePoint.position += (Vector3)oldMoveVector.normalized * Constants.moveUnit * maxDistanceCoef;
