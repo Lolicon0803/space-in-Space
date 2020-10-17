@@ -1,0 +1,41 @@
+● PlayerMovement.cs
+
+* Knock(Vector2 direction, float impactFactor, float impactSpeed)
+	將玩家從現在位置往direction方向以impactSpeed的速度推impactFactor個單位。
+
+	--Parameter
+		direction		: 要推的方向。
+		impactFactor	: 要推動幾個單位。
+		impactSpeed		: 要推多快。
+
+	--Exapmple
+		// 過濾層，只要玩家。
+		LayerMask mask = LayerMask.GetMask("Player");
+		// 方形射線檢測
+		RaycastHit2D hit = Physics2D.BoxCast(transform.position, impactUnit * Vector2.one, 0, Vector2.zero, 0, mask);
+		if (hit.collider != null)
+			hit.collider.GetComponent<PlayerMovement>().Knock(Vector2.left, 5, 5);
+
+	// 執行結果
+	假設玩家在世界座標(0, 0)，如果一格是世界座標1，則推成功且無撞牆則他會跑到(-5, 0)。
+-------------------------------------------------------------------------------------------------------------
+● BlackHole.cs
+
+* 參數
+	Is Entrance				: 是否是可以作為入口的黑洞。
+	Exit					: 設定另一個黑洞為出口。
+	Impact Speed			: 吸人時會吸多快。
+	Impact Unit				: 黑洞吸人範圍。
+	Send Time				: 吸人後過多久人才從另一個黑洞出現
+	Is Exit					: 目前只有debug作用，可以在Scene中看到白線表示推人後推多遠。
+	Push Unit				: 推人推多少個單位。
+	Push Speed				: 推人推多快。
+	Impact Rotation Speed	: 作為入口時，人會在黑洞中轉多快。
+	Push Rotation Speed		: 作為出口時，人會在黑洞中轉多快。
+
+* 使用方式
+	在場景中放入兩個黑洞，勾選IsEntranec後，這個黑洞可以吸玩家，同時必須設定出口、吸收速度、作用範圍、
+	與傳送到另一個黑洞的時間。Scene中可以看見藍色框框即為黑洞影響範圍。
+	做為出口的黑洞可以勾選IsExit(目前沒特別作用)，在Scene中可以看見一條紅線連接入口與出口，另一條白線表
+	示出口會把玩家推到哪裡。
+
