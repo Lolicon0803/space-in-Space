@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using UnityEngine.Events;
 
 public enum TouchStates
 {
@@ -14,6 +15,12 @@ public enum TouchStates
     Disable,
     Enable,
     Reset
+}
+public enum TempoType
+{
+    Quarter,
+    Half,
+    Whole
 }
 public class AudioEngine: MonoBehaviour
 {
@@ -43,6 +50,7 @@ public class AudioEngine: MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
+    private Dictionary<TempoType, UnityAction> actionDictionary;
     public AudioSource BGM;
  
     // Start is called before the first frame update
@@ -59,10 +67,23 @@ public class AudioEngine: MonoBehaviour
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
-        InvokeRepeating("timer", timeStep, timeStep);
+        InvokeRepeatInit();
         touchState = TouchStates.Disable;
+        foreach (TempoType type in Enum.GetValues(typeof(TempoType)))
+        {
+            actionDictionary.Add(type, ()=> {});
+        }
     }
-    void timer() {
+    void InvokeRepeatInit()
+    {
+        CancelInvoke();
+        InvokeRepeating("Timer", 0, timeStep);
+        InvokeRepeating("WholeTimer", 0, (float)(MsPB / 1000));
+        InvokeRepeating("HalfTimer", 0, (float)(MsPB / 1000 / 2));
+        InvokeRepeating("QuarterTimer", 0, (float)(MsPB / 1000 / 4));
+    }
+    void Timer()
+    {
         this.time += 0.01 * 1000;
         #region 時間更改State
         if (IsEnableTouchTime())
@@ -91,6 +112,18 @@ public class AudioEngine: MonoBehaviour
             touchState = TouchStates.Reset;
         }
         #endregion
+    }
+    void WholeTimer()
+    {
+        actionDictionary[TempoType.Whole]();
+    }
+    void HalfTimer()
+    {
+        actionDictionary[TempoType.Half]();
+    }
+    void QuarterTimer()
+    {
+        actionDictionary[TempoType.Quarter]();
     }
     // Update is called once per frame
     void Update()
@@ -207,6 +240,7 @@ public class AudioEngine: MonoBehaviour
         BGM.Stop();
         BGM.Play();
         time = MsPB;
+        InvokeRepeatInit();
     }
     public void ResetAdjustArgs()
     {
@@ -221,5 +255,10 @@ public class AudioEngine: MonoBehaviour
         {
             delay = adjustDelay;
         }
+    }
+    // 按照TempoType覆寫Action，請加所有Action加在一起再傳入。
+    public void SetListener(UnityAction newAction, TempoType tempoType)
+    {
+        actionDictionary[tempoType]=newAction;
     }
 }
