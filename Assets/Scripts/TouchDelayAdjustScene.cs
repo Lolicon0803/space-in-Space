@@ -1,32 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class TouchDelayAdjustScene : MonoBehaviour
 {
-    AudioEngine audioEngine;
-    Text avgDelayText;
-    Text lastTouchDelayText;
-    Text currentDelayText;
-    Text isSuccessText;
+    public AudioEngine audioEngine;
+    public Text avgDelayText;
+    public Text lastTouchDelayText;
+    public Text currentDelayText;
+    public Text setDelayText;
+    public Text isSuccessText;
+    public Button resetButton;
+    public Button checkButton;
     // Start is called before the first frame update
     void Start()
     {
-        audioEngine = this.GetComponentInChildren<AudioEngine>();
-        avgDelayText = transform.Find("Canvas/AvgDelayText").GetComponent<Text>();
-        lastTouchDelayText = transform.Find("Canvas/LastTouchDelayText").GetComponent<Text>();
-        currentDelayText = transform.Find("Canvas/CurrentDelayText").GetComponent<Text>();
-        isSuccessText = transform.Find("Canvas/IsSuccessText").GetComponent<Text>();
+        audioEngine.ResetAdjustArgs();
+        resetButton.onClick.AddListener(ResetEvent);
+        resetButton.onClick.AddListener(selectNull);
+        checkButton.onClick.AddListener(audioEngine.AdjustDelay);
+        checkButton.onClick.AddListener(selectNull);
     }
 
     // Update is called once per frame
     void Update()
     {
+        audioEngine.improveDelayMode = true;
         avgDelayText.text = "Avg Touch Delay: " + audioEngine.GetAvgTouchDelayTime().ToString();
         lastTouchDelayText.text = "Last Touch Delay: " + audioEngine.GetLastTouchDelayTime().ToString();
         currentDelayText.text = "Current Delay: " + audioEngine.GetCurrentDelayTime().ToString();
+        setDelayText.text = "Set Delay: " + audioEngine.GetStaticDelay().ToString();
         TouchStates touchState = audioEngine.touchState;
-        audioEngine.improveDelayMode = true;
         switch (touchState)
         {
             case TouchStates.Reset:
@@ -49,5 +54,16 @@ public class TouchDelayAdjustScene : MonoBehaviour
                 isSuccessText.text = "Failed";
                 break;
         }
+    }
+    void ResetEvent()
+    {
+        avgDelayText.text = "Avg Touch Delay: 0";
+        lastTouchDelayText.text = "Last Touch Delay: 0";
+        currentDelayText.text = "Current Delay: 0";
+        audioEngine.ResetAdjustArgs();
+    }
+    void selectNull()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }
