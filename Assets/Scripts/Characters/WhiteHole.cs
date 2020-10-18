@@ -12,6 +12,11 @@ public class WhiteHole : MonoBehaviour
     // 推人時的速度
     public float pushSpeed;
 
+    private void Start()
+    {
+        GetComponent<BoxCollider2D>().size = new Vector2(radius, radius);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))

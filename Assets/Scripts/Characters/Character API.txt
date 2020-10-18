@@ -1,4 +1,7 @@
+●●● C# API
+
 ● PlayerMovement.cs
+	用來處理跟玩家移動相關的行為。
 
 * Knock(Vector2 direction, float impactFactor, float impactSpeed)
 	將玩家從現在位置往direction方向以impactSpeed的速度推impactFactor個單位。
@@ -19,23 +22,115 @@
 	// 執行結果
 	假設玩家在世界座標(0, 0)，如果一格是世界座標1，則推成功且無撞牆則他會跑到(-5, 0)。
 -------------------------------------------------------------------------------------------------------------
-● BlackHole.cs
+
+● GameData.cs
+	定義一些封裝起來的class。
+
+	* public enum Direction
+		UP = 1,
+		DOWN = 2,
+		LEFT = 3,
+		RIGHT = 4
+
+	* public class RouteData
+		-- 成員
+			public Direction direction	: 表示方向。
+			public float distance		: 該方向要移動幾個單位。
+
+	* public class BulletData
+		-- 成員
+			public float speed			: 子彈移動速度。
+			public Direction direction	: 移動方向。
+			public float distance		: 最多移動幾個單位。
+
+	* class Map
+		-- 成員
+			static public Dictionary<int, Vector2> directionMap
+			 (int)Direction.UP, Vector2.up },
+			 (int)Direction.DOWN, Vector2.down },
+			 (int)Direction.LEFT, Vector2.left },
+			 (int)Direction.RIGHT, Vector2.right }
+-------------------------------------------------------------------------------------------------------------
+
+=============================================================================================================
+●●● Prefab API
+
+● Teleporter 傳送門
+	當玩家移動結束，停在傳送點上方時，將玩家傳送至出口位置。
 
 * 參數
-	Is Entrance				: 是否是可以作為入口的黑洞。
-	Exit					: 設定另一個黑洞為出口。
-	Impact Speed			: 吸人時會吸多快。
-	Impact Unit				: 黑洞吸人範圍。
-	Send Time				: 吸人後過多久人才從另一個黑洞出現
+	Is Entrance				: 是否是可以作為入口的傳送點。
+	Exit					: 設定另一個傳送點為出口。
+	Send Time				: 吸人後過多久人才從另一個傳送點出現
 	Is Exit					: 目前只有debug作用，可以在Scene中看到白線表示推人後推多遠。
-	Push Unit				: 推人推多少個單位。
-	Push Speed				: 推人推多快。
-	Impact Rotation Speed	: 作為入口時，人會在黑洞中轉多快。
-	Push Rotation Speed		: 作為出口時，人會在黑洞中轉多快。
+	Push Unit				: 出來後推人推多少個單位。
+	Push Speed				: 出來後推人推多快。
+	Impact Rotation Speed	: 作為入口時，人會在傳送點中轉多快。
+	Push Rotation Speed		: 作為出口時，人會在傳送點中轉多快。
 
 * 使用方式
-	在場景中放入兩個黑洞，勾選IsEntranec後，這個黑洞可以吸玩家，同時必須設定出口、吸收速度、作用範圍、
-	與傳送到另一個黑洞的時間。Scene中可以看見藍色框框即為黑洞影響範圍。
-	做為出口的黑洞可以勾選IsExit(目前沒特別作用)，在Scene中可以看見一條紅線連接入口與出口，另一條白線表
+	將Prefabs/Telepoter直接拉到場景，就會有兩個傳送點，入口跟出口。勾選IsEntranec後，
+	表示這個傳送點可以吸玩家。在Scene中可以看見一條綠線連接入口與出口，另一條白線表
 	示出口會把玩家推到哪裡。
+-------------------------------------------------------------------------------------------------------------
 
+● BlackHole 黑洞
+	具有一個作用範圍的物件，當玩家碰觸到的瞬間會被強制吸入，遊戲結束(回某個起點)。
+
+* 參數
+    isEntrance				: 勾選後，這個黑洞會吸人。
+    impactSpeed				: 玩家會被吸多快。
+    impactUnit				: 黑洞範圍(半徑)。
+    impactRotationSpeed		: 玩家被吸會轉多快。
+
+* 使用方式
+	將Prefabs/BlackHole直接拉到場景，勾選IsEntranec後，表示這個黑洞可以吸玩家。在Scene
+	中可以看見藍色框框表示黑洞範圍。
+-------------------------------------------------------------------------------------------------------------
+
+● WhiteHole 白洞
+	具有一個作用範圍的物件，當玩家碰觸到的瞬間會被強制推開。
+
+* 參數
+    radius					: 範圍。
+    pushUnit				: 推人推多遠。
+    pushSpeed				: 推人推多快。
+
+* 使用方式
+	將Prefabs/WhiteHole直接拉到場景。在Scene中可以看見青色框框表示白洞範圍。
+-------------------------------------------------------------------------------------------------------------
+
+ ● Anemy 敵人
+	可以自行移動與射出子彈的敵人。
+
+ * 參數
+	Route					: 移動路徑
+		Size				: 移動陣列(有幾個移動步驟，會循環播放) [array]
+		Direction			: 移動方向 [enum]
+		Distance			: 移動距離 [int]
+	Bullet Data				: 該敵人射出的子彈資料
+		Speed				: 子彈速度(目前被假節拍限制住，一拍幾格) [float]
+		Direction			: 移動方向 [int]
+		Distance			: 移動距離 [int]
+-------------------------------------------------------------------------------------------------------------
+
+● RazerMachine 雷射機
+	會發出雷射的物件。
+
+* 參數
+	Razer Distance			: 雷射距離 [int]
+	Razer Direction			: 雷射方向(360度角) [int]
+	Razer Tempo				: 雷射節奏(雷射開關的循環節奏) [bool]
+ 
+ -------------------------------------------------------------------------------------------------------------
+ 
+ ● SapceJunk 太空垃圾
+	會移動與推人的障礙物。
+
+ * 參數
+	Route					: 移動路徑
+		Size				: 移動陣列(有幾個移動步驟，會循環播放) [array]
+		Direction			: 移動方向 [enum]
+		Distance			: 移動距離 [int]
+	knockDistance			: 推動玩家多少距離
+    knockPower				: 推動力(速度)
