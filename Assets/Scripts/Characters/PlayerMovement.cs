@@ -6,13 +6,6 @@ static class Constants
 {
     //世界座標移動單位
     public const float moveUnit = 1.0f;
-
-    // 移動速度係數
-    public const float moveSpeed = 5f;
-
-    // 滑行速度系數
-    public const float slideSpeed = 1f;
-
 }
 
 public class PlayerMovement : MonoBehaviour
@@ -21,6 +14,12 @@ public class PlayerMovement : MonoBehaviour
 
     // 移動距離係數
     private readonly Dictionary<string, float> distanceDictionary = new Dictionary<string, float> { { "rocket", 2f }, { "move", 1f } };
+
+    // 移動速度係數
+    public float moveSpeed = 5f;
+
+    // 滑行速度系數
+    public float slideSpeed = 1f;
 
     // 下一個移動點
     public Transform movePoint;
@@ -47,7 +46,7 @@ public class PlayerMovement : MonoBehaviour
         private set { oldMoveVector = value; }
     }
     private float distanceCoef = 0f;
-    private float speedCoef = 1f;
+    public float SpeedCoef { get; private set; }
 
     private Coroutine coroutineHitObstacle;
     private Coroutine coroutineMovePlayer;
@@ -56,15 +55,17 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask obstacleLayers;
 
     // All player behavier.
-    public delegate void PlayerBehavierDelegate();
+    public delegate void PlayerBehavierDelegate(Vector2 direction);
     public event PlayerBehavierDelegate OnWalk;
     public event PlayerBehavierDelegate OnFireBag;
-    public event PlayerBehavierDelegate OnFallIntoBlackHole;
-    public event PlayerBehavierDelegate OnMiss;
+    public delegate void PlayerDamagedDelegate();
+    public event PlayerDamagedDelegate OnFallIntoBlackHole;
+    public event PlayerDamagedDelegate OnMiss;
 
     // Start is called before the first frame update
     void Start()
     {
+        SpeedCoef = 1.0f;
         movePoint.parent = null;
         coroutineMovePlayer = StartCoroutine(MovePlayer());
     }
@@ -94,22 +95,16 @@ public class PlayerMovement : MonoBehaviour
             // 水平
             if (direction.x != 0)
             {
-                speedCoef = Constants.moveSpeed;
+                SpeedCoef = moveSpeed;
 
                 // 是否按下空白鍵 Fix me:操控反直覺
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    if (OnFireBag != null)
-                        OnFireBag.Invoke();
-
                     distanceCoef = distanceDictionary["rocket"];
                     isSlide = true;
                 }
                 else
                 {
-                    if (OnWalk != null)
-                        OnWalk.Invoke();
-
                     distanceCoef = distanceDictionary["move"];
                     isSlide = false;
                 }
@@ -118,6 +113,17 @@ public class PlayerMovement : MonoBehaviour
 
                 oldMoveVector = direction * maxDistanceCoef * Constants.moveUnit;
                 movePoint.position += (Vector3)oldMoveVector;
+
+                if (distanceCoef == distanceDictionary["move"] && maxDistanceCoef != 0)
+                {
+                    if (OnWalk != null)
+                        OnWalk.Invoke(direction);
+                }
+                else if (distanceCoef == distanceDictionary["rocket"])
+                {
+                    if (OnFireBag != null)
+                        OnFireBag.Invoke(direction);
+                }
 
                 // 會撞牆，演示撞牆後回到正確位置
                 if (!noObstacle)
@@ -132,18 +138,17 @@ public class PlayerMovement : MonoBehaviour
             // 垂直 
             if (direction.y != 0)
             {
-                speedCoef = Constants.moveSpeed;
+                SpeedCoef = moveSpeed;
                 distanceCoef = distanceDictionary["rocket"];
                 isSlide = true;
-
-                if (OnFireBag != null)
-                    OnFireBag.Invoke();
 
                 bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxDistanceCoef, ref obstaclePoint);
 
                 oldMoveVector = oldMoveVector = direction * maxDistanceCoef * Constants.moveUnit;
                 movePoint.position += (Vector3)oldMoveVector;
 
+                if (OnFireBag != null)
+                    OnFireBag.Invoke(direction);
 
                 // 會撞牆，演示撞牆後回到正確位置
                 if (!noObstacle)
@@ -161,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
                 if (OnMiss != null)
                     OnMiss.Invoke();
 
-                speedCoef = Constants.slideSpeed;
+                SpeedCoef = slideSpeed;
                 isSlide = false;
 
                 bool yes = GetNextMovePointDistance(oldMoveVector.normalized, Constants.moveUnit, out maxDistanceCoef, ref obstaclePoint, true);
@@ -186,11 +191,10 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speedCoef * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, SpeedCoef * Time.deltaTime);
             yield return null;
         }
     }
-
 
     /// <summary>
     /// Show hit obstacle and return to original grid.
@@ -211,14 +215,14 @@ public class PlayerMovement : MonoBehaviour
         // Hit obstacle.
         while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
         {
-            Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, speedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+            Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
             transform.position += (Vector3)delta;
             yield return null;
         }
         // Bounce.
         while (Vector2.Distance(transform.position, movePoint.position) > 0.02f * Time.deltaTime)
         {
-            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, speedCoef * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, SpeedCoef * Time.deltaTime);
             yield return null;
         }
         coroutineMovePlayer = StartCoroutine(MovePlayer());
@@ -283,12 +287,13 @@ public class PlayerMovement : MonoBehaviour
         float d = Mathf.Round(Vector2.Distance(transform.position, movePoint.position) / Constants.moveUnit);
         Vector2 delta = (transform.position - movePoint.position).normalized;
         movePoint.position = (Vector2)movePoint.position + delta * d;
+        movePoint.position = new Vector2(Mathf.Floor(movePoint.position.x) + 0.5f, Mathf.Floor(movePoint.position.y) + 0.5f);
         Vector2 obstaclePosition = Vector2.zero;
         bool noObstacle = GetNextMovePointDistance(direction, impactFactor, out float maxDistance, ref obstaclePosition, true);
         movePoint.position += (Vector3)(maxDistance * Constants.moveUnit * direction);
         // No punishment anymore.
         oldMoveVector = Vector2.zero;
-        speedCoef = impactSpeed;
+        SpeedCoef = impactSpeed;
         // 會撞牆，演示撞牆後回到正確位置
         if (!noObstacle)
             coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition));
@@ -376,7 +381,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator DisplayTeleport(Teleporter entrance, Teleporter exit)
     {
-        while (Vector2.Distance(transform.position, movePoint.position) >= speedCoef * Time.deltaTime)
+        while (Vector2.Distance(transform.position, movePoint.position) >= SpeedCoef * Time.deltaTime)
             yield return null;
         if (coroutineHitObstacle != null)
             yield return coroutineHitObstacle;

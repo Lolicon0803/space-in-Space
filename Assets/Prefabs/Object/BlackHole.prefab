@@ -96,6 +96,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isEntrance: 1
   impactSpeed: 5
-  impactUnit: 4
+  impactUnit: 3.5
   sendTime: 5
   impactRotationSpeed: 4320

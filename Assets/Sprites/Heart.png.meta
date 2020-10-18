@@ -1,19 +1,16 @@
 fileFormatVersion: 2
-guid: 0e0d22e58b221784b9e1fabca649e80c
+guid: 6733aaa2c93d89e40a6eee27362e5e47
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7686620788146746789
-    second: NewProtagonistWalk_0
+      213: 4606908045521496030
+    second: Heart_0
   - first:
-      213: 6184151089799973921
-    second: NewProtagonistWalk_1
+      213: -4195582761621981391
+    second: Heart_1
   - first:
-      213: 3109249280578419767
-    second: NewProtagonistWalk_2
-  - first:
-      213: -1599018277597468195
-    second: NewProtagonistWalk_3
+      213: 516283494600122218
+    second: Heart_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -57,7 +54,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 375
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -111,85 +108,64 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: NewProtagonistWalk_0
+      name: Heart_0
       rect:
         serializedVersion: 2
-        x: 87
-        y: 648
-        width: 344
-        height: 256
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 0
+        y: 0
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5a5be90a1ec5caa60800000000000000
-      internalID: 7686620788146746789
+      spriteID: ed7a23e75760fef30800000000000000
+      internalID: 4606908045521496030
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NewProtagonistWalk_1
+      name: Heart_1
       rect:
         serializedVersion: 2
-        x: 608
-        y: 648
-        width: 344
-        height: 256
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 50
+        y: 0
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 12c4fd0b6a482d550800000000000000
-      internalID: 6184151089799973921
+      spriteID: 137f4cb15bb46c5c0800000000000000
+      internalID: -4195582761621981391
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NewProtagonistWalk_2
+      name: Heart_2
       rect:
         serializedVersion: 2
-        x: 88
-        y: 128
-        width: 344
-        height: 256
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
+        x: 100
+        y: 0
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 73cf3074fb5462b20800000000000000
-      internalID: 3109249280578419767
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: NewProtagonistWalk_3
-      rect:
-        serializedVersion: 2
-        x: 608
-        y: 128
-        width: 344
-        height: 256
-      alignment: 9
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd9227639552fc9e0800000000000000
-      internalID: -1599018277597468195
+      spriteID: a6f990b5a153a2700800000000000000
+      internalID: 516283494600122218
       vertices: []
       indices: 
       edges: []

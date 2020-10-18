@@ -29,12 +29,12 @@ public class PlayerAudioManager : MonoBehaviour
         audioSource.PlayOneShot(fallIntoBlackHole);
     }
 
-    private void PlayFireBagAudio()
+    private void PlayFireBagAudio(Vector2 direction)
     {
         audioSource.PlayOneShot(fireBag);
     }
 
-    private void PlayWalkAudio()
+    private void PlayWalkAudio(Vector2 direction)
     {
         audioSource.PlayOneShot(walk);
     }
