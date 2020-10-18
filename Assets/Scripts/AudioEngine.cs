@@ -17,9 +17,11 @@ public enum TouchStates
 }
 public class AudioEngine: MonoBehaviour
 {
-    SpriteRenderer sprite;
+    public SpriteRenderer sprite;
     public bool improveDelayMode;
     public TouchStates touchState;
+    public static double delay;
+    private double adjustDelay;
     private double bpm;
     public double BPM
     {
@@ -32,7 +34,6 @@ public class AudioEngine: MonoBehaviour
     }
     // mini second per beat 
     private double MsPB;
-    private double delay;
     private double bufferTime;
     private double lastTouchDelayTime;
     private List<double> touchDelayTimes;
@@ -42,20 +43,19 @@ public class AudioEngine: MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
-    AudioSource BGM;
+    public AudioSource BGM;
  
     // Start is called before the first frame update
     void Start()
     {
         improveDelayMode = false;
-        sprite = GetComponent<SpriteRenderer>();
         BPM = 120;
-        delay = 0;
+        //delay = 0;
+        adjustDelay = 0;
         lastTouchDelayTime = 0;
         touchDelayTimes = new List<double>();
         bufferTime = MsPB / 8;
         SetResetArgs(0.4, 0.6);
-        BGM = this.GetComponentInChildren<AudioSource>();
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
@@ -159,7 +159,7 @@ public class AudioEngine: MonoBehaviour
         {
             double newDelay = GetAvgTouchDelayTime();
             Debug.Log(newDelay);
-            delay = newDelay;
+            adjustDelay = newDelay;
         }
     }
 
@@ -170,12 +170,12 @@ public class AudioEngine: MonoBehaviour
         this.resetEndTime = MsPB * resetEndTime;
     }
     private bool IsEnableTouchTime() {
-        double touchTime = ((time - delay) % MsPB) ;
+        double touchTime = ((time - GetDelay()) % MsPB) ;
         return touchTime <= bufferTime || touchTime >= (MsPB - bufferTime);
     }
     private bool IsResetTime()
     {
-        double currentTime = ((time - delay) % MsPB);
+        double currentTime = ((time - GetDelay()) % MsPB);
         return currentTime <= resetEndTime && currentTime >= resetStartTime;
     }
     private double GetThisTouchDelayTime() {
@@ -187,11 +187,39 @@ public class AudioEngine: MonoBehaviour
     }
     public double GetCurrentDelayTime()
     {
-        return delay;
+        return GetDelay();
     }
     public double GetAvgTouchDelayTime()
     {
         if (touchDelayTimes.Count == 0) return 0;
         return touchDelayTimes.Average();
+    }
+    private double GetDelay()
+    {
+        return (improveDelayMode)?adjustDelay:delay;
+    }
+    public double GetStaticDelay()
+    {
+        return delay;
+    }
+    public void BGMReStart()
+    {
+        BGM.Stop();
+        BGM.Play();
+        time = MsPB;
+    }
+    public void ResetAdjustArgs()
+    {
+        adjustDelay = 0;
+        lastTouchDelayTime = 0;
+        touchDelayTimes = new List<double>();
+        BGMReStart();
+    }
+    public void AdjustDelay()
+    {
+        if (improveDelayMode)
+        {
+            delay = adjustDelay;
+        }
     }
 }
