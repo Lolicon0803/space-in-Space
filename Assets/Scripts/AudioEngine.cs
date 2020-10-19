@@ -16,11 +16,12 @@ public enum TouchStates
     Enable,
     Reset
 }
-public enum TempoType
+public enum TempoActionType
 {
     Quarter,
     Half,
-    Whole
+    Whole,
+    TimeOut,
 }
 public class AudioEngine: MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class AudioEngine: MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
-    private Dictionary<TempoType, UnityAction> actionDictionary;
+    private Dictionary<TempoActionType, UnityAction> tempoActionDictionary;
     public AudioSource BGM;
  
     // Start is called before the first frame update
@@ -67,12 +68,16 @@ public class AudioEngine: MonoBehaviour
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
+        tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
+        foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
+        {
+            tempoActionDictionary.Add(type, ()=> { Debug.Log(type.ToString()); });
+        }
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
-        foreach (TempoType type in Enum.GetValues(typeof(TempoType)))
-        {
-            actionDictionary.Add(type, ()=> {});
-        }
+    }
+    void Awake()
+    {
     }
     void InvokeRepeatInit()
     {
@@ -100,6 +105,7 @@ public class AudioEngine: MonoBehaviour
             if (touchState == TouchStates.Enable)
             {
                 touchState = TouchStates.TimeOut;
+                tempoActionDictionary[TempoActionType.TimeOut]();
             }
             // reset結束
             if (touchState == TouchStates.Reset && !IsResetTime())
@@ -115,47 +121,19 @@ public class AudioEngine: MonoBehaviour
     }
     void WholeTimer()
     {
-        actionDictionary[TempoType.Whole]();
+        tempoActionDictionary[TempoActionType.Whole]();
     }
     void HalfTimer()
     {
-        actionDictionary[TempoType.Half]();
+        tempoActionDictionary[TempoActionType.Half]();
     }
     void QuarterTimer()
     {
-        actionDictionary[TempoType.Quarter]();
+        tempoActionDictionary[TempoActionType.Quarter]();
     }
     // Update is called once per frame
     void Update()
     {
-        #region 打擊更改State
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            switch (touchState)
-            {
-                case TouchStates.Disable:
-                        touchState = TouchStates.TouchFailed;
-                    break;
-                case TouchStates.Enable:
-                        touchState = TouchStates.Touched;
-                    break;
-                case TouchStates.TimeOut:
-                        touchState = TouchStates.TimeOutFailed;
-                    break;
-                case TouchStates.Reset:
-                    break;
-                case TouchStates.Touched:
-                    break;
-                case TouchStates.TouchFailed:
-                    break;
-                case TouchStates.TimeOutFailed:
-                    break;
-            }
-            Touch();
-        }
-
-
-        #endregion
         #region 狀態處理
         switch (touchState)
         {
@@ -180,7 +158,33 @@ public class AudioEngine: MonoBehaviour
 
         #endregion
     }
-    private void Touch()
+    // 打擊更改State
+    public bool KeyDown()
+    {
+        switch (touchState)
+        {
+            case TouchStates.Disable:
+                touchState = TouchStates.TouchFailed;
+                break;
+            case TouchStates.Enable:
+                touchState = TouchStates.Touched;
+                break;
+            case TouchStates.TimeOut:
+                touchState = TouchStates.TimeOutFailed;
+                break;
+            case TouchStates.Reset:
+                break;
+            case TouchStates.Touched:
+                break;
+            case TouchStates.TouchFailed:
+                break;
+            case TouchStates.TimeOutFailed:
+                break;
+        }
+        if(improveDelayMode) UpdateAdjustDelay();
+        return touchState == TouchStates.Touched;
+    }
+    private void UpdateAdjustDelay()
     {
         lastTouchDelayTime = GetThisTouchDelayTime();
         touchDelayTimes.Add(lastTouchDelayTime);
@@ -191,7 +195,6 @@ public class AudioEngine: MonoBehaviour
         if (improveDelayMode && touchDelayTimes.Count == 10)
         {
             double newDelay = GetAvgTouchDelayTime();
-            Debug.Log(newDelay);
             adjustDelay = newDelay;
         }
     }
@@ -249,16 +252,17 @@ public class AudioEngine: MonoBehaviour
         touchDelayTimes = new List<double>();
         BGMReStart();
     }
-    public void AdjustDelay()
+    public void UpdateDelay()
     {
         if (improveDelayMode)
         {
             delay = adjustDelay;
         }
     }
-    // 按照TempoType覆寫Action，請加所有Action加在一起再傳入。
-    public void SetListener(UnityAction newAction, TempoType tempoType)
+    // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
+    public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
     {
-        actionDictionary[tempoType]=newAction;
+
+        tempoActionDictionary[tempoType] = newAction;
     }
 }
