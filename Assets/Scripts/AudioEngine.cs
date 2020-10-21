@@ -23,7 +23,7 @@ public enum TempoActionType
     Whole,
     TimeOut,
 }
-public class AudioEngine: MonoBehaviour
+public class AudioEngine : MonoBehaviour
 {
     public SpriteRenderer sprite;
     public bool improveDelayMode;
@@ -53,12 +53,12 @@ public class AudioEngine: MonoBehaviour
     private float timeStep;
     private Dictionary<TempoActionType, UnityAction> tempoActionDictionary;
     public AudioSource BGM;
- 
+
     // Start is called before the first frame update
     void Start()
     {
         improveDelayMode = false;
-        BPM = 120;
+        BPM = 60;
         //delay = 0;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
@@ -71,13 +71,21 @@ public class AudioEngine: MonoBehaviour
         tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
         foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
         {
-            tempoActionDictionary.Add(type, ()=> { Debug.Log(type.ToString()); });
+            tempoActionDictionary.Add(type, () => { Debug.Log(type.ToString()); });
         }
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
     void Awake()
     {
+        if (singleton == null)
+        {
+            singleton = this;
+        }
+        else if (singleton != this)
+        {
+            Destroy(gameObject);
+        }
     }
     void InvokeRepeatInit()
     {
@@ -181,7 +189,7 @@ public class AudioEngine: MonoBehaviour
             case TouchStates.TimeOutFailed:
                 break;
         }
-        if(improveDelayMode) UpdateAdjustDelay();
+        if (improveDelayMode) UpdateAdjustDelay();
         return touchState == TouchStates.Touched;
     }
     private void UpdateAdjustDelay()
@@ -205,8 +213,9 @@ public class AudioEngine: MonoBehaviour
         this.resetStartTime = MsPB * resetStartTime;
         this.resetEndTime = MsPB * resetEndTime;
     }
-    private bool IsEnableTouchTime() {
-        double touchTime = ((time - GetDelay()) % MsPB) ;
+    private bool IsEnableTouchTime()
+    {
+        double touchTime = ((time - GetDelay()) % MsPB);
         return touchTime <= bufferTime || touchTime >= (MsPB - bufferTime);
     }
     private bool IsResetTime()
@@ -214,11 +223,13 @@ public class AudioEngine: MonoBehaviour
         double currentTime = ((time - GetDelay()) % MsPB);
         return currentTime <= resetEndTime && currentTime >= resetStartTime;
     }
-    private double GetThisTouchDelayTime() {
-        double touchTime = (time  % MsPB) ;
+    private double GetThisTouchDelayTime()
+    {
+        double touchTime = (time % MsPB);
         return (touchTime);
     }
-    public double GetLastTouchDelayTime() {
+    public double GetLastTouchDelayTime()
+    {
         return lastTouchDelayTime;
     }
     public double GetCurrentDelayTime()
@@ -232,7 +243,7 @@ public class AudioEngine: MonoBehaviour
     }
     private double GetDelay()
     {
-        return (improveDelayMode)?adjustDelay:delay;
+        return (improveDelayMode) ? adjustDelay : delay;
     }
     public double GetStaticDelay()
     {
@@ -265,4 +276,20 @@ public class AudioEngine: MonoBehaviour
 
         tempoActionDictionary[tempoType] = newAction;
     }
+
+    private static AudioEngine singleton = null;
+    public static AudioEngine Singleton
+    {
+        get
+        {
+            if (singleton == null)
+            {
+                singleton = FindObjectOfType(typeof(AudioEngine)) as AudioEngine;
+            }
+            return singleton;
+        }
+
+    }
+
+
 }

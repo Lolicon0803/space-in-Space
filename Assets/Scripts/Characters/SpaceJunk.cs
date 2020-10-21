@@ -8,7 +8,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
 {
     public Rigidbody2D rigid;
 
-    public GameData.RouteData[] route;
+    public GameData.Direction[] route;
 
     public float knockDistance;
 
@@ -26,6 +26,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     // 移動方向
     private Vector2 moveDiraction;
 
+
     void Awake()
     {
         transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
@@ -36,7 +37,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     void Start()
     {
         movePoint = transform.position;
-        StartCoroutine("Move");
+        ObjectTempoControl.Singleton.AddToBeatAction(CanMove);
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
         if (collider.CompareTag("Player"))
         {
             collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
-            Debug.Log("撞到敵人 撞牆");
+            Debug.Log("撞到敵人");
             // Call損血系統(bool 扣多少血)
         }
     }
@@ -57,37 +58,33 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     public IEnumerator Move()
     {
 
-        while (true)
+        if (routeIndex % route.Length == 0 && isGoStartPoint)
         {
-            if (isGoStartPoint)
-            {
-                transform.position = startPoint;
-            }
-
-            foreach (GameData.RouteData item in route)
-            {
-                moveDiraction = GameData.Map.directionMap[(int)item.direction];
-
-                for (int i = 0; i < item.distance; i++)
-                {
-                    // 下個移動點+朝路徑移動1格vector
-                    movePoint = (Vector2)transform.position + moveDiraction;
-
-                    while (Vector2.Distance(transform.position, movePoint) > 5 * Time.deltaTime)
-                    {
-                        transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, 5f * Time.deltaTime);
-
-                        yield return null;
-                    }
-
-                    transform.position = movePoint;
-
-                    // Todo:接節奏API
-                    yield return new WaitForSeconds(1);
-
-                }
-            }
+            transform.position = startPoint;
         }
+
+        //確認方向
+        moveDiraction = GameData.Map.directionMap[(int)route[routeIndex]];
+
+        // 下個移動點+朝路徑移動1格vector
+        movePoint = (Vector2)transform.position + moveDiraction;
+
+        //移動
+        while (Vector2.Distance(transform.position, movePoint) > 5 * Time.deltaTime)
+        {
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, 5f * Time.deltaTime);
+            yield return null;
+        }
+
+        transform.position = movePoint;
+        routeIndex = (routeIndex + 1) % route.Length;
+    }
+
+    private int routeIndex = 0;
+    void CanMove()
+    {
+        Debug.Log("s");
+        StartCoroutine("Move");
     }
 
 }

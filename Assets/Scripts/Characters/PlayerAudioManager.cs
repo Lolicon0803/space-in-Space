@@ -31,27 +31,31 @@ public class PlayerAudioManager : MonoBehaviour
 
     private void PlayFallIntoBlackHoleAudio()
     {
-        audioSource.PlayOneShot(fallIntoBlackHole);
+        if (fallIntoBlackHole != null)
+            audioSource.PlayOneShot(fallIntoBlackHole);
     }
 
     private void PlayFireBagAudio(Vector2 direction)
     {
-        audioSource.PlayOneShot(fireBag);
+        if (fireBag != null)
+            audioSource.PlayOneShot(fireBag);
     }
 
     private void PlayWalkAudio(Vector2 direction)
     {
-        audioSource.PlayOneShot(walk);
+        if (walk != null)
+            audioSource.PlayOneShot(walk);
     }
 
     private void PlayErrorAudio()
     {
-        audioSource.PlayOneShot(error);
+        if (error != null)
+            audioSource.PlayOneShot(error);
     }
 
     private void PlayeMissAudio()
     {
-        audioSource.PlayOneShot(timeMiss);
+        if (timeMiss != null)
+            audioSource.PlayOneShot(timeMiss);
     }
-
 }

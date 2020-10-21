@@ -79,9 +79,9 @@ public class PlayerMovement : MonoBehaviour
             OnMiss?.Invoke();
         }, TempoActionType.TimeOut);
         //FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.TimeOut);
-        FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Quarter);
-        FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Half);
-        FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Whole);
+       // FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Quarter);
+      //  FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Half);
+       // FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Whole);
         //FindObjectOfType<AudioEngine>().BPM = 60;
         inputDirection = Vector2.zero;
         spacePressed = false;

@@ -78,6 +78,7 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
                     // Todo:接節奏API
                     yield return new WaitForSeconds(1);
+
                 }
             }
         }
