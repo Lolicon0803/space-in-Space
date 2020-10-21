@@ -12,9 +12,8 @@ public enum HeartStatus
 
 public class PlayerLifeSystem : MonoBehaviour
 {
-    [SerializeField]
-    private int hp;
-    public int Hp { get; private set; }
+    public int maxHp;
+    private int nowHp;
 
     public Canvas canvas;
     public Image redEffectImage;
@@ -37,7 +36,9 @@ public class PlayerLifeSystem : MonoBehaviour
         PlayerMovement playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnMiss += LossLife;
 
-        int total = hp / 2 + hp % 2;
+        nowHp = maxHp;
+
+        int total = nowHp / 2 + nowHp % 2;
         heartImages = new Image[total];
         lastHeartIndex = total - 1;
         for (int i = 0; i < total; i++)
@@ -46,7 +47,7 @@ public class PlayerLifeSystem : MonoBehaviour
             heartImages[i].rectTransform.offsetMin = new Vector2(heartImages[i].rectTransform.offsetMin.x + 75 * i, heartImages[i].rectTransform.offsetMin.y);
             heartImages[i].rectTransform.offsetMax = new Vector2(heartImages[i].rectTransform.offsetMax.x + 75 * i, heartImages[i].rectTransform.offsetMax.y);
         }
-        if (hp % 2 != 0)
+        if (nowHp % 2 != 0)
         {
             heartImages[lastHeartIndex].sprite = breakHeart;
             lastHeartState = HeartStatus.Break;
@@ -63,7 +64,7 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private void BreakHeart()
     {
-        hp--;
+        nowHp--;
         switch (lastHeartState)
         {
             case HeartStatus.Full:
@@ -79,8 +80,13 @@ public class PlayerLifeSystem : MonoBehaviour
                 break;
         }
 
-        // if (hp == 0)
-        //      GameOver
+        if (nowHp == 0)
+        {
+            //GameOver
+            nowHp = maxHp;
+            int total = nowHp / 2 + nowHp % 2;
+            lastHeartIndex = total - 1;
+        }
     }
 
     private IEnumerator ShowEffect()

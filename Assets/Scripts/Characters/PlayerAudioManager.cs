@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAudioManager : MonoBehaviour
 {
     public AudioClip walk;
     public AudioClip fireBag;
     public AudioClip fallIntoBlackHole;
+    public AudioClip timeMiss;
+    public AudioClip error;
 
     private AudioSource audioSource;
 
@@ -22,6 +25,8 @@ public class PlayerAudioManager : MonoBehaviour
         playerMovement.OnWalk += PlayWalkAudio;
         playerMovement.OnFireBag += PlayFireBagAudio;
         playerMovement.OnFallIntoBlackHole += PlayFallIntoBlackHoleAudio;
+        playerMovement.OnMiss += PlayeMissAudio;
+        playerMovement.OnError += PlayErrorAudio;
     }
 
     private void PlayFallIntoBlackHoleAudio()
@@ -39,6 +44,14 @@ public class PlayerAudioManager : MonoBehaviour
         audioSource.PlayOneShot(walk);
     }
 
+    private void PlayErrorAudio()
+    {
+        audioSource.PlayOneShot(error);
+    }
 
+    private void PlayeMissAudio()
+    {
+        audioSource.PlayOneShot(timeMiss);
+    }
 
 }

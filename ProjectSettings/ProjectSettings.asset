@@ -629,10 +629,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 6
-  cloudProjectId: c361731e-92ea-418a-9983-ab2396fa0707
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: space in Space
-  organizationId: a0979790220
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
