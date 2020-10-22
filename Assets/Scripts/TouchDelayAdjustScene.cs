@@ -31,7 +31,8 @@ public class TouchDelayAdjustScene : MonoBehaviour
         {
             audioEngine.KeyDown();
         }
-            avgDelayText.text = "Avg Touch Delay: " + audioEngine.GetAvgTouchDelayTime().ToString();
+        avgDelayText.text = "Avg Touch Delay: " + audioEngine.GetAvgTouchDelayTime().ToString();
+
         lastTouchDelayText.text = "Last Touch Delay: " + audioEngine.GetLastTouchDelayTime().ToString();
         currentDelayText.text = "Current Delay: " + audioEngine.GetCurrentDelayTime().ToString();
         setDelayText.text = "Set Delay: " + audioEngine.GetStaticDelay().ToString();

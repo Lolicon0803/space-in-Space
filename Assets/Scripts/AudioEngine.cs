@@ -16,6 +16,7 @@ public enum TouchStates
     Enable,
     Reset
 }
+
 public enum TempoActionType
 {
     Quarter,
@@ -23,6 +24,7 @@ public enum TempoActionType
     Whole,
     TimeOut,
 }
+
 public class AudioEngine : MonoBehaviour
 {
     public SpriteRenderer sprite;
@@ -51,12 +53,10 @@ public class AudioEngine : MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
-    private Dictionary<TempoActionType, UnityAction> tempoActionDictionary;
+
+    //private Dictionary<TempoActionType, UnityAction> tempoActions;
+    public TempoActions tempoActions;
     public AudioSource BGM;
-
-
-    //testing
-   // private UnityAction QuarterAction = ObjectTempoControl.Singleton.QuarterAction;
 
     // Start is called before the first frame update
     void Start()
@@ -73,12 +73,13 @@ public class AudioEngine : MonoBehaviour
         time = MsPB;
         timeStep = 0.01f;
 
-
+        tempoActions = new TempoActions();
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
     void Awake()
     {
+
         if (singleton == null)
         {
             singleton = this;
@@ -93,6 +94,7 @@ public class AudioEngine : MonoBehaviour
         {
             tempoActionDictionary.Add(type, () => { /*Debug.Log(type.ToString());*/ });
         }
+
     }
     void InvokeRepeatInit()
     {
@@ -120,7 +122,8 @@ public class AudioEngine : MonoBehaviour
             if (touchState == TouchStates.Enable)
             {
                 touchState = TouchStates.TimeOut;
-                tempoActionDictionary[TempoActionType.TimeOut]();
+                tempoActions[TempoActionType.TimeOut]();
+
             }
             // reset結束
             if (touchState == TouchStates.Reset && !IsResetTime())
@@ -136,6 +139,7 @@ public class AudioEngine : MonoBehaviour
     }
     void WholeTimer()
     {
+
         tempoActionDictionary[TempoActionType.Whole]();
     }
     void HalfTimer()
@@ -278,6 +282,7 @@ public class AudioEngine : MonoBehaviour
         }
     }
     // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
+
     public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
     {
         tempoActionDictionary[tempoType] = newAction;
@@ -297,8 +302,5 @@ public class AudioEngine : MonoBehaviour
         }
 
     }
-
-
-
 
 }
