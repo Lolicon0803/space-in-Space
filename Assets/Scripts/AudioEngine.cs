@@ -17,6 +17,14 @@ public enum TouchStates
     Reset
 }
 
+public enum TempoActionType
+{
+    Quarter,
+    Half,
+    Whole,
+    TimeOut,
+}
+
 public class AudioEngine : MonoBehaviour
 {
     public SpriteRenderer sprite;
@@ -45,6 +53,7 @@ public class AudioEngine : MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
+
     //private Dictionary<TempoActionType, UnityAction> tempoActions;
     public TempoActions tempoActions;
     public AudioSource BGM;
@@ -53,7 +62,7 @@ public class AudioEngine : MonoBehaviour
     void Start()
     {
         improveDelayMode = false;
-        BPM = 120;
+        BPM = 60;
         //delay = 0;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
@@ -63,12 +72,29 @@ public class AudioEngine : MonoBehaviour
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
+
         tempoActions = new TempoActions();
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
     void Awake()
     {
+
+        if (singleton == null)
+        {
+            singleton = this;
+        }
+        else if (singleton != this)
+        {
+            Destroy(gameObject);
+        }
+
+        tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
+        foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
+        {
+            tempoActionDictionary.Add(type, () => { /*Debug.Log(type.ToString());*/ });
+        }
+
     }
     void InvokeRepeatInit()
     {
@@ -97,6 +123,7 @@ public class AudioEngine : MonoBehaviour
             {
                 touchState = TouchStates.TimeOut;
                 tempoActions[TempoActionType.TimeOut]();
+
             }
             // reset結束
             if (touchState == TouchStates.Reset && !IsResetTime())
@@ -112,15 +139,16 @@ public class AudioEngine : MonoBehaviour
     }
     void WholeTimer()
     {
-        tempoActions[TempoActionType.Whole]();
+
+        tempoActionDictionary[TempoActionType.Whole]();
     }
     void HalfTimer()
     {
-        tempoActions[TempoActionType.Half]();
+        tempoActionDictionary[TempoActionType.Half]();
     }
     void QuarterTimer()
     {
-        tempoActions[TempoActionType.Quarter]();
+        tempoActionDictionary[TempoActionType.Quarter]();
     }
     // Update is called once per frame
     void Update()
@@ -254,8 +282,25 @@ public class AudioEngine : MonoBehaviour
         }
     }
     // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
-    //public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
-    //{
-    //    tempoActions[tempoType] = newAction;
-    //}
+
+    public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
+    {
+        tempoActionDictionary[tempoType] = newAction;
+    }
+
+    //單例引用，所有人呼叫的系統都是同一個
+    private static AudioEngine singleton = null;
+    public static AudioEngine Singleton
+    {
+        get
+        {
+            if (singleton == null)
+            {
+                singleton = FindObjectOfType(typeof(AudioEngine)) as AudioEngine;
+            }
+            return singleton;
+        }
+
+    }
+
 }
