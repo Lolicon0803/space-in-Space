@@ -19,7 +19,7 @@ public class TouchDelayAdjustScene : MonoBehaviour
         audioEngine.ResetAdjustArgs();
         resetButton.onClick.AddListener(ResetEvent);
         resetButton.onClick.AddListener(selectNull);
-        checkButton.onClick.AddListener(audioEngine.AdjustDelay);
+        checkButton.onClick.AddListener(audioEngine.UpdateDelay);
         checkButton.onClick.AddListener(selectNull);
     }
 
@@ -27,6 +27,10 @@ public class TouchDelayAdjustScene : MonoBehaviour
     void Update()
     {
         audioEngine.improveDelayMode = true;
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            audioEngine.KeyDown();
+        }
         avgDelayText.text = "Avg Touch Delay: " + audioEngine.GetAvgTouchDelayTime().ToString();
         lastTouchDelayText.text = "Last Touch Delay: " + audioEngine.GetLastTouchDelayTime().ToString();
         currentDelayText.text = "Current Delay: " + audioEngine.GetCurrentDelayTime().ToString();
