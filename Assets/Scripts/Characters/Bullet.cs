@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     private Vector2 moveDiraction;
     private float moveSpeed;
     private float moveDistance;
-    public GameData.TempoType tempoType;
+    public TempoActionType tempoType;
     private int routeIndex = 0;
 
     public void Set(GameData.BulletData bulletData)

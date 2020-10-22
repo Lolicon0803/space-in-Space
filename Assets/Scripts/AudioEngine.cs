@@ -17,13 +17,6 @@ public enum TouchStates
     Reset
 }
 
-public enum TempoActionType
-{
-    Quarter,
-    Half,
-    Whole,
-    TimeOut,
-}
 
 public class AudioEngine : MonoBehaviour
 {
@@ -73,7 +66,7 @@ public class AudioEngine : MonoBehaviour
         time = MsPB;
         timeStep = 0.01f;
 
-        tempoActions = new TempoActions();
+
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
@@ -89,12 +82,14 @@ public class AudioEngine : MonoBehaviour
             Destroy(gameObject);
         }
 
-        tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
-        foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
-        {
-            tempoActionDictionary.Add(type, () => { /*Debug.Log(type.ToString());*/ });
-        }
-
+        tempoActions = new TempoActions();
+        /*
+                tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
+                foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
+                {
+                    tempoActionDictionary.Add(type, () => { Debug.Log(type.ToString()); });
+                }
+        */
     }
     void InvokeRepeatInit()
     {
@@ -139,16 +134,15 @@ public class AudioEngine : MonoBehaviour
     }
     void WholeTimer()
     {
-
-        tempoActionDictionary[TempoActionType.Whole]();
+        tempoActions[TempoActionType.Whole]();
     }
     void HalfTimer()
     {
-        tempoActionDictionary[TempoActionType.Half]();
+        tempoActions[TempoActionType.Half]();
     }
     void QuarterTimer()
     {
-        tempoActionDictionary[TempoActionType.Quarter]();
+        tempoActions[TempoActionType.Quarter]();
     }
     // Update is called once per frame
     void Update()
@@ -283,11 +277,12 @@ public class AudioEngine : MonoBehaviour
     }
     // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
 
-    public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
-    {
-        tempoActionDictionary[tempoType] = newAction;
-    }
-
+    /*
+        public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
+        {
+            tempoActionDictionary[tempoType] = newAction;
+        }
+    */
     //單例引用，所有人呼叫的系統都是同一個
     private static AudioEngine singleton = null;
     public static AudioEngine Singleton

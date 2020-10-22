@@ -15,7 +15,7 @@ public class Anemy : MonoBehaviour, IObjectBehavier
     //迴圈讀取用
     private List<GameData.Direction> routeMap = new List<GameData.Direction>();
 
-    public GameData.TempoType tempoType;
+    public TempoActionType tempoType;
 
     public GameData.BulletData bulletData;
 
@@ -66,7 +66,7 @@ public class Anemy : MonoBehaviour, IObjectBehavier
         if (collider.CompareTag("Player"))
         {
             Debug.Log("敵人撞到 扣血");
-
+            gameObject.GetComponent<AudioSource>().Play();
             // Call損血系統(bool 扣多少血)
         }
     }

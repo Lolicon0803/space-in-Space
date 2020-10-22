@@ -5,15 +5,19 @@ using Assets.Scripts.Characters;
 
 
 
-public class RazerMachine : MonoBehaviour, IObjectBehavier
+public class RazerMachine : MonoBehaviour
 {
     public Rigidbody2D rigid;
 
     public int razerDistance;
     public int razerDiracter;
     public bool[] razerTempo;
+    public TempoActionType tempoType;
 
+    public int waitTempo;
+    public bool razerWaitStatus;
 
+    private int razerTempoIndex = 0;
     void Awake()
     {
         transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
@@ -24,7 +28,7 @@ public class RazerMachine : MonoBehaviour, IObjectBehavier
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine("Move");
+        ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
     }
 
     // Update is called once per frame
@@ -43,27 +47,43 @@ public class RazerMachine : MonoBehaviour, IObjectBehavier
         }
     }
 
-    public IEnumerator Move()
+    public void Move()
     {
-        while (true)
+        if (waitTempo != 0)
         {
-            foreach (bool item in razerTempo)
-            {
-                if (item)
-                {
-                    transform.GetChild(0).transform.localScale = new Vector3(razerDistance, 1, 1);
-                    
-                }
-                else
-                {
-                    transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
-                }
+            waitTempo--;
 
-                // Todo:接節奏API
-                yield return new WaitForSeconds(1);
+            if (razerWaitStatus)
+            {
+                transform.GetChild(0).transform.localScale = new Vector3(razerDistance, 1, 1);
+
             }
+            else
+            {
+                transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
+            }
+
+        }
+        else
+        {
+            if (razerTempo[razerTempoIndex])
+            {
+                transform.GetChild(0).transform.localScale = new Vector3(razerDistance, 1, 1);
+
+            }
+            else
+            {
+                transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
+            }
+
+            razerTempoIndex = (razerTempoIndex + 1) % razerTempo.Length;
         }
 
+    }
+
+    void CanMove()
+    {
+        Move();
     }
 
 

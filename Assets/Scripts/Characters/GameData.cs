@@ -12,13 +12,6 @@ namespace GameData
         RIGHT = 4
     }
 
-    public enum TempoType
-    {
-        Quarter,
-        Half,
-        Whole
-    }
-
     [System.Serializable]
     public class RouteData
     {
@@ -32,7 +25,7 @@ namespace GameData
         public float speed = 0f;
         public Direction direction;
         public float distance = 0f;
-        public GameData.TempoType tempoType;
+        public TempoActionType tempoType;
     };
 
     class Map

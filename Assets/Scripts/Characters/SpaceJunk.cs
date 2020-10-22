@@ -14,7 +14,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     //迴圈讀取用
     private List<GameData.Direction> routeMap = new List<GameData.Direction>();
 
-    public GameData.TempoType tempoType;
+    public TempoActionType tempoType;
 
     public float knockDistance;
 
@@ -68,6 +68,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
         {
             collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
             Debug.Log("撞到敵人");
+            gameObject.GetComponent<AudioSource>().Play();
             // Call損血系統(bool 扣多少血)
         }
     }
