@@ -9,13 +9,15 @@ public class Bullet : MonoBehaviour
     private Vector2 moveDiraction;
     private float moveSpeed;
     private float moveDistance;
+    public GameData.TempoType tempoType;
+    private int routeIndex = 0;
 
     public void Set(GameData.BulletData bulletData)
     {
         moveDiraction = GameData.Map.directionMap[(int)bulletData.direction];
         moveSpeed = bulletData.speed;
         moveDistance = bulletData.distance;
-        StartCoroutine("Move");
+        tempoType = bulletData.tempoType;
     }
 
     void Awake()
@@ -27,6 +29,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         movePoint = transform.position;
+        ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -48,26 +51,30 @@ public class Bullet : MonoBehaviour
 
     public IEnumerator Move()
     {
+        // 下個移動點+朝路徑移動1格vector
+        movePoint = (Vector2)transform.position + moveDiraction;
 
-        for (int i = 0; i < moveDistance; i++)
+        while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
         {
-            // 下個移動點+朝路徑移動1格vector
-            movePoint = (Vector2)transform.position + moveDiraction;
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.deltaTime);
 
-            while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
-            {
-                transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.deltaTime);
-
-                yield return null;
-            }
-
-            transform.position = movePoint;
-
-            // Todo:接節奏API
-            yield return new WaitForSeconds(1);
-
+            yield return null;
         }
 
-        Destroy(gameObject);
+        transform.position = movePoint;
+
+        routeIndex = (routeIndex + 1) % (int)moveDistance;
+
+        if (routeIndex % moveDistance == 0)
+        {
+            routeIndex = 0;
+            ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
+            Destroy(gameObject);
+        }
+    }
+
+    void CanMove()
+    {
+        StartCoroutine("Move");
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine.Events;
 public class ObjectTempoControl : MonoBehaviour
 {
     private UnityAction QuarterAction = new UnityAction(() => { });
-    private UnityAction HalfAction;
-    private UnityAction WholeAction;
+    private UnityAction HalfAction = new UnityAction(() => { });
+    private UnityAction WholeAction = new UnityAction(() => { });
 
     private static ObjectTempoControl singleton = null;
     public static ObjectTempoControl Singleton
@@ -33,13 +33,14 @@ public class ObjectTempoControl : MonoBehaviour
             Destroy(gameObject);
         }
 
+        Debug.Log("送給節奏系統");
+        // AudioEngine.Singleton.SetTempoTypeListener(QuarterAction, TempoActionType.Quarter);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("送給節奏系統");
-        AudioEngine.Singleton.SetTempoTypeListener(QuarterAction, TempoActionType.Whole);
+
     }
 
     // Update is called once per frame
@@ -48,11 +49,46 @@ public class ObjectTempoControl : MonoBehaviour
 
     }
 
-    public void AddToBeatAction(UnityAction function)
+    public void AddToBeatAction(UnityAction function, GameData.TempoType type)
     {
-        QuarterAction += function;
-        AudioEngine.Singleton.SetTempoTypeListener(QuarterAction, TempoActionType.Whole);
+        if (type == GameData.TempoType.Whole)
+        {
+            WholeAction += function;
+            AudioEngine.Singleton.SetTempoTypeListener(WholeAction, TempoActionType.Whole);
+        }
+        else if (type == GameData.TempoType.Half)
+        {
+            HalfAction += function;
+            AudioEngine.Singleton.SetTempoTypeListener(HalfAction, TempoActionType.Half);
+        }
+        else if (type == GameData.TempoType.Quarter)
+        {
+            QuarterAction += function;
+            AudioEngine.Singleton.SetTempoTypeListener(QuarterAction, TempoActionType.Quarter);
+        }
+
+
     }
 
+    public void RemoveToBeatAction(UnityAction function, GameData.TempoType type)
+    {
+        if (type == GameData.TempoType.Whole)
+        {
+            WholeAction -= function;
+            AudioEngine.Singleton.SetTempoTypeListener(WholeAction, TempoActionType.Whole);
+        }
+        else if (type == GameData.TempoType.Half)
+        {
+            HalfAction -= function;
+            AudioEngine.Singleton.SetTempoTypeListener(HalfAction, TempoActionType.Half);
+        }
+        else if (type == GameData.TempoType.Quarter)
+        {
+            QuarterAction -= function;
+            AudioEngine.Singleton.SetTempoTypeListener(QuarterAction, TempoActionType.Quarter);
+        }
+
+
+    }
 
 }

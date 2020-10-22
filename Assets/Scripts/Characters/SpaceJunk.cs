@@ -8,7 +8,13 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
 {
     public Rigidbody2D rigid;
 
-    public GameData.Direction[] route;
+    //使用者輸入用
+    public GameData.RouteData[] route;
+
+    //迴圈讀取用
+    private List<GameData.Direction> routeMap = new List<GameData.Direction>();
+
+    public GameData.TempoType tempoType;
 
     public float knockDistance;
 
@@ -26,18 +32,29 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     // 移動方向
     private Vector2 moveDiraction;
 
+    private int routeIndex = 0;
 
     void Awake()
     {
         transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
         startPoint = transform.position;
+
+
+        //獲得路線
+        foreach (GameData.RouteData item in route)
+        {
+            for (int i = 0; i < item.distance; i++)
+            {
+                routeMap.Add(item.direction);
+            }
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
         movePoint = transform.position;
-        ObjectTempoControl.Singleton.AddToBeatAction(CanMove);
+        ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
     }
 
     // Update is called once per frame
@@ -57,33 +74,31 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
 
     public IEnumerator Move()
     {
-
-        if (routeIndex % route.Length == 0 && isGoStartPoint)
+    
+        if (routeIndex % routeMap.Count == 0 && isGoStartPoint)
         {
             transform.position = startPoint;
         }
 
         //確認方向
-        moveDiraction = GameData.Map.directionMap[(int)route[routeIndex]];
+        moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
 
         // 下個移動點+朝路徑移動1格vector
         movePoint = (Vector2)transform.position + moveDiraction;
 
         //移動
-        while (Vector2.Distance(transform.position, movePoint) > 5 * Time.deltaTime)
+        while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
         {
-            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, 5f * Time.deltaTime);
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
             yield return null;
         }
 
         transform.position = movePoint;
-        routeIndex = (routeIndex + 1) % route.Length;
+        routeIndex = (routeIndex + 1) % routeMap.Count;
     }
 
-    private int routeIndex = 0;
     void CanMove()
     {
-        Debug.Log("s");
         StartCoroutine("Move");
     }
 

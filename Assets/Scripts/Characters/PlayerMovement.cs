@@ -73,11 +73,12 @@ public class PlayerMovement : MonoBehaviour
         SpeedCoef = 1.0f;
         movePoint.parent = null;
         coroutineMovePlayer = StartCoroutine(MovePlayer());
+        /*
         FindObjectOfType<AudioEngine>().SetTempoTypeListener(() =>
         {
             Punish();
             OnMiss?.Invoke();
-        }, TempoActionType.TimeOut);
+        }, TempoActionType.TimeOut);*/
         //FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.TimeOut);
        // FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Quarter);
       //  FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Half);

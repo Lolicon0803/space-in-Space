@@ -54,6 +54,10 @@ public class AudioEngine : MonoBehaviour
     private Dictionary<TempoActionType, UnityAction> tempoActionDictionary;
     public AudioSource BGM;
 
+
+    //testing
+   // private UnityAction QuarterAction = ObjectTempoControl.Singleton.QuarterAction;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,11 +72,8 @@ public class AudioEngine : MonoBehaviour
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
-        tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
-        foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
-        {
-            tempoActionDictionary.Add(type, () => { Debug.Log(type.ToString()); });
-        }
+
+
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
@@ -85,6 +86,12 @@ public class AudioEngine : MonoBehaviour
         else if (singleton != this)
         {
             Destroy(gameObject);
+        }
+
+        tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
+        foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
+        {
+            tempoActionDictionary.Add(type, () => { /*Debug.Log(type.ToString());*/ });
         }
     }
     void InvokeRepeatInit()
@@ -273,10 +280,10 @@ public class AudioEngine : MonoBehaviour
     // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
     public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
     {
-
         tempoActionDictionary[tempoType] = newAction;
     }
 
+    //單例引用，所有人呼叫的系統都是同一個
     private static AudioEngine singleton = null;
     public static AudioEngine Singleton
     {
@@ -290,6 +297,8 @@ public class AudioEngine : MonoBehaviour
         }
 
     }
+
+
 
 
 }
