@@ -16,8 +16,14 @@ public class RazerMachine : MonoBehaviour
 
     public int waitTempo;
     public bool razerWaitStatus;
-
     private int razerTempoIndex = 0;
+
+    //雷射音效 待全域化
+    public AudioClip razerStart;
+    public AudioClip razerPlaying;
+    public AudioClip razerEnd;
+
+
     void Awake()
     {
         transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
@@ -70,10 +76,20 @@ public class RazerMachine : MonoBehaviour
             {
                 transform.GetChild(0).transform.localScale = new Vector3(razerDistance, 1, 1);
 
+                //持續播放音效
+                if (!gameObject.GetComponent<AudioSource>().loop)
+                {
+                    gameObject.GetComponent<AudioSource>().clip = razerPlaying;
+                    gameObject.GetComponent<AudioSource>().loop = true;
+                    gameObject.GetComponent<AudioSource>().Play();
+                }
             }
             else
             {
                 transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
+
+                gameObject.GetComponent<AudioSource>().loop = false;
+                gameObject.GetComponent<AudioSource>().Stop();
             }
 
             razerTempoIndex = (razerTempoIndex + 1) % razerTempo.Length;

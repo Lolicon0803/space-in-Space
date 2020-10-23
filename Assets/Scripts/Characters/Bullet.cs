@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class Bullet : MonoBehaviour
 {
     private Vector2 movePoint;
@@ -36,10 +35,13 @@ public class Bullet : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
+
             // Call損血系統(bool 扣多少血)
             Debug.Log("子彈命中 扣血");
-            //自己消失
-            Destroy(gameObject);
+            gameObject.GetComponent<AudioSource>().Play();
+
+            //等待音樂播放結束
+            StartCoroutine(AudioPlayFinished(gameObject.GetComponent<AudioSource>().clip.length));
         }
     }
 
@@ -68,8 +70,8 @@ public class Bullet : MonoBehaviour
         if (routeIndex % moveDistance == 0)
         {
             routeIndex = 0;
-            ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
-            Destroy(gameObject);
+            DestroyMyself();
+
         }
     }
 
@@ -77,4 +79,21 @@ public class Bullet : MonoBehaviour
     {
         StartCoroutine("Move");
     }
+
+    void DestroyMyself()
+    {
+        ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
+        Destroy(gameObject);
+    }
+
+    private IEnumerator AudioPlayFinished(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        //自己消失
+        DestroyMyself();
+    }
+
+
+
 }

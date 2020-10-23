@@ -7,6 +7,9 @@ using Assets.Scripts.Characters;
 
 public class Razer : MonoBehaviour
 {
+
+
+
     public Rigidbody2D rigid;
 
     void Awake()

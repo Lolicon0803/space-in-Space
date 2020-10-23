@@ -21,7 +21,8 @@ public class TempoActions
         tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
         foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
         {
-            tempoActionDictionary.Add(type, () => { Debug.Log(type.ToString()); });
+            tempoActionDictionary.Add(type, () => { //Debug.Log(type.ToString());
+             });
         }
     }
     public UnityAction this[TempoActionType key]
