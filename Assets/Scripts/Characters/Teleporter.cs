@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
+    // 作用節奏
+    public TempoActionType activeTempo;
     // 是入口
     public bool isEntrance;
     // 出口
     public Teleporter exit;
-    // 傳送時間
-    public float sendTime;
+    // 傳送節奏(幾拍後人出現)
+    public TempoActionType sendTempo;
     // 是出口
     public bool isExit;
     // 推人推多遠
-    public float pushUnit;
+    public int pushUnit;
     // 推人時的速度
     public float pushSpeed;
     // 吸人時人的旋轉速度
@@ -23,23 +25,52 @@ public class Teleporter : MonoBehaviour
     // 推人方向
     public Vector2 pushDirection;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private PlayerMovement target;
+
+    private bool isActive;
+
+    private void Awake()
     {
-        if (collision.CompareTag("Player"))
+        isActive = false;
+        target = null;
+    }
+
+    private void Start()
+    {
+        ObjectTempoControl.Singleton.AddToBeatAction(Activate, activeTempo);
+        ObjectTempoControl.Singleton.AddToBeatAction(Teleport, sendTempo);
+    }
+
+    private void Activate()
+    {
+        isActive = true;
+    }
+
+    private void Deactivate()
+    {
+        isActive = false;
+    }
+
+    private void Teleport()
+    {
+        if (target != null)
         {
-            PlayerMovement player = collision.GetComponent<PlayerMovement>();
-            if (Vector2.Distance(transform.position, player.movePoint.position) <= Constants.moveUnit)
-                player.Teleport(this, exit);
+            target.TeleportOut(exit);
+            target = null;
         }
     }
 
-    /// <summary>
-    /// When sendTime is readched, player can exit black hole.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator WaitToExit()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        yield return new WaitForSeconds(sendTime);
+        if (!isActive)
+            return;
+
+        if (collision.CompareTag("Player"))
+        {
+            target = collision.GetComponent<PlayerMovement>();
+            if (Vector2.Distance(transform.position, target.movePoint.position) <= Constants.moveUnit)
+                target.TeleportIn(this);
+        }
     }
 
     private void OnDrawGizmos()

@@ -32,10 +32,12 @@ public class PlayerMovement : MonoBehaviour
     //private readonly float Constants.moveUnit = 1.0f;
 
     // 是否可以操作
-    private bool canInput = true;
+    public bool canInput = true;
 
     // 是否要滑行(懲罰)
-    private bool mayPunish = false;
+    public bool mayPunish = false;
+
+    public bool stayLossBlood;
 
     // 黑洞中，優先度最高
     private bool isBlackHole = false;
@@ -72,27 +74,21 @@ public class PlayerMovement : MonoBehaviour
     {
         SpeedCoef = 1.0f;
         movePoint.parent = null;
-        coroutineMovePlayer = StartCoroutine(MovePlayer());
-        /*
-        FindObjectOfType<AudioEngine>().SetTempoTypeListener(() =>
+
+        ObjectTempoControl.Singleton.AddToBeatAction(() =>
         {
             Punish();
-            OnMiss?.Invoke();
-        }, TempoActionType.TimeOut);*/
-        //FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.TimeOut);
-       // FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Quarter);
-      //  FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Half);
-       // FindObjectOfType<AudioEngine>().SetTempoTypeListener(() => { }, TempoActionType.Whole);
-        //FindObjectOfType<AudioEngine>().BPM = 60;
+            if (mayPunish)
+                OnMiss?.Invoke();
+        }, TempoActionType.TimeOut);
+
         inputDirection = Vector2.zero;
+        mayPunish = false;
         spacePressed = false;
+        stayLossBlood = false;
+
+        coroutineMovePlayer = StartCoroutine(MovePlayer());
         StartCoroutine(ProcessOperation());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private IEnumerator ProcessOperation()
@@ -130,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         inputDirection = Vector2.zero;
         spacePressed = false;
         // 讓玩家在x幀內都能輸入，不然同一幀有時候未必能偵測到空白鍵+左右鍵
-        while (t < Time.deltaTime * 10.0f)
+        while (t < Time.deltaTime * 7.5f)
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
                 inputDirection = Vector2.left;
@@ -183,6 +179,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (distanceCoef == distanceDictionary["rocket"])
             {
+                stayLossBlood = false;
                 OnFireBag?.Invoke(direction);
             }
 
@@ -202,6 +199,7 @@ public class PlayerMovement : MonoBehaviour
             SpeedCoef = moveSpeed;
             distanceCoef = distanceDictionary["rocket"];
             mayPunish = true;
+            stayLossBlood = false;
             bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxDistanceCoef, ref obstaclePoint);
 
             if (maxDistanceCoef != 0)
@@ -230,6 +228,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!mayPunish)
             return;
+
+        if (stayLossBlood)
+            return;
+
+        stayLossBlood = true;
 
         SpeedCoef = slideSpeed;
 
@@ -410,39 +413,37 @@ public class PlayerMovement : MonoBehaviour
         }
         transform.localScale = Vector2.zero;
 
-        // 死亡，回起點。
-
-        //movePoint.position = exit.transform.position;
-        //transform.position = exit.transform.position;
-        //// Wait.
-        //yield return StartCoroutine(entrance.WaitToExit());
-        //// Rotate, appear and become bigger.
-        //while (transform.localScale.magnitude < Vector2.one.magnitude)
-        //{
-        //    transform.Rotate(Vector3.forward, exit.pushRotationSpeed * Time.deltaTime);
-        //    transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.one, 1 * Time.deltaTime);
-        //    yield return null;
-        //}
-        //transform.localScale = Vector2.one;
-        //transform.rotation = Quaternion.identity;
-        //isBlackHole = false;
-        //Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
+        canInput = false;
+        mayPunish = false;
+        stayLossBlood = false;
+        GetComponent<PlayerLifeSystem>().GameOver();
     }
 
     /// <summary>
-    /// Telepot player to exit.
+    /// Telepot player into entrance.
     /// </summary>
     /// <param name="entrance">Entrance.</param>
-    /// <param name="exit">Where player to go.</param>
-    public void Teleport(Teleporter entrance, Teleporter exit)
+    public void TeleportIn(Teleporter entrance)
     {
         canInput = false;
         mayPunish = false;
         oldMoveVector = Vector2.zero;
-        StartCoroutine(DisplayTeleport(entrance, exit));
+        StartCoroutine(DisplayTeleportIn(entrance));
     }
 
-    private IEnumerator DisplayTeleport(Teleporter entrance, Teleporter exit)
+    /// <summary>
+    /// Telepot player out exit.
+    /// </summary>
+    /// <param name="exit">Exit.</param>
+    public void TeleportOut(Teleporter exit)
+    {
+        canInput = false;
+        mayPunish = false;
+        oldMoveVector = Vector2.zero;
+        StartCoroutine(DisplayTeleportOut(exit));
+    }
+
+    private IEnumerator DisplayTeleportIn(Teleporter entrance)
     {
         while (Vector2.Distance(transform.position, movePoint.position) >= SpeedCoef * Time.deltaTime)
             yield return null;
@@ -451,33 +452,28 @@ public class PlayerMovement : MonoBehaviour
         if (coroutineMovePlayer != null)
             StopCoroutine(coroutineMovePlayer);
         // Rotate and become smaller then disappear.
-        while (transform.localScale.magnitude > 0.1f * Time.deltaTime)
+        while (transform.localScale.magnitude > 10f * Time.deltaTime)
         {
             transform.Rotate(Vector3.forward, entrance.impactRotationSpeed * Time.deltaTime);
-            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.zero, 1 * Time.deltaTime);
+            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.zero, 10 * Time.deltaTime);
             yield return null;
         }
         transform.localScale = Vector2.zero;
-        // Wait.
-        yield return StartCoroutine(entrance.WaitToExit());
+    }
+
+    private IEnumerator DisplayTeleportOut(Teleporter exit)
+    {
         movePoint.position = exit.transform.position;
         transform.position = exit.transform.position;
         // Rotate, appear and become bigger.
         while (transform.localScale.magnitude < Vector2.one.magnitude)
         {
             transform.Rotate(Vector3.forward, exit.pushRotationSpeed * Time.deltaTime);
-            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.one, 1 * Time.deltaTime);
+            transform.localScale = Vector2.MoveTowards(transform.localScale, Vector2.one, 10 * Time.deltaTime);
             yield return null;
         }
         transform.localScale = Vector2.one;
         transform.rotation = Quaternion.identity;
         Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
     }
-
-
-    private void TEST()
-    {
-
-    }
-
 }

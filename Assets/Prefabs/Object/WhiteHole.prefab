@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2558678738363558996}
   - component: {fileID: 2558678738363558997}
-  - component: {fileID: 2558678738363558999}
   - component: {fileID: 2558678738363559001}
   - component: {fileID: 2558678738363558998}
+  - component: {fileID: 7651268927605267863}
   m_Layer: 10
   m_Name: WhiteHole
   m_TagString: Untagged
@@ -46,35 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de906103d83a0445bc48001fdc55b22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 4
+  actionType: 0
   pushUnit: 4
   pushSpeed: 16
---- !u!61 &2558678738363558999
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2558678738363558994}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4}
-  m_EdgeRadius: 0
 --- !u!212 &2558678738363559001
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -119,7 +93,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -135,7 +109,7 @@ Animator:
   m_GameObject: {fileID: 2558678738363558994}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5fb1c119adc2c64e8144dc4a978daf2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -144,3 +118,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!58 &7651268927605267863
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2558678738363558994}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 2.56

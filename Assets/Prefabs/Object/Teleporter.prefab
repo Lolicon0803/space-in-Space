@@ -94,14 +94,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb38fe909dd0c4c409ff190f158c6e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeTempo: 0
   isEntrance: 0
   exit: {fileID: 0}
-  sendTime: 0
+  sendTempo: 0
   isExit: 1
   pushUnit: 1
   pushSpeed: 5
   impactRotationSpeed: 0
-  pushRotationSpeed: 4096
+  pushRotationSpeed: 8192
   pushDirection: {x: 1, y: 0}
 --- !u!1 &7261871193464705874
 GameObject:
@@ -199,13 +200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb38fe909dd0c4c409ff190f158c6e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  activeTempo: 2
   isEntrance: 1
   exit: {fileID: 3572596977541513365}
-  sendTime: 5
+  sendTempo: 2
   isExit: 0
   pushUnit: 0
   pushSpeed: 0
-  impactRotationSpeed: 0
+  impactRotationSpeed: 8192
   pushRotationSpeed: 0
   pushDirection: {x: 0, y: 0}
 --- !u!61 &4915007977139608290

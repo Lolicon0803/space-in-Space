@@ -5,25 +5,59 @@ using Assets.Scripts.Characters;
 
 public class WhiteHole : MonoBehaviour
 {
+    public TempoActionType actionType;
     // 範圍
-    public float radius;
+    //public float radius;
     // 推人推多遠
-    public float pushUnit;
+    public int pushUnit;
     // 推人時的速度
     public float pushSpeed;
 
+    private Animator animator;
+    private bool isActive;
+
+    private readonly int activateTrigger = Animator.StringToHash("Activate");
+
+    private void Awake()
+    {
+        isActive = false;
+    }
+
     private void Start()
     {
-        GetComponent<BoxCollider2D>().size = new Vector2(radius, radius);
+        animator = GetComponent<Animator>();
+        ObjectTempoControl.Singleton.AddToBeatAction(Activate, actionType);
+    }
+
+    private void Update()
+    {
+        transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
+    }
+
+    private void Activate()
+    {
+        //Debug.Log("White Hole activate");
+        animator.SetTrigger(activateTrigger);
+        isActive = true;
+    }
+
+    private void Deactivate()
+    {
+        //Debug.Log("White Hole dectivate");
+        isActive = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!isActive)
+            return;
+
         if (collision.CompareTag("Player"))
         {
+            //Debug.Log("White Hole push player.");
             PlayerMovement player = collision.GetComponent<PlayerMovement>();
             Vector2 position = collision.transform.position;
-            Debug.Log(position);
+            float radius = GetComponent<CircleCollider2D>().radius;
             // 從左邊撞
             if (position.x >= transform.position.x + radius / 2.0f * Constants.moveUnit)
                 player.Knock(Vector2.right, pushUnit, pushSpeed);
@@ -35,11 +69,4 @@ public class WhiteHole : MonoBehaviour
                 player.Knock(Vector2.down, pushUnit, pushSpeed);
         }
     }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(transform.position, radius * Vector2.one);
-    }
-
 }
