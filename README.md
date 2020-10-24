@@ -96,3 +96,10 @@
 |ImpactRotationSpeed |float| 玩家轉多快進去入口|
 |PushRotationSpeed |float| 玩家轉多快出來出口(設定在出口)|
 |PushDirction |Vector2| 出來後往哪推(設定在出口)|
+
+* RebirthPointTrigger
+
+|名稱|型別|說明|
+|-----|--------|-|
+|RebirthPoint|Vector2|玩家碰到後要設定的復活點|
+
