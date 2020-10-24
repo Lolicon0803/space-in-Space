@@ -69,6 +69,15 @@ public class PlayerLifeSystem : MonoBehaviour
     }
 
     /// <summary>
+    /// 設定重生點。
+    /// </summary>
+    /// <param name="position">重生點。</param>
+    public void SetStartPosition(Vector2 position)
+    {
+        startPosition = position;
+    }
+
+    /// <summary>
     /// When miss or error, loss one hp and show red screen.
     /// </summary>
     private void LossLife()
@@ -145,8 +154,8 @@ public class PlayerLifeSystem : MonoBehaviour
             image.color = new Color(1, 1, 1, 0);
 
         // 黑屏慢慢出現。
-        blackImage.color = new Color(0, 0, 0, 0);
         float alpha = 0;
+        blackImage.color = new Color(0, 0, 0, alpha);
         while (alpha < 1)
         {
             alpha += 0.5f * Time.deltaTime;
