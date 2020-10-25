@@ -36,8 +36,10 @@ public class Bullet : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
 
-            // Call損血系統(bool 扣多少血)
+         
             Debug.Log("子彈命中 扣血");
+            // Call損血系統
+            Player.Singleton.lifeSystem.Hurt();
             gameObject.GetComponent<AudioSource>().Play();
 
             //等待音樂播放結束

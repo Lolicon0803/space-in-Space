@@ -70,7 +70,9 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
             collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
             Debug.Log("撞到敵人");
             gameObject.GetComponent<AudioSource>().Play();
-            // Call損血系統(bool 扣多少血)
+            // Call損血系統
+            // Call損血系統
+            Player.Singleton.lifeSystem.Hurt();
         }
     }
 

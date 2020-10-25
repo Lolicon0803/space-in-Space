@@ -46,8 +46,8 @@ public class RazerMachine : MonoBehaviour
             if (hitObject.collider != null)
             {
                 Debug.Log("撞到雷射 即死");
-                Player.Singleton.lifeSystem.GameOver();
-               //Player.Singleton.lifeSystem.LossLife();
+               // Player.Singleton.lifeSystem.GameOver();
+               Player.Singleton.lifeSystem.Hurt();
             }
         }
     }
@@ -59,7 +59,7 @@ public class RazerMachine : MonoBehaviour
             Debug.Log("撞到雷射機 扣血");
 
             // Call損血系統
-            Player.Singleton.lifeSystem.LossLife();
+            Player.Singleton.lifeSystem.Hurt();
         }
     }
 
@@ -92,6 +92,7 @@ public class RazerMachine : MonoBehaviour
             {
                 isShooting = false;
                 transform.GetChild(0).transform.localScale = new Vector3(0, (float)0.08, 1);
+
                 //關閉音效
                 gameObject.GetComponent<AudioSource>().Stop();
             }

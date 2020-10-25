@@ -68,7 +68,8 @@ public class Anemy : MonoBehaviour, IObjectBehavier
         {
             Debug.Log("敵人撞到 扣血");
             gameObject.GetComponent<AudioSource>().Play();
-            // Call損血系統(bool 扣多少血)
+            // Call損血系統
+            Player.Singleton.lifeSystem.Hurt();
         }
     }
 

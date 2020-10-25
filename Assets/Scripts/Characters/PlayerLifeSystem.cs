@@ -94,6 +94,18 @@ public class PlayerLifeSystem : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// When miss or error, loss one hp and show red screen.
+    /// </summary>
+    public void Hurt()
+    {
+
+        BreakHeart();
+        StartCoroutine(ShowRedEffect());
+
+    }
+
     /// <summary>
     /// HP minus1 and check gameover.
     /// </summary>
@@ -195,5 +207,8 @@ public class PlayerLifeSystem : MonoBehaviour
             image.color = new Color(1, 1, 1, 1);
 
         playerMovement.canInput = true;
+
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
     }
 }
