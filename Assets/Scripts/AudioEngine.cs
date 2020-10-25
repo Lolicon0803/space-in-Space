@@ -57,7 +57,7 @@ public class AudioEngine : MonoBehaviour
     {
         improveDelayMode = false;
         BPM = 60;
-        //delay = 0;
+        delay = -350;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
         touchDelayTimes = new List<double>();

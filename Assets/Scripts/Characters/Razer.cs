@@ -23,12 +23,4 @@ public class Razer : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.CompareTag("Player"))
-        {
-            Debug.Log("撞到雷射");
-        }
-    }
-
 }

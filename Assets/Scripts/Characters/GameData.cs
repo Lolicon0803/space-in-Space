@@ -29,6 +29,13 @@ namespace GameData
         public TempoActionType tempoType;
     };
 
+    [System.Serializable]
+    public class RazerData
+    {
+        public Vector2 Direction;
+        public int distance = 0;
+    };
+
     class Map
     {
         static public Dictionary<int, Vector2> directionMap = new Dictionary<int, Vector2> {

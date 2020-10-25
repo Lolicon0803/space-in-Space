@@ -70,7 +70,7 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Player.Singleton.movement.firstTimeMiss);
+        //Debug.Log(Player.Singleton.movement.firstTimeMiss);
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// <summary>
     /// When miss or error, loss one hp and show red screen.
     /// </summary>
-    private void LossLife()
+    public void LossLife()
     {
         if (!Player.Singleton.movement.firstTimeMiss)
         {
