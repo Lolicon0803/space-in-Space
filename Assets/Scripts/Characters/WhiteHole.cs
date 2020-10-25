@@ -54,19 +54,18 @@ public class WhiteHole : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            //Debug.Log("White Hole push player.");
-            PlayerMovement player = collision.GetComponent<PlayerMovement>();
+            Debug.Log("White Hole push player.");
             Vector2 position = collision.transform.position;
             float radius = GetComponent<CircleCollider2D>().radius;
             // 從左邊撞
             if (position.x >= transform.position.x + radius / 2.0f * Constants.moveUnit)
-                player.Knock(Vector2.right, pushUnit, pushSpeed);
+                Player.Singleton.movement.Knock(Vector2.right, pushUnit, pushSpeed);
             else if (position.x <= transform.position.x - radius / 2.0f * Constants.moveUnit)
-                player.Knock(Vector2.left, pushUnit, pushSpeed);
+                Player.Singleton.movement.Knock(Vector2.left, pushUnit, pushSpeed);
             else if (position.y >= transform.position.y + radius / 2.0f * Constants.moveUnit)
-                player.Knock(Vector2.up, pushUnit, pushSpeed);
+                Player.Singleton.movement.Knock(Vector2.up, pushUnit, pushSpeed);
             else if (position.y <= transform.position.y - radius / 2.0f * Constants.moveUnit)
-                player.Knock(Vector2.down, pushUnit, pushSpeed);
+                Player.Singleton.movement.Knock(Vector2.down, pushUnit, pushSpeed);
         }
     }
 }

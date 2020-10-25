@@ -68,6 +68,11 @@ public class PlayerLifeSystem : MonoBehaviour
             lastHeartState = HeartStatus.Full;
     }
 
+    private void Update()
+    {
+        Debug.Log(Player.Singleton.movement.firstTimeMiss);
+    }
+
     /// <summary>
     /// 設定重生點。
     /// </summary>
@@ -82,8 +87,11 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     private void LossLife()
     {
-        BreakHeart();
-        StartCoroutine(ShowRedEffect());
+        if (!Player.Singleton.movement.firstTimeMiss)
+        {
+            BreakHeart();
+            StartCoroutine(ShowRedEffect());
+        }
     }
 
     /// <summary>
@@ -139,7 +147,6 @@ public class PlayerLifeSystem : MonoBehaviour
         nowHp = maxHp;
         int total = nowHp / 2 + nowHp % 2;
         lastHeartIndex = total - 1;
-        playerMovement.mayPunish = false;
         playerMovement.canInput = false;
     }
 

@@ -28,16 +28,11 @@ public class PlayerMovement : MonoBehaviour
     // 四個碰撞點
     public Transform[] hitJudgmentPoints;
 
-    // 移動單位
-    //private readonly float Constants.moveUnit = 1.0f;
-
     // 是否可以操作
     public bool canInput = true;
 
-    // 是否要滑行(懲罰)
-    public bool mayPunish = false;
-
-    public bool stayLossBlood;
+    // 是否第一次空拍
+    public bool firstTimeMiss;
 
     // 黑洞中，優先度最高
     private bool isBlackHole = false;
@@ -67,7 +62,7 @@ public class PlayerMovement : MonoBehaviour
     public event PlayerDamagedDelegate OnError;
 
     private Vector2 inputDirection;
-    private bool spacePressed;
+    //private bool spacePressed;
 
     // Start is called before the first frame update
     void Start()
@@ -77,15 +72,16 @@ public class PlayerMovement : MonoBehaviour
 
         ObjectTempoControl.Singleton.AddToBeatAction(() =>
         {
-            Punish();
-            if (mayPunish)
+            if (!IsOnGround() && canInput)
+            {
                 OnMiss?.Invoke();
+                Punish();
+            }
         }, TempoActionType.TimeOut);
 
         inputDirection = Vector2.zero;
-        mayPunish = false;
-        spacePressed = false;
-        stayLossBlood = false;
+        //spacePressed = false;
+        firstTimeMiss = true;
 
         coroutineMovePlayer = StartCoroutine(MovePlayer());
         StartCoroutine(ProcessOperation());
@@ -97,14 +93,18 @@ public class PlayerMovement : MonoBehaviour
         {
             if (canInput)
             {
+                // 已在定點。
                 if (Vector2.Distance(transform.position, movePoint.position) <= SpeedCoef * Time.deltaTime)
                 {
-                    yield return StartCoroutine(CheckInput());
-                    if (inputDirection != Vector2.zero || spacePressed)
+                    CheckInput();
+                    //if (inputDirection != Vector2.zero || spacePressed)
+                    if (inputDirection != Vector2.zero)
                     {
-                        if (FindObjectOfType<AudioEngine>().KeyDown())
-                            HandleInput(inputDirection, spacePressed);
-                        else
+                        // 打在節拍上
+                        if (AudioEngine.Singleton.KeyDown())
+                            HandleInput(inputDirection);
+                        // 沒有打在節拍上且不在地上
+                        else if (!IsOnGround())
                         {
                             OnError?.Invoke();
                             Punish();
@@ -120,28 +120,30 @@ public class PlayerMovement : MonoBehaviour
     /// Get player's keyboard input.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator CheckInput()
+    private void CheckInput()
     {
-        float t = 0;
-        inputDirection = Vector2.zero;
-        spacePressed = false;
+        //float t = 0;
+        
+        //spacePressed = false;
         // 讓玩家在x幀內都能輸入，不然同一幀有時候未必能偵測到空白鍵+左右鍵
-        while (t < Time.deltaTime * 7.5f)
-        {
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-                inputDirection = Vector2.left;
-            else if (Input.GetKeyDown(KeyCode.RightArrow))
-                inputDirection = Vector2.right;
-            else if (Input.GetKeyDown(KeyCode.UpArrow))
-                inputDirection = Vector2.up;
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-                inputDirection = Vector2.down;
-            if (Input.GetKeyDown(KeyCode.Space))
-                spacePressed = true;
-            yield return null;
-            t += Time.deltaTime;
-        }
-        yield return null;
+        //while (t < Time.deltaTime * 7.5f)
+        //{
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            inputDirection = Vector2.left;
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+            inputDirection = Vector2.right;
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
+            inputDirection = Vector2.up;
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+            inputDirection = Vector2.down;
+        else
+            inputDirection = Vector2.zero;
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //    spacePressed = true;
+        //yield return null;
+        //t += Time.deltaTime;
+        //}
+        //yield return null;
     }
 
     /// <summary>
@@ -149,20 +151,21 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     /// <param name="direction">Player's input direction.</param>
     /// <param name="spacePressed">Is space pressed.</param>
-    private void HandleInput(Vector2 direction, bool spacePressed)
+    private void HandleInput(Vector2 direction)
     {
         float maxDistanceCoef = 0;
         Vector2 obstaclePoint = Vector2.zero;
         // 水平
         if (direction.x != 0)
         {
-            mayPunish = true;
             SpeedCoef = moveSpeed;
 
-            if (spacePressed)
-                distanceCoef = distanceDictionary["rocket"];
-            else
+            // 地上，1格。
+            if (IsOnGround() && IsFrontHasGround())
                 distanceCoef = distanceDictionary["move"];
+            // 空中，2格。
+            else
+                distanceCoef = distanceDictionary["rocket"];
 
             bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxDistanceCoef, ref obstaclePoint);
 
@@ -172,14 +175,13 @@ public class PlayerMovement : MonoBehaviour
                 movePoint.position += (Vector3)oldMoveVector;
             }
 
-            if (distanceCoef == distanceDictionary["move"] && (maxDistanceCoef != 0 || (!noObstacle && maxDistanceCoef == 0)))
+            if (distanceCoef == distanceDictionary["move"])
             {
                 OnWalk?.Invoke(direction);
-                mayPunish = false;
             }
             else if (distanceCoef == distanceDictionary["rocket"])
             {
-                stayLossBlood = false;
+                firstTimeMiss = true;
                 OnFireBag?.Invoke(direction);
             }
 
@@ -198,8 +200,7 @@ public class PlayerMovement : MonoBehaviour
         {
             SpeedCoef = moveSpeed;
             distanceCoef = distanceDictionary["rocket"];
-            mayPunish = true;
-            stayLossBlood = false;
+            firstTimeMiss = true;
             bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxDistanceCoef, ref obstaclePoint);
 
             if (maxDistanceCoef != 0)
@@ -221,18 +222,27 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private bool IsOnGround()
+    {
+        // 判斷自己下方是否有地板
+        Collider2D c = Physics2D.Raycast(movePoint.position, Vector2.down, Constants.moveUnit, obstacleLayers).collider;
+        return c != null;
+    }
+
+    private bool IsFrontHasGround()
+    {
+        // 判斷前方一格下方是否有地板
+        Collider2D c = Physics2D.Raycast(movePoint.position + new Vector3(Constants.moveUnit * inputDirection.x, 0), Vector2.down, Constants.moveUnit, obstacleLayers).collider;
+        return c != null;
+    }
+
     /// <summary>
     /// Force move 1 unit when timemiss or error tempo.
     /// </summary>
     private void Punish()
     {
-        if (!mayPunish)
+        if (!firstTimeMiss)
             return;
-
-        if (stayLossBlood)
-            return;
-
-        stayLossBlood = true;
 
         SpeedCoef = slideSpeed;
 
@@ -248,6 +258,7 @@ public class PlayerMovement : MonoBehaviour
                 StopCoroutine(coroutineHitObstacle);
             coroutineHitObstacle = StartCoroutine(HitObstacle(oldMoveVector.normalized, obstaclePoint));
         }
+        firstTimeMiss = false;
     }
 
     /// <summary>
@@ -308,20 +319,6 @@ public class PlayerMovement : MonoBehaviour
     private bool GetNextMovePointDistance(Vector2 direction, float distanceFactor, out float maxDistance, ref Vector2 obstaclePosition, bool isSlide = false)
     {
         RaycastHit2D hit;
-
-        // 平台邊緣與空中禁止移動1單位
-        if ((Mathf.Abs(distanceFactor - Constants.moveUnit) <= Mathf.Epsilon) && direction.x != 0 && !isSlide)
-        {
-            // 地圖邊緣
-            Collider2D c1 = Physics2D.Raycast(movePoint.position + new Vector3(Constants.moveUnit * direction.x, 0), Vector2.down, distanceFactor * Constants.moveUnit, obstacleLayers).collider;
-            // 空中
-            Collider2D c2 = Physics2D.Raycast(movePoint.position, Vector2.down, distanceFactor * Constants.moveUnit, obstacleLayers).collider;
-            if (c1 == null || c2 == null)
-            {
-                maxDistance = 0;
-                return true;
-            }
-        }
         // 確認移動方向是否有障礙物
         hit = Physics2D.Raycast(movePoint.position, direction, distanceFactor * Constants.moveUnit, obstacleLayers);
         Debug.DrawLine(movePoint.position, (Vector2)movePoint.position + direction * distanceFactor * Constants.moveUnit, Color.green, 1);
@@ -343,7 +340,6 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="impactSpeed">推動或吸動速度.</param>
     public void Knock(Vector2 direction, float impactFactor, float impactSpeed)
     {
-        mayPunish = false;
         canInput = false;
         // Stop all movement.
         if (coroutineHitObstacle != null)
@@ -381,7 +377,6 @@ public class PlayerMovement : MonoBehaviour
             return;
         isBlackHole = true;
         canInput = false;
-        mayPunish = false;
         oldMoveVector = Vector2.zero;
         // Stop all movement.
         if (coroutineHitObstacle != null)
@@ -414,8 +409,7 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = Vector2.zero;
 
         canInput = false;
-        mayPunish = false;
-        stayLossBlood = false;
+        firstTimeMiss = true;
         GetComponent<PlayerLifeSystem>().GameOver();
     }
 
@@ -426,7 +420,6 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportIn(Teleporter entrance)
     {
         canInput = false;
-        mayPunish = false;
         oldMoveVector = Vector2.zero;
         StartCoroutine(DisplayTeleportIn(entrance));
     }
@@ -438,7 +431,6 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportOut(Teleporter exit)
     {
         canInput = false;
-        mayPunish = false;
         oldMoveVector = Vector2.zero;
         StartCoroutine(DisplayTeleportOut(exit));
     }
