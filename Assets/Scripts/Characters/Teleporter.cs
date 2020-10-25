@@ -25,20 +25,33 @@ public class Teleporter : MonoBehaviour
     // 推人方向
     public Vector2 pushDirection;
 
-    private PlayerMovement target;
-
     private bool isActive;
+    private bool hasTarget;
 
     private void Awake()
     {
         isActive = false;
-        target = null;
     }
 
     private void Start()
     {
         ObjectTempoControl.Singleton.AddToBeatAction(Activate, activeTempo);
         ObjectTempoControl.Singleton.AddToBeatAction(Teleport, sendTempo);
+    }
+
+    private void Update()
+    {
+        if (isActive && isEntrance)
+        {
+            if (Physics2D.OverlapBox(transform.position, Vector2.one, 0, LayerMask.GetMask("Player")))
+            {
+                if (!hasTarget)
+                {
+                    Player.Singleton.movement.TeleportIn(this);
+                    hasTarget = true;
+                }
+            }
+        }
     }
 
     private void Activate()
@@ -53,23 +66,10 @@ public class Teleporter : MonoBehaviour
 
     private void Teleport()
     {
-        if (target != null)
+        if (hasTarget)
         {
-            target.TeleportOut(exit);
-            target = null;
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!isActive)
-            return;
-
-        if (collision.CompareTag("Player"))
-        {
-            target = collision.GetComponent<PlayerMovement>();
-            if (Vector2.Distance(transform.position, target.movePoint.position) <= Constants.moveUnit)
-                target.TeleportIn(this);
+            Player.Singleton.movement.TeleportOut(exit);
+            hasTarget = false;
         }
     }
 

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class BlackHole : MonoBehaviour
 {
+    [Tooltip("For debug.")]
+    public bool drawArea;
+    // 範圍半徑
+    public float radius;
     // 節奏類型
     public TempoActionType tempoType;
     // 吸人時的速度
@@ -14,11 +18,14 @@ public class BlackHole : MonoBehaviour
     private Animator animator;
     private bool isActive;
 
+    private LayerMask layerMask;
+
     private readonly int activateTrigger = Animator.StringToHash("Activate");
 
     private void Awake()
     {
         isActive = false;
+        layerMask = LayerMask.GetMask("Player");
     }
 
     private void Start()
@@ -30,6 +37,11 @@ public class BlackHole : MonoBehaviour
     private void Update()
     {
         transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
+        if (isActive)
+        {
+            if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
+                Player.Singleton.movement.FallIntoBlackHole(this);
+        }
     }
 
     private void Activate()
@@ -45,16 +57,9 @@ public class BlackHole : MonoBehaviour
         isActive = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDrawGizmos()
     {
-        if (!isActive)
-            return;
-
-        if (collision.CompareTag("Player"))
-        {
-            //Debug.Log("Black Hole get player.");
-            collision.GetComponent<PlayerMovement>().FallIntoBlackHole(this);
-        }
+        if (drawArea)
+            Gizmos.DrawWireSphere(transform.position, radius);
     }
-
 }

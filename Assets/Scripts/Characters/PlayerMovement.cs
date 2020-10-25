@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     public bool firstTimeMiss;
 
     // 黑洞中，優先度最高
-    private bool isBlackHole = false;
+    public bool isBlackHole = false;
 
     private Vector2 oldMoveVector;
     public Vector2 OldMoveVector
@@ -265,10 +265,15 @@ public class PlayerMovement : MonoBehaviour
     /// Let player move to move point.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator MovePlayer()
+    public IEnumerator MovePlayer()
     {
         while (true)
         {
+            if (Vector2.Distance(transform.position, movePoint.position) <= SpeedCoef * Time.deltaTime)
+            {
+                if (!isBlackHole)
+                    canInput = true;
+            }
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, SpeedCoef * Time.deltaTime);
             yield return null;
         }
@@ -304,7 +309,6 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         coroutineMovePlayer = StartCoroutine(MovePlayer());
-        canInput = true;
     }
 
     /// <summary>
@@ -363,7 +367,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             coroutineMovePlayer = StartCoroutine(MovePlayer());
-            canInput = true;
         }
     }
 

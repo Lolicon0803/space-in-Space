@@ -5,6 +5,10 @@ using Assets.Scripts.Characters;
 
 public class WhiteHole : MonoBehaviour
 {
+    [Tooltip("For debug.")]
+    public bool drawArea;
+    // 範圍半徑
+    public float radius;
     public TempoActionType actionType;
     // 範圍
     //public float radius;
@@ -16,11 +20,14 @@ public class WhiteHole : MonoBehaviour
     private Animator animator;
     private bool isActive;
 
+    private LayerMask layerMask;
+
     private readonly int activateTrigger = Animator.StringToHash("Activate");
 
     private void Awake()
     {
         isActive = false;
+        layerMask = LayerMask.GetMask("Player");
     }
 
     private void Start()
@@ -32,6 +39,23 @@ public class WhiteHole : MonoBehaviour
     private void Update()
     {
         transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
+        if (isActive)
+        {
+            if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
+            {
+                //Debug.Log("White Hole push player.");
+                Vector2 position = Player.Singleton.transform.position;
+                // 從左邊撞
+                if (position.x >= transform.position.x + Constants.moveUnit / 2.0f)
+                    Player.Singleton.movement.Knock(Vector2.right, pushUnit, pushSpeed);
+                else if (position.x <= transform.position.x - Constants.moveUnit / 2.0f)
+                    Player.Singleton.movement.Knock(Vector2.left, pushUnit, pushSpeed);
+                else if (position.y >= transform.position.y + Constants.moveUnit / 2.0f)
+                    Player.Singleton.movement.Knock(Vector2.up, pushUnit, pushSpeed);
+                else if (position.y <= transform.position.y - Constants.moveUnit / 2.0f)
+                    Player.Singleton.movement.Knock(Vector2.down, pushUnit, pushSpeed);
+            }
+        }
     }
 
     private void Activate()
@@ -47,25 +71,9 @@ public class WhiteHole : MonoBehaviour
         isActive = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnDrawGizmos()
     {
-        if (!isActive)
-            return;
-
-        if (collision.CompareTag("Player"))
-        {
-            Debug.Log("White Hole push player.");
-            Vector2 position = collision.transform.position;
-            float radius = GetComponent<CircleCollider2D>().radius;
-            // 從左邊撞
-            if (position.x >= transform.position.x + radius / 2.0f * Constants.moveUnit)
-                Player.Singleton.movement.Knock(Vector2.right, pushUnit, pushSpeed);
-            else if (position.x <= transform.position.x - radius / 2.0f * Constants.moveUnit)
-                Player.Singleton.movement.Knock(Vector2.left, pushUnit, pushSpeed);
-            else if (position.y >= transform.position.y + radius / 2.0f * Constants.moveUnit)
-                Player.Singleton.movement.Knock(Vector2.up, pushUnit, pushSpeed);
-            else if (position.y <= transform.position.y - radius / 2.0f * Constants.moveUnit)
-                Player.Singleton.movement.Knock(Vector2.down, pushUnit, pushSpeed);
-        }
+        if (drawArea)
+            Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
