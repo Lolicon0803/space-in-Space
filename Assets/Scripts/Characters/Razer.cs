@@ -7,14 +7,8 @@ using Assets.Scripts.Characters;
 
 public class Razer : MonoBehaviour
 {
-
-
-
-    public Rigidbody2D rigid;
-
     void Awake()
     {
-        transform.position = new Vector2(Mathf.Floor(transform.position.x) + 0.5f, Mathf.Floor(transform.position.y) + 0.5f);
     }
 
     // Start is called before the first frame update

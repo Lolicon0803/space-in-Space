@@ -9,7 +9,8 @@ namespace GameData
         UP = 1,
         DOWN = 2,
         LEFT = 3,
-        RIGHT = 4
+        RIGHT = 4,
+        Stop = 5
     }
 
     [System.Serializable]
@@ -34,7 +35,8 @@ namespace GameData
         {(int)Direction.UP, Vector2.up },
         { (int)Direction.DOWN, Vector2.down },
         { (int)Direction.LEFT, Vector2.left },
-        { (int)Direction.RIGHT, Vector2.right }
+        { (int)Direction.RIGHT, Vector2.right },
+         { (int)Direction.Stop, new Vector2(0,0) }
         };
 
     }

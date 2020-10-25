@@ -7,8 +7,6 @@ using Assets.Scripts.Characters;
 
 public class RazerMachine : MonoBehaviour
 {
-    public Rigidbody2D rigid;
-
     public int razerDistance;
     public int razerDiracter;
     public bool[] razerTempo;
@@ -88,6 +86,7 @@ public class RazerMachine : MonoBehaviour
             {
                 transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
 
+                //關閉音效
                 gameObject.GetComponent<AudioSource>().loop = false;
                 gameObject.GetComponent<AudioSource>().Stop();
             }
@@ -101,6 +100,5 @@ public class RazerMachine : MonoBehaviour
     {
         Move();
     }
-
 
 }

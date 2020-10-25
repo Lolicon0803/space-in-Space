@@ -24,6 +24,7 @@ public class TempoActions
             tempoActionDictionary.Add(type, () => { //Debug.Log(type.ToString());
              });
         }
+    
     }
     public UnityAction this[TempoActionType key]
     {
