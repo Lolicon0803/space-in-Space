@@ -2768,9 +2768,19 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.009
       objectReference: {fileID: 0}
+    - target: {fileID: 629644478927395797, guid: 28a74a9b72204f14693b3867acc459c7,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.08
+      objectReference: {fileID: 0}
     - target: {fileID: 4554779617315276594, guid: 28a74a9b72204f14693b3867acc459c7,
         type: 3}
       propertyPath: Mute
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7769647021230904087, guid: 28a74a9b72204f14693b3867acc459c7,
+        type: 3}
+      propertyPath: m_PlayOnAwake
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

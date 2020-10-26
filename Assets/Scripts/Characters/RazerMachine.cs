@@ -46,6 +46,7 @@ public class RazerMachine : MonoBehaviour
             if (hitObject.collider != null)
             {
                 Debug.Log("撞到雷射 即死");
+                transform.GetChild(0).GetComponent<AudioSource>().Play();
                // Player.Singleton.lifeSystem.GameOver();
                Player.Singleton.lifeSystem.Hurt();
             }
@@ -112,8 +113,8 @@ public class RazerMachine : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position + (Vector3)razerData.Direction.normalized * i, Vector3.one);
-
         }
+
         Gizmos.DrawLine(transform.position, transform.position + (Vector3)razerData.Direction.normalized * razerData.distance);
     }
 
