@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
             if (!IsOnGround() && canInput)
             {
                 OnMiss?.Invoke();
+                //Player.Singleton.lifeSystem.LossLife();
                 Punish();
             }
         }, TempoActionType.TimeOut);
@@ -85,6 +86,11 @@ public class PlayerMovement : MonoBehaviour
 
         coroutineMovePlayer = StartCoroutine(MovePlayer());
         StartCoroutine(ProcessOperation());
+    }
+
+    private void Update()
+    {
+        Debug.Log(canInput);
     }
 
     private IEnumerator ProcessOperation()
@@ -123,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
     private void CheckInput()
     {
         //float t = 0;
-        
+
         //spacePressed = false;
         // 讓玩家在x幀內都能輸入，不然同一幀有時候未必能偵測到空白鍵+左右鍵
         //while (t < Time.deltaTime * 7.5f)
@@ -191,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
                 if (coroutineHitObstacle != null)
                     StopCoroutine(coroutineHitObstacle);
                 coroutineHitObstacle = StartCoroutine(HitObstacle(new Vector2(direction.x, 0), obstaclePoint));
-                oldMoveVector.x = distanceCoef * Constants.moveUnit * direction.x;
+                oldMoveVector = distanceCoef * Constants.moveUnit * direction;
             }
         }
         else
@@ -217,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
                 if (coroutineHitObstacle != null)
                     StopCoroutine(coroutineHitObstacle);
                 coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePoint));
-                oldMoveVector.y = distanceCoef * Constants.moveUnit * direction.y;
+                oldMoveVector = distanceCoef * Constants.moveUnit * direction;
             }
         }
     }
@@ -247,7 +253,6 @@ public class PlayerMovement : MonoBehaviour
         SpeedCoef = slideSpeed;
 
         Vector2 obstaclePoint = Vector2.zero;
-
         bool yes = GetNextMovePointDistance(oldMoveVector.normalized, Constants.moveUnit, out float maxDistanceCoef, ref obstaclePoint, true);
         if (yes)
             movePoint.position += (Vector3)oldMoveVector.normalized * Constants.moveUnit * maxDistanceCoef;
@@ -285,14 +290,19 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">Where to go.</param>
     /// <param name="obstaclePoint">Obstacle's position.</param>
     /// <returns></returns>
-    private IEnumerator HitObstacle(Vector2 direction, Vector2 obstaclePoint)
+    private IEnumerator HitObstacle(Vector2 direction, Vector2 obstaclePoint, bool byKnocked = false)
     {
         canInput = false;
         StopCoroutine(coroutineMovePlayer);
         int index;
         // Get hitJudgmentPoints inedx.
         if (direction.x != 0)
-            index = 3; //  (direction.x == -1) ? 2 : 3;
+        {
+            if (!byKnocked)
+                index = 3; //  (direction.x == -1) ? 2 : 3;
+            else
+                index = (direction.x == -1) ? 2 : 3;
+        }
         else
             index = (direction.y == 1) ? 0 : 1;
         // Hit obstacle.
@@ -363,7 +373,7 @@ public class PlayerMovement : MonoBehaviour
         SpeedCoef = impactSpeed;
         // 會撞牆，演示撞牆後回到正確位置
         if (!noObstacle)
-            coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition));
+            coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition, true));
         else
         {
             coroutineMovePlayer = StartCoroutine(MovePlayer());
@@ -470,5 +480,26 @@ public class PlayerMovement : MonoBehaviour
         transform.localScale = Vector2.one;
         transform.rotation = Quaternion.identity;
         Knock(exit.pushDirection, exit.pushUnit, exit.pushSpeed);
+    }
+
+    public void ResetStatus()
+    {
+        canInput = true;
+        isBlackHole = false;
+        firstTimeMiss = true;
+        if (coroutineMovePlayer != null)
+            StopCoroutine(coroutineMovePlayer);
+        coroutineMovePlayer = StartCoroutine(MovePlayer());
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+    }
+
+    public void Die()
+    {
+        if (coroutineMovePlayer != null)
+            StopCoroutine(coroutineMovePlayer);
+        canInput = false;
+        isBlackHole = false;
+        firstTimeMiss = true;
     }
 }

@@ -41,24 +41,36 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
+    private bool isDie;
+
     // Start is called before the first frame update
     void Start()
     {
+        isDie = false;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnMiss += LossLife;
         playerMovement.OnError += LossLife;
+        InitializeHHeart();
+    }
 
+    private void InitializeHHeart()
+    {
         nowHp = maxHp;
-
         int total = nowHp / 2 + nowHp % 2;
-        heartImages = new Image[total];
-        lastHeartIndex = total - 1;
-        for (int i = 0; i < total; i++)
+        if (heartImages == null)
         {
-            heartImages[i] = Instantiate(heartImagePrefab, canvas.transform);
-            heartImages[i].rectTransform.offsetMin = new Vector2(heartImages[i].rectTransform.offsetMin.x + 75 * i, heartImages[i].rectTransform.offsetMin.y);
-            heartImages[i].rectTransform.offsetMax = new Vector2(heartImages[i].rectTransform.offsetMax.x + 75 * i, heartImages[i].rectTransform.offsetMax.y);
+            heartImages = new Image[total];
+            for (int i = 0; i < total; i++)
+            {
+                heartImages[i] = Instantiate(heartImagePrefab, canvas.transform);
+                heartImages[i].rectTransform.offsetMin = new Vector2(heartImages[i].rectTransform.offsetMin.x + 75 * i, heartImages[i].rectTransform.offsetMin.y);
+                heartImages[i].rectTransform.offsetMax = new Vector2(heartImages[i].rectTransform.offsetMax.x + 75 * i, heartImages[i].rectTransform.offsetMax.y);
+            }
         }
+        foreach (Image image in heartImages)
+            image.sprite = fullHeart;
+
+        lastHeartIndex = total - 1;
         if (nowHp % 2 != 0)
         {
             heartImages[lastHeartIndex].sprite = breakHeart;
@@ -66,11 +78,6 @@ public class PlayerLifeSystem : MonoBehaviour
         }
         else
             lastHeartState = HeartStatus.Full;
-    }
-
-    private void Update()
-    {
-        //Debug.Log(Player.Singleton.movement.firstTimeMiss);
     }
 
     /// <summary>
@@ -87,23 +94,24 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-        if (!Player.Singleton.movement.firstTimeMiss)
+        if (!Player.Singleton.movement.firstTimeMiss && !isDie)
         {
+            playerMovement.canInput = false;
             BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
     }
-
 
     /// <summary>
     /// When miss or error, loss one hp and show red screen.
     /// </summary>
     public void Hurt()
     {
-
-        BreakHeart();
-        StartCoroutine(ShowRedEffect());
-
+        if (!isDie)
+        {
+            BreakHeart();
+            StartCoroutine(ShowRedEffect());
+        }
     }
 
     /// <summary>
@@ -127,10 +135,11 @@ public class PlayerLifeSystem : MonoBehaviour
             default:
                 break;
         }
-
         // Gameover.
-        if (nowHp == 0)
+        if (nowHp <= 0)
             GameOver();
+        else
+            playerMovement.canInput = true;
     }
 
     /// <summary>
@@ -154,12 +163,9 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        isDie = true;
+        playerMovement.Die();
         StartCoroutine(ShowBlackEffect());
-        // Recover hp.
-        nowHp = maxHp;
-        int total = nowHp / 2 + nowHp % 2;
-        lastHeartIndex = total - 1;
-        playerMovement.canInput = false;
     }
 
     /// <summary>
@@ -182,16 +188,8 @@ public class PlayerLifeSystem : MonoBehaviour
             yield return null;
         }
 
-        // 補愛心圖
-        foreach (Image image in heartImages)
-            image.sprite = fullHeart;
-        if (nowHp % 2 != 0)
-        {
-            heartImages[lastHeartIndex].sprite = breakHeart;
-            lastHeartState = HeartStatus.Break;
-        }
-        else
-            lastHeartState = HeartStatus.Full;
+        InitializeHHeart();
+
         // 玩家回到起始點。
         playerMovement.movePoint.position = startPosition;
         transform.position = startPosition;
@@ -205,10 +203,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 愛心出來。
         foreach (Image image in heartImages)
             image.color = new Color(1, 1, 1, 1);
-
-        playerMovement.canInput = true;
-
-        transform.localRotation = Quaternion.identity;
-        transform.localScale = Vector3.one;
+        playerMovement.ResetStatus();
+        isDie = false;
     }
 }
