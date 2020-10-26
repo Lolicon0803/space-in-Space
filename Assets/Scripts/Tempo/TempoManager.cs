@@ -18,7 +18,7 @@ public enum TouchStates
 }
 
 
-public class AudioEngine : MonoBehaviour
+public class TempoManager : MonoBehaviour
 {
     public SpriteRenderer sprite;
     public bool improveDelayMode;
@@ -47,8 +47,6 @@ public class AudioEngine : MonoBehaviour
     private double resetEndTime;
     private double time;
     private float timeStep;
-
-    //private Dictionary<TempoActionType, UnityAction> tempoActions;
     public TempoActions tempoActions;
     public AudioSource BGM;
 
@@ -66,14 +64,11 @@ public class AudioEngine : MonoBehaviour
         BGM.Play();
         time = MsPB;
         timeStep = 0.01f;
-
-
         InvokeRepeatInit();
         touchState = TouchStates.Disable;
     }
     void Awake()
     {
-
         if (singleton == null)
         {
             singleton = this;
@@ -82,15 +77,7 @@ public class AudioEngine : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         tempoActions = new TempoActions();
-        /*
-                tempoActionDictionary = new Dictionary<TempoActionType, UnityAction>();
-                foreach (TempoActionType type in Enum.GetValues(typeof(TempoActionType)))
-                {
-                    tempoActionDictionary.Add(type, () => { Debug.Log(type.ToString()); });
-                }
-        */
     }
     void InvokeRepeatInit()
     {
@@ -175,12 +162,14 @@ public class AudioEngine : MonoBehaviour
     // 打擊更改State
     public bool KeyDown()
     {
+        bool touchSuccess = false;
         switch (touchState)
         {
             case TouchStates.Disable:
                 touchState = TouchStates.TouchFailed;
                 break;
             case TouchStates.Enable:
+                touchSuccess = true;
                 touchState = TouchStates.Touched;
                 break;
             case TouchStates.TimeOut:
@@ -196,7 +185,7 @@ public class AudioEngine : MonoBehaviour
                 break;
         }
         if (improveDelayMode) UpdateAdjustDelay();
-        return touchState == TouchStates.Touched;
+        return touchSuccess;
     }
     private void UpdateAdjustDelay()
     {
@@ -276,23 +265,15 @@ public class AudioEngine : MonoBehaviour
             delay = adjustDelay;
         }
     }
-    // 按照TempoActionType覆寫Action，請加所有Action加在一起再傳入。
-
-    /*
-        public void SetTempoTypeListener(UnityAction newAction, TempoActionType tempoType)
-        {
-            tempoActionDictionary[tempoType] = newAction;
-        }
-    */
     //單例引用，所有人呼叫的系統都是同一個
-    private static AudioEngine singleton = null;
-    public static AudioEngine Singleton
+    private static TempoManager singleton = null;
+    public static TempoManager Singleton
     {
         get
         {
             if (singleton == null)
             {
-                singleton = FindObjectOfType(typeof(AudioEngine)) as AudioEngine;
+                singleton = FindObjectOfType(typeof(TempoManager)) as TempoManager;
             }
             return singleton;
         }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class TouchDelayAdjustScene : MonoBehaviour
 {
-    public AudioEngine audioEngine;
+    public TempoManager audioEngine;
     public Text avgDelayText;
     public Text lastTouchDelayText;
     public Text currentDelayText;
