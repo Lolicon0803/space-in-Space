@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour
                     if (inputDirection != Vector2.zero)
                     {
                         // 打在節拍上
-                        if (AudioEngine.Singleton.KeyDown())
+                        if (TempoManager.Singleton.KeyDown())
                             HandleInput(inputDirection);
                         // 沒有打在節拍上且不在地上
                         else if (!IsOnGround())

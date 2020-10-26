@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4782803993227169767}
   - component: {fileID: 4782803993227169765}
   m_Layer: 0
-  m_Name: AudioEngine
+  m_Name: TempoManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4782803993227169760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb8e943ae6fc5ad44bad1cafdc5eabba, type: 3}
+  m_Script: {fileID: 11500000, guid: 60fca7ec357960f4187e1e6f2510c2e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 711766734}

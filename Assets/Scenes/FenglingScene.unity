@@ -860,7 +860,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0.5}
-    oldSize: {x: 2.9, y: 0.39}
+    oldSize: {x: 0.975, y: 0.975}
     newSize: {x: 1, y: 0.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
@@ -930,6 +930,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AudioEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
+        type: 3}
+      propertyPath: improveDelayMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}

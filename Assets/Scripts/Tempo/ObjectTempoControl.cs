@@ -46,17 +46,17 @@ public class ObjectTempoControl : MonoBehaviour
 
     public void AddToBeatAction(UnityAction function, TempoActionType type)
     {
-        AudioEngine.Singleton.tempoActions[type] += function;
+        TempoManager.Singleton.tempoActions[type] += function;
     }
 
     public void RemoveToBeatAction(UnityAction function, TempoActionType type)
     {
-        AudioEngine.Singleton.tempoActions[type] -= function;
+        TempoManager.Singleton.tempoActions[type] -= function;
     }
 
     public void ClearToBeatAction(TempoActionType type)
     {
         //Fix me:not sure if sentence true
-        AudioEngine.Singleton.tempoActions[type] = null;
+        TempoManager.Singleton.tempoActions[type] = null;
     }
 }
