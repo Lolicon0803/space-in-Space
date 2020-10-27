@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7158554234574964119}
   - component: {fileID: 3898602998773411314}
   m_Layer: 5
-  m_Name: Button
+  m_Name: mainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3898602998773411314}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7158554236166811516}
+        m_MethodName: LoadMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3898602998773411314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +223,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -310,7 +321,7 @@ GameObject:
   - component: {fileID: 7158554235749046421}
   - component: {fileID: 1426152175790078440}
   m_Layer: 5
-  m_Name: Button
+  m_Name: resumeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -385,7 +396,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1426152175790078440}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7158554236166811516}
+        m_MethodName: Resume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1426152175790078440
 MonoBehaviour:
   m_ObjectHideFlags: 0

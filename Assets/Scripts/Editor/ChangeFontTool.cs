@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 
 public class ChangeFontWindow : EditorWindow
@@ -9,7 +7,7 @@ public class ChangeFontWindow : EditorWindow
     [MenuItem("Tools/更換字體")]
     public static void Open()
     {
-        EditorWindow.GetWindow(typeof(ChangeFontWindow));
+        GetWindow(typeof(ChangeFontWindow));
     }
 
     Font toChange;

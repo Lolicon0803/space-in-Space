@@ -49,26 +49,15 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
+        [SerializeField] private Text BGMvolumeText; 
         [SerializeField] private Slider volumeSlider;
         [Space(10)]
         #endregion
 
-        int[,] COORD_LIST = new int[,] {
-            { 42, 350 },
-            { 42, 300 },
-            { 42, 250 },
-            { 42, 200 },
-            { 360, 225 },
-            { 510, 225 },
-            { 42, 100 },
-        };
+        public AudioSource BGM;
 
         public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
         public GameObject graphicsMenuFirstBtn, soundMenuFirstBtn, gameplayMenuFirstBtn;
-
-        void Start()
-        {
-        }
         
         //MAIN SECTION
         public IEnumerator ConfirmationBox()
@@ -197,10 +186,17 @@ namespace SpeedTutorMainMenuSystem
             volumeText.text = volume.ToString("0.0");
         }
 
+        public void BGMVolumeSlider(float volume)
+        {
+            BGM.volume = volume;
+            BGMvolumeText.text = volume.ToString("0.0");
+        }
+
         public void VolumeApply()
         {
             PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
             Debug.Log(PlayerPrefs.GetFloat("masterVolume"));
+            PlayerPrefs.SetFloat("BGM", BGM.volume);
             StartCoroutine(ConfirmationBox());
         }
 
