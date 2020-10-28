@@ -11,6 +11,8 @@ public class RazerMachine : MonoBehaviour
     public bool[] razerTempo;
     public TempoActionType tempoType;
 
+    public float razerSize;
+
     public int waitTempo;
     public bool razerWaitStatus;
     private int razerTempoIndex = 0;
@@ -46,6 +48,7 @@ public class RazerMachine : MonoBehaviour
             if (hitObject.collider != null)
             {
                 Debug.Log("撞到雷射 即死");
+                transform.GetChild(0).GetComponent<AudioSource>().Play();
                // Player.Singleton.lifeSystem.GameOver();
                Player.Singleton.lifeSystem.Hurt();
             }
@@ -71,11 +74,11 @@ public class RazerMachine : MonoBehaviour
 
             if (razerWaitStatus)
             {
-                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, (float)0.08, 1);
+                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, razerSize, 1);
             }
             else
             {
-                transform.GetChild(0).transform.localScale = new Vector3(0, 1, 1);
+                transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
             }
 
         }
@@ -83,7 +86,7 @@ public class RazerMachine : MonoBehaviour
         {
             if (razerTempo[razerTempoIndex])
             {
-                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, (float)0.08, 1);
+                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, razerSize, 1);
                 isShooting = true;
                 gameObject.GetComponent<AudioSource>().clip = razerPlaying;
                 gameObject.GetComponent<AudioSource>().Play();
@@ -91,7 +94,7 @@ public class RazerMachine : MonoBehaviour
             else
             {
                 isShooting = false;
-                transform.GetChild(0).transform.localScale = new Vector3(0, (float)0.08, 1);
+                transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
 
                 //關閉音效
                 gameObject.GetComponent<AudioSource>().Stop();
@@ -112,8 +115,8 @@ public class RazerMachine : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(transform.position + (Vector3)razerData.Direction.normalized * i, Vector3.one);
-
         }
+
         Gizmos.DrawLine(transform.position, transform.position + (Vector3)razerData.Direction.normalized * razerData.distance);
     }
 

@@ -102,6 +102,7 @@ MonoBehaviour:
     distance: 5
   razerTempo: 0000000001
   tempoType: 2
+  razerSize: 0
   waitTempo: 0
   razerWaitStatus: 1
   razerStart: {fileID: 8300000, guid: 066b566658fe9034382c0995fd3532b6, type: 3}
@@ -118,7 +119,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: c19aacb0c37154c45b74529685264c4a, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
