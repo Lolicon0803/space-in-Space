@@ -64,6 +64,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 inputDirection;
     //private bool spacePressed;
 
+
+    //測試用
+    bool isa = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -90,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(canInput);
+        // Debug.Log(canInput);
     }
 
     private IEnumerator ProcessOperation()
@@ -129,6 +133,8 @@ public class PlayerMovement : MonoBehaviour
     private void CheckInput()
     {
         //float t = 0;
+        if (Input.GetKeyDown(KeyCode.Q))
+            isa = !isa;
 
         //spacePressed = false;
         // 讓玩家在x幀內都能輸入，不然同一幀有時候未必能偵測到空白鍵+左右鍵
@@ -160,6 +166,7 @@ public class PlayerMovement : MonoBehaviour
     private void HandleInput(Vector2 direction)
     {
         float maxDistanceCoef = 0;
+
         Vector2 obstaclePoint = Vector2.zero;
         // 水平
         if (direction.x != 0)
@@ -278,6 +285,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!isBlackHole)
                     canInput = true;
+            }
+
+            if ((int)Vector2.Distance(transform.position, movePoint.position) == 0 && !isa)
+            {
+                //觸發事件
+                isa = !isa;
+                Debug.Log("觸發");
+                MapSystem.Singleton.MapEventTrigger(transform.position);
             }
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, SpeedCoef * Time.deltaTime);
             yield return null;

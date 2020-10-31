@@ -94,10 +94,11 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
+
         if (!Player.Singleton.movement.firstTimeMiss && !isDie)
         {
             playerMovement.canInput = false;
-            BreakHeart();
+           // BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
     }
