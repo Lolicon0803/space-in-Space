@@ -97,7 +97,7 @@ public class PlayerLifeSystem : MonoBehaviour
 
         if (!Player.Singleton.movement.firstTimeMiss && !isDie)
         {
-            playerMovement.canInput = false;
+            //playerMovement.canInput = false;
            // BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
@@ -192,7 +192,7 @@ public class PlayerLifeSystem : MonoBehaviour
         InitializeHHeart();
 
         // 玩家回到起始點。
-        playerMovement.movePoint.position = startPosition;
+        playerMovement.movePoint = startPosition;
         transform.position = startPosition;
         // 黑屏結束
         while (alpha > 0)
