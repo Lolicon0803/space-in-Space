@@ -24,9 +24,9 @@ public class PlayerAnimationManager : MonoBehaviour
     private void PlayWalkAnimation(Vector2 direction)
     {
         // Change sprite direction.
-        if (direction == Vector2.left)
+        if (direction == -(Vector2)transform.right)
             transform.localScale = new Vector3(-1, 1, 1);
-        else if (direction == Vector2.right)
+        else if (direction == (Vector2)transform.right)
             transform.localScale = new Vector3(1, 1, 1);
 
         // Left or right foot.

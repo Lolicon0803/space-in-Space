@@ -47,7 +47,8 @@ public class PlayerMovement : MonoBehaviour
     public float SpeedCoef { get; private set; }
 
     private Coroutine coroutineHitObstacle;
-    private Coroutine coroutineMovePlayer;
+    private Coroutine coroutineShoot;
+    private Coroutine coroutineSlide;
 
     // 所有能阻擋玩家的層(玩家碰撞後回到格子中間)
     public LayerMask obstacleLayers;
@@ -61,28 +62,26 @@ public class PlayerMovement : MonoBehaviour
     public event PlayerDamagedDelegate OnMiss;
     public event PlayerDamagedDelegate OnError;
 
-    private Vector2 inputDirection;
-
-    ////測試用
-    //bool isa = false;
+    private Vector2 moveDirection;
+    private CapsuleCollider2D collider;
 
     // Start is called before the first frame update
     void Start()
     {
-        SpeedCoef = 1.0f;
+        collider = GetComponent<CapsuleCollider2D>();
 
         ObjectTempoControl.Singleton.AddToBeatAction(() =>
         {
             if (!IsOnGround() && canInput)
             {
                 OnMiss?.Invoke();
-                Slide();
+                //Slide();
             }
         }, TempoActionType.TimeOut);
 
-        inputDirection = Vector2.zero;
+        SpeedCoef = 1.0f;
+        moveDirection = Vector2.zero;
         firstTimeMiss = true;
-
         movePoint = transform.position;
         canInput = true;
         StartCoroutine(ProcessOperation());
@@ -90,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(canInput);
+        //Debug.Log(canInput);
     }
 
     private IEnumerator ProcessOperation()
@@ -99,18 +98,16 @@ public class PlayerMovement : MonoBehaviour
         {
             if (canInput)
             {
-                CheckInput();
-                if (inputDirection != Vector2.zero)
+                //CheckInput();
+                //if (inputDirection != Vector2.zero)
+                if (Input.GetMouseButtonDown(0))
                 {
                     // 打在節拍上
                     if (TempoManager.Singleton.KeyDown())
-                        HandleInput(inputDirection);
+                        HandleInput();
                     // 沒有打在節拍上且不在地上
                     else if (!IsOnGround())
-                    {
                         OnError?.Invoke();
-                        Slide();
-                    }
                 }
             }
             yield return null;
@@ -121,189 +118,206 @@ public class PlayerMovement : MonoBehaviour
     /// Get player's keyboard input.
     /// </summary>
     /// <returns></returns>
-    private void CheckInput()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-            inputDirection = Vector2.left;
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-            inputDirection = Vector2.right;
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
-            inputDirection = Vector2.up;
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
-            inputDirection = Vector2.down;
-        else
-            inputDirection = Vector2.zero;
-    }
+    //private void CheckInput()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.LeftArrow))
+    //        inputDirection = -transform.right;
+    //    else if (Input.GetKeyDown(KeyCode.RightArrow))
+    //        inputDirection = transform.right;
+    //    else if (Input.GetKeyDown(KeyCode.UpArrow))
+    //        inputDirection = transform.up;
+    //    else if (Input.GetKeyDown(KeyCode.DownArrow))
+    //        inputDirection = -transform.up;
+    //    else
+    //        inputDirection = Vector2.zero;
+    //}
 
     /// <summary>
     /// According to player's input to determine how will player move.
     /// </summary>
-    /// <param name="direction">Player's input direction.</param>
-    /// <param name="spacePressed">Is space pressed.</param>
-    private void HandleInput(Vector2 direction)
+    private void HandleInput()
     {
-        // 這次移動最遠可以走多少
-        float maxMovableDistance = 0;
-        // 移動方向上障礙物的位置
-        Vector2 obstaclePoint = Vector2.zero;
-        // 水平移動
-        if (direction.x != 0)
-        {
-            // 套用噴射/走路速度
-            SpeedCoef = moveSpeed;
+        // 抓滑鼠位置算方向
+        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        moveDirection = mouse - (Vector2)transform.position;
+        moveDirection.Normalize();
+        coroutineShoot = StartCoroutine(Shoot());
+        //// 這次移動最遠可以走多少
+        //float maxMovableDistance = 0;
+        //// 移動方向上障礙物的位置
+        //Ground ground = null;
+        //// 水平移動
+        //if (moveDirection.x != 0)
+        //{
+        //    // 套用噴射/走路速度
+        //    SpeedCoef = moveSpeed;
 
-            // 地上，1格。
-            if (IsOnGround() && IsFrontHasGround())
-                distanceCoef = distanceDictionary["move"];
-            // 空中，2格。
-            else
-                distanceCoef = distanceDictionary["rocket"];
+        //    // 地上，1格。
+        //    if (IsOnGround() && IsFrontHasGround())
+        //        distanceCoef = distanceDictionary["move"];
+        //    // 空中，2格。
+        //    else
+        //        distanceCoef = distanceDictionary["rocket"];
 
-            // 取得最遠移動距離、是否有障礙物與障礙物位置
-            bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxMovableDistance, ref obstaclePoint);
-            // 可以走至少1格
-            if (maxMovableDistance != 0)
-            {
-                // 紀錄移動方向
-                oldMoveVector = direction * maxMovableDistance * Constants.moveUnit;
-                // 更新目的地點
-                movePoint += oldMoveVector;
-            }
-            
-            if (distanceCoef == distanceDictionary["move"])
-            {
-                OnWalk?.Invoke(direction);
-            }
-            else if (distanceCoef == distanceDictionary["rocket"])
-            {
-                firstTimeMiss = true;
-                OnFireBag?.Invoke(direction);
-            }
-            // 會撞牆，演示撞牆後回到正確位置
-            if (!noObstacle)
-            {
-                if (coroutineHitObstacle != null)
-                    StopCoroutine(coroutineHitObstacle);
-                coroutineHitObstacle = StartCoroutine(HitObstacle(new Vector2(direction.x, 0), obstaclePoint));
-                oldMoveVector = distanceCoef * Constants.moveUnit * direction;
-            }
-            // 不會撞牆，正常移動
-            else
-            {
-                Debug.Log("Can Move");
-                coroutineMovePlayer = StartCoroutine(MovePlayer());
-            }
+        //    // 取得最遠移動距離、是否有障礙物與障礙物位置
+        //    bool noObstacle = GetNextMovePointDistance(moveDirection, distanceCoef, out maxMovableDistance, ref ground);
+        //    // 可以走至少1格
+        //    if (maxMovableDistance != 0)
+        //    {
+        //        // 紀錄移動方向
+        //        oldMoveVector = moveDirection * maxMovableDistance * Constants.moveUnit;
+        //        // 更新目的地點
+        //        movePoint += oldMoveVector;
+        //    }
 
-        }
-        else
-        // 垂直移動
-        if (direction.y != 0)
-        {
-            // 套用噴射/走路速度
-            SpeedCoef = moveSpeed;
-            // 上下2格
-            distanceCoef = distanceDictionary["rocket"];
-            firstTimeMiss = true;
-            // 取得最遠移動距離、是否有障礙物與障礙物位置
-            bool noObstacle = GetNextMovePointDistance(direction, distanceCoef, out maxMovableDistance, ref obstaclePoint);
-            // 可以走至少1格
-            if (maxMovableDistance != 0)
-            {
-                // 紀錄移動方向
-                oldMoveVector = oldMoveVector = direction * maxMovableDistance * Constants.moveUnit;
-                // 更新目的地點
-                movePoint += oldMoveVector;
-            }
+        //    if (distanceCoef == distanceDictionary["move"])
+        //    {
+        //        OnWalk?.Invoke(moveDirection);
+        //    }
+        //    else if (distanceCoef == distanceDictionary["rocket"])
+        //    {
+        //        firstTimeMiss = true;
+        //        OnFireBag?.Invoke(moveDirection);
+        //    }
+        //    // 會撞牆，演示撞牆後回到正確位置
+        //    if (!noObstacle)
+        //    {
+        //        if (coroutineHitObstacle != null)
+        //            StopCoroutine(coroutineHitObstacle);
+        //        coroutineHitObstacle = StartCoroutine(HitObstacle(new Vector2(moveDirection.x, 0), ground));
+        //        oldMoveVector = distanceCoef * Constants.moveUnit * moveDirection;
+        //    }
+        //    // 不會撞牆，正常移動
+        //    else
+        //    {
+        //        //Debug.Log("Can Move");
+        //        coroutineMovePlayer = StartCoroutine(Shoot());
+        //    }
 
-            OnFireBag?.Invoke(direction);
+        //}
+        //else
+        //// 垂直移動
+        //if (moveDirection.y != 0)
+        //{
+        //    // 套用噴射/走路速度
+        //    SpeedCoef = moveSpeed;
+        //    // 上下2格
+        //    distanceCoef = distanceDictionary["rocket"];
+        //    firstTimeMiss = true;
+        //    // 取得最遠移動距離、是否有障礙物與障礙物位置
+        //    bool noObstacle = GetNextMovePointDistance(moveDirection, distanceCoef, out maxMovableDistance, ref ground);
+        //    // 可以走至少1格
+        //    if (maxMovableDistance != 0)
+        //    {
+        //        // 紀錄移動方向
+        //        oldMoveVector = moveDirection * maxMovableDistance * Constants.moveUnit;
+        //        // 更新目的地點
+        //        movePoint += oldMoveVector;
+        //    }
 
-            // 會撞牆，演示撞牆後回到正確位置
-            if (!noObstacle)
-            {
-                if (coroutineHitObstacle != null)
-                    StopCoroutine(coroutineHitObstacle);
-                coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePoint));
-                oldMoveVector = distanceCoef * Constants.moveUnit * direction;
-            }
-            // 不會撞牆，正常移動
-            else
-                coroutineMovePlayer = StartCoroutine(MovePlayer());
-        }
+        //    OnFireBag?.Invoke(moveDirection);
+
+        //    // 會撞牆，演示撞牆後回到正確位置
+        //    if (!noObstacle)
+        //    {
+        //        if (coroutineHitObstacle != null)
+        //            StopCoroutine(coroutineHitObstacle);
+        //        coroutineHitObstacle = StartCoroutine(HitObstacle(moveDirection, ground));
+        //        oldMoveVector = distanceCoef * Constants.moveUnit * moveDirection;
+        //    }
+        //    // 不會撞牆，正常移動
+        //    else
+        //        coroutineMovePlayer = StartCoroutine(Shoot());
+        //}
     }
 
     private bool IsOnGround()
     {
         // 判斷自己下方是否有地板
-        Collider2D c = Physics2D.Raycast(movePoint, Vector2.down, Constants.moveUnit, obstacleLayers).collider;
+        Collider2D c = Physics2D.Raycast(movePoint, -transform.up, Constants.moveUnit, obstacleLayers).collider;
         return c != null;
     }
 
     private bool IsFrontHasGround()
     {
         // 判斷前方一格下方是否有地板
-        Collider2D c = Physics2D.Raycast(movePoint + new Vector2(Constants.moveUnit * inputDirection.x, 0), Vector2.down, Constants.moveUnit, obstacleLayers).collider;
+        Collider2D c = Physics2D.Raycast(movePoint + new Vector2(Constants.moveUnit * moveDirection.x, 0), -transform.up, Constants.moveUnit, obstacleLayers).collider;
         return c != null;
     }
 
     /// <summary>
     /// Force move 1 unit when timemiss or error tempo.
     /// </summary>
-    private void Slide()
-    {
-        // 只有第一次空拍或打錯才會移動一格
-        if (!firstTimeMiss)
-            return;
-        // 套用滑行速度
-        SpeedCoef = slideSpeed;
+    //private void Slide()
+    //{
+    //    // 只有第一次空拍或打錯才會移動一格
+    //    if (!firstTimeMiss)
+    //        return;
+    //    // 套用滑行速度
+    //    SpeedCoef = slideSpeed;
 
-        Vector2 obstaclePoint = Vector2.zero;
-        // 取得最遠移動距離、是否有障礙物與障礙物位置
-        bool noObstacle = GetNextMovePointDistance(oldMoveVector.normalized, Constants.moveUnit, out float maxDistanceCoef, ref obstaclePoint, true);
-        if (noObstacle)
-            movePoint += oldMoveVector.normalized * Constants.moveUnit * maxDistanceCoef;
-        // 會撞牆，演示撞牆後回到正確位置
-        else
-        {
-            if (coroutineHitObstacle != null)
-                StopCoroutine(coroutineHitObstacle);
-            coroutineHitObstacle = StartCoroutine(HitObstacle(oldMoveVector.normalized, obstaclePoint));
-        }
-        firstTimeMiss = false;
-    }
+    //    Ground ground = null;
+    //    // 取得最遠移動距離、是否有障礙物與障礙物位置
+    //    //bool noObstacle = GetNextMovePointDistance(oldMoveVector.normalized, Constants.moveUnit, out float maxDistanceCoef, ref ground, true);
+    //    //if (noObstacle)
+    //    //    movePoint += oldMoveVector.normalized * Constants.moveUnit * maxDistanceCoef;
+    //    //// 會撞牆，演示撞牆後回到正確位置
+    //    //else
+    //    //{
+    //    //    if (coroutineHitObstacle != null)
+    //    //        StopCoroutine(coroutineHitObstacle);
+    //    //    coroutineHitObstacle = StartCoroutine(HitObstacle(oldMoveVector.normalized, ground));
+    //    //}
+    //    //firstTimeMiss = false;
+    //}
 
     /// <summary>
     /// Let player move to move point.
     /// </summary>
     /// <returns></returns>
-    public IEnumerator MovePlayer()
+    private IEnumerator Shoot()
     {
         // 移動中，不可操作
         canInput = false;
+        // 預先設置目的地
+        movePoint = (Vector2)transform.position + moveDirection * distanceDictionary["rocket"];
+        SpeedCoef = moveSpeed;
+        // 停止滑行
+        if (coroutineSlide != null)
+            StopCoroutine(coroutineSlide);
         // 直到到達目的地為止
         while (Vector2.Distance(transform.position, movePoint) > SpeedCoef * Time.deltaTime)
         {
-            Debug.Log("moving");
             transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
             yield return null;
         }
         transform.position = movePoint;
-        if (!isBlackHole)
-            canInput = true;
-        // 事件處理
-        //MapSystem.Singleton.MapEventTrigger(transform.position);
+        canInput = true;
+        coroutineSlide = StartCoroutine(Slide());
+    }
+
+    private IEnumerator Slide()
+    {
+        SpeedCoef = slideSpeed;
+        while (true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + (Vector3)moveDirection, SpeedCoef * Time.deltaTime);
+            movePoint = transform.position;
+            yield return null;
+        }
     }
 
     /// <summary>
     /// Show hit obstacle and return to original grid.
     /// </summary>
     /// <param name="direction">Where to go.</param>
-    /// <param name="obstaclePoint">Obstacle's position.</param>
+    /// <param name="ground">Obstacle's position.</param>
     /// <returns></returns>
-    private IEnumerator HitObstacle(Vector2 direction, Vector2 obstaclePoint, bool byKnocked = false)
+    private IEnumerator HitObstacle(Vector2 direction, Ground ground, bool byKnocked = false)
     {
         canInput = false;
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
         int index;
         // Get hitJudgmentPoints inedx.
         if (direction.x != 0)
@@ -315,18 +329,109 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             index = (direction.y == 1) ? 0 : 1;
-        // Hit obstacle.
-        while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+        //Debug.Log(transform.position - ground.transform.position);
+        GroundEvent groundEvent = ground.GetGroundEvent(transform.position - ground.transform.position);
+        Vector2 obstaclePoint = ground.GetBoundPoint(transform.position - ground.transform.position);
+        //Debug.Log(groundEvent);
+        if (groundEvent != null)
         {
-            Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
-            transform.position += (Vector3)delta;
-            yield return null;
+            switch (groundEvent.behavior)
+            {
+                case GroundBehavior.None:
+                    // Hit obstacle.
+                    while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+                    {
+                        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+                        transform.position += (Vector3)delta;
+                        yield return null;
+                    }
+                    // Bounce.
+                    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+                        yield return null;
+                    }
+                    break;
+                case GroundBehavior.Standable:
+                    if (groundEvent.needHit)
+                    {
+                        // Hit obstacle.
+                        while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+                        {
+                            Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+                            transform.position += (Vector3)delta;
+                            yield return null;
+                        }
+                        // Bounce.
+                        while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+                        {
+                            transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+                            yield return null;
+                        }
+                    }
+                    Quaternion q = Quaternion.FromToRotation(-transform.up, moveDirection);
+                    if (q.eulerAngles.z != 0)
+                    {
+                        q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
+                        while (Vector3.Distance(transform.rotation.eulerAngles, q.eulerAngles) > 5.625f * Time.deltaTime)
+                        {
+                            if (q.eulerAngles.z > 0)
+                                transform.Rotate(Vector3.forward, 5.625f);
+                            else
+                                transform.Rotate(-Vector3.forward, 5.625f);
+                            yield return null;
+                        }
+                        transform.rotation = q;
+                    }
+                    break;
+                case GroundBehavior.Rebounce:
+                    // Hit obstacle.
+                    while (Vector2.Distance(hitJudgmentPoints[index].position, ground.transform.position) > 0.02f * Time.deltaTime)
+                    {
+                        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, ground.transform.position, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+                        transform.position += (Vector3)delta;
+                        yield return null;
+                    }
+                    //Debug.Log(groundEvent.reboundDirection);
+                    switch (groundEvent.reboundDirection)
+                    {
+                        case GameData.Direction.UP:
+                            movePoint = (Vector2)ground.transform.position + Vector2.up;
+                            break;
+                        case GameData.Direction.DOWN:
+                            movePoint = (Vector2)ground.transform.position + Vector2.down;
+                            break;
+                        case GameData.Direction.LEFT:
+                            movePoint = (Vector2)ground.transform.position + Vector2.left;
+                            break;
+                        case GameData.Direction.RIGHT:
+                            movePoint = (Vector2)ground.transform.position + Vector2.right;
+                            break;
+                    }
+                    // Bounce.
+                    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+                        yield return null;
+                    }
+                    break;
+            }
         }
-        // Bounce.
-        while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+        else
         {
-            transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
-            yield return null;
+            // Hit obstacle.
+            while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+            {
+                Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+                transform.position += (Vector3)delta;
+                yield return null;
+            }
+            // Bounce.
+            while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+                yield return null;
+            }
         }
         canInput = true;
     }
@@ -337,10 +442,10 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">Where to go.</param>
     /// <param name="distanceFactor">How long to go.</param>
     /// <param name="maxDistance">Max distance can go.</param>
-    /// <param name="obstaclePosition">Obstacke position.</param>
+    /// <param name="groundPosition">Obstacke position.</param>
     /// <param name="isSlide">If is slide, no need to detect edge or air.</param>
     /// <returns>True if wont't hit obstacle.</returns>
-    private bool GetNextMovePointDistance(Vector2 direction, float distanceFactor, out float maxDistance, ref Vector2 obstaclePosition, bool isSlide = false)
+    private bool GetNextMovePointDistance(Vector2 direction, float distanceFactor, out float maxDistance, ref Ground groundPosition, bool isSlide = false)
     {
         RaycastHit2D hit;
         // 確認移動方向是否有障礙物
@@ -352,7 +457,7 @@ public class PlayerMovement : MonoBehaviour
             return true;
         }
         maxDistance = Mathf.Floor(hit.distance / Constants.moveUnit);
-        obstaclePosition = hit.point;
+        groundPosition = hit.collider.GetComponent<Ground>();
         return false;
     }
 
@@ -368,24 +473,24 @@ public class PlayerMovement : MonoBehaviour
         // Stop all movement.
         if (coroutineHitObstacle != null)
             StopCoroutine(coroutineHitObstacle);
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
         // Check to determine where player's position is.
         float d = Mathf.Round(Vector2.Distance(transform.position, movePoint) / Constants.moveUnit);
         Vector2 delta = ((Vector2)transform.position - movePoint).normalized;
-        movePoint = (Vector2)movePoint + delta * d;
+        movePoint = movePoint + delta * d;
         movePoint = new Vector2(Mathf.Floor(movePoint.x) + 0.5f, Mathf.Floor(movePoint.y) + 0.5f);
-        Vector2 obstaclePosition = Vector2.zero;
-        bool noObstacle = GetNextMovePointDistance(direction, impactFactor, out float maxDistance, ref obstaclePosition, true);
+        Ground ground = null;
+        bool noObstacle = GetNextMovePointDistance(direction, impactFactor, out float maxDistance, ref ground, true);
         movePoint += maxDistance * Constants.moveUnit * direction;
         // No punishment anymore.
         oldMoveVector = Vector2.zero;
         SpeedCoef = impactSpeed;
         // 會撞牆，演示撞牆後回到正確位置
         if (!noObstacle)
-            coroutineHitObstacle = StartCoroutine(HitObstacle(direction, obstaclePosition, true));
+            coroutineHitObstacle = StartCoroutine(HitObstacle(direction, ground, true));
         else
-            coroutineMovePlayer = StartCoroutine(MovePlayer());
+            coroutineShoot = StartCoroutine(Shoot());
     }
 
     /// <summary>
@@ -402,8 +507,8 @@ public class PlayerMovement : MonoBehaviour
         // Stop all movement.
         if (coroutineHitObstacle != null)
             StopCoroutine(coroutineHitObstacle);
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
 
         StartCoroutine(DisplayFallIntoBlackHole(entrance));
     }
@@ -462,8 +567,8 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         if (coroutineHitObstacle != null)
             yield return coroutineHitObstacle;
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
         // Rotate and become smaller then disappear.
         while (transform.localScale.magnitude > 10f * Time.deltaTime)
         {
@@ -495,17 +600,17 @@ public class PlayerMovement : MonoBehaviour
         canInput = true;
         isBlackHole = false;
         firstTimeMiss = true;
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
-        coroutineMovePlayer = StartCoroutine(MovePlayer());
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
+        coroutineShoot = StartCoroutine(Shoot());
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
     }
 
     public void Die()
     {
-        if (coroutineMovePlayer != null)
-            StopCoroutine(coroutineMovePlayer);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
         canInput = false;
         isBlackHole = false;
         firstTimeMiss = true;
