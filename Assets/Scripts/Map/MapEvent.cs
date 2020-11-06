@@ -24,6 +24,20 @@ class EventBox
     };
 }
 
+class EventEdge
+{
+    public Vector2 hit_Diraction;
+    public short hit_Distance;
+    public short hit_Power;
+
+    public Dictionary<EventList, bool> eventBox = new Dictionary<EventList, bool>()
+    {
+        [EventList.LostLife] = false,
+        [EventList.Hit] = false,
+        [EventList.Die] = false,
+    };
+}
+
 
 public class MapEvent : MonoBehaviour
 {

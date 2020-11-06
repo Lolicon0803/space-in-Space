@@ -49,6 +49,7 @@ public class MapSystem : MonoBehaviour
 
     }
 
+
     /**
      * 以下多載，根據傳入資料判斷是哪一種Event
      * 
@@ -71,9 +72,6 @@ public class MapSystem : MonoBehaviour
     public void SetMapEvent(Vector2 coord, EventList type, bool result)
     {
         coord = CorrectCoord(coord);
-      //  Debug.Log(coord);
-
-
         Map[coord].eventBox[type] = result;
     }
     /**
