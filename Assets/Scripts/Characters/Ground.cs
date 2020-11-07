@@ -66,61 +66,24 @@ public class Ground : MonoBehaviour
         //}
     }
 
-    public GroundEvent GetGroundEvent(Vector2 direction)
-    {
-        //direction.Normalize();
-        //Vector2Int dir = new Vector2Int((int)direction.x, (int)direction.y);
-        //Direction d;
-        //if (dir == Vector2Int.up)
-        //    d = Direction.UP;
-        //else if (dir == Vector2Int.down)
-        //    d = Direction.DOWN;
-        //else if (dir == Vector2Int.left)
-        //    d = Direction.LEFT;
-        //else if (dir == Vector2Int.right)
-        //    d = Direction.RIGHT;
-        //else
-        //    d = Direction.Stop;
-        //foreach (GroundEvent ge in groundEvents)
-        //{
-        //    if (ge.inDirectionLeft == d)
-        //        return ge;
-        //}
-        //return null;
-        //direction.Normalize();
-        //Debug.Log("Get Ground Event d: " + direction);
-        //Debug.Log("Dictionary = " + string.Join(", ", eventDictionary));
-        //if (eventDictionary.ContainsKey(direction))
-        //    return eventDictionary[direction];
-        //else
-        return null;
-    }
-
-    public Vector2 GetBoundPoint(Vector2 direction)
-    {
-        //direction.Normalize();
-        return (Vector2)transform.position + direction / 2.0f;
-    }
-
     private void ProcessEvent(Vector2 point)
     {
         Vector2 d = point - (Vector2)transform.position;
-        //Debug.Log("Hit point = " + point);
-        //Debug.DrawLine(transform.position, point, Color.red, 10);
         int index = GetEventIndex(d);
         if (index != -1)
         {
             switch (groundEvents[index].behavior)
             {
                 case GroundBehavior.Stop:
+                    Debug.Log("Stop");
                     Player.Singleton.movement.StopMove();
                     break;
                 case GroundBehavior.Standable:
-                    Debug.Log("Stand");
+                    //Debug.Log("Stand");
                     Player.Singleton.movement.StandOnGround(groundEvents[index].standDirection);
                     break;
                 case GroundBehavior.Rebounce:
-                    Debug.Log("Rebounce");
+                    //Debug.Log("Rebounce");
                     Player.Singleton.movement.Knock(groundEvents[index].reboundDirection);
                     break;
                 default:
@@ -135,14 +98,16 @@ public class Ground : MonoBehaviour
         int index = 0;
         foreach (GroundEvent ge in groundEvents)
         {
-            Debug.DrawRay(transform.position, ge.inDirectionLeft, Color.yellow, 5);
-            Debug.DrawRay(transform.position, ge.inDirectionRight, Color.yellow, 5);
-            Debug.DrawRay(transform.position, Vector3.Cross(ge.inDirectionLeft, target), Color.blue, 5);
-            Debug.Log(Vector3.Cross(ge.inDirectionLeft, target));
-            Debug.DrawRay(transform.position, Vector3.Cross(ge.inDirectionRight, target), Color.green, 5);
-            Debug.Log(Vector3.Cross(ge.inDirectionRight, target));
+            //Debug.DrawRay(transform.position, ge.inDirectionLeft, Color.yellow, 5);
+            //Debug.DrawRay(transform.position, ge.inDirectionRight, new Color(0.2f, 0.5f, 0.7f), 5);
+            //Debug.DrawRay(transform.position, Vector3.Cross(ge.inDirectionLeft, target), Color.blue, 5);
+            //Debug.Log(Vector3.Cross(ge.inDirectionLeft, target));
+            //Debug.DrawRay(transform.position, Vector3.Cross(ge.inDirectionRight, target), Color.green, 5);
+            //Debug.Log(Vector3.Cross(ge.inDirectionRight, target));
             if (Vector3.Cross(ge.inDirectionLeft, target).z < 0 && Vector3.Cross(ge.inDirectionRight, target).z > 0)
                 return index;
+            index++;
+            //Debug.DrawRay(transform.position, Quaternion.Euler(0, 0, 45) * ge.inDirectionRight, Color.green);
             index++;
         }
         return -1;
@@ -161,8 +126,7 @@ public class Ground : MonoBehaviour
         Color color = new Color(0, 1, 0);
         if (groundEvents == null)
             return;
-
-        int a = 1;
+        int index = 1;
         foreach (GroundEvent ge in groundEvents)
         {
             color += new Color(1.0f / groundEvents.Length, 0, 1.0f / groundEvents.Length);
@@ -171,8 +135,6 @@ public class Ground : MonoBehaviour
             Vector2 right = ge.inDirectionRight;
             Vector2 direction = (left + right).normalized;
             float angle = Mathf.Rad2Deg * Mathf.Acos(Vector2.Dot(left.normalized, right.normalized));
-            //Vector3 leftdir = Quaternion.AngleAxis(-angle / 2, Vector3.forward) * direction;
-            //Vector3 rightdir = Quaternion.AngleAxis(angle / 2, Vector3.forward) * direction;
             Gizmos.DrawLine(transform.position, (Vector2)transform.position + left);
             Gizmos.DrawLine(transform.position, (Vector2)transform.position + right);
             Vector3 currentP = transform.position + (Vector3)right;
@@ -183,10 +145,11 @@ public class Ground : MonoBehaviour
             {
                 Vector3 d = Quaternion.AngleAxis(i, Vector3.forward) * right;
                 oldP = currentP;
-                currentP = transform.position + d.normalized * a * 0.2f;
+                currentP = transform.position + d.normalized * index * 0.25f;
                 Gizmos.DrawLine(oldP, currentP);
+                Gizmos.DrawLine(transform.position, currentP);
             }
-            a++;
+            index++;
         }
     }
 }
