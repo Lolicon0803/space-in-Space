@@ -49,8 +49,9 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
-        [SerializeField] private Text BGMvolumeText; 
+        [SerializeField] private Text BGMvolumeText;
         [SerializeField] private Slider volumeSlider;
+        [SerializeField] private Slider BGMvolumeSlider;
         [Space(10)]
         #endregion
 
@@ -65,6 +66,11 @@ namespace SpeedTutorMainMenuSystem
             confirmationMenu.SetActive(true);
             yield return new WaitForSeconds(2);
             confirmationMenu.SetActive(false);
+        }
+
+        private void Start()
+        {
+            LoadGameSetting();
         }
 
         private void Update()
@@ -89,6 +95,20 @@ namespace SpeedTutorMainMenuSystem
                     ClickSound();
                 }
             }
+        }
+
+        private void LoadGameSetting()
+        {
+            float volume = PlayerPrefs.GetFloat("masterVolume", defaultVolume);
+            float bgmVolume = PlayerPrefs.GetFloat("BGM", defaultVolume);
+
+            AudioListener.volume = volume;
+            BGM.volume = bgmVolume;
+
+            volumeSlider.value = volume;
+            volumeText.text = volume.ToString("0.0");
+            BGMvolumeSlider.value = bgmVolume;
+            BGMvolumeText.text = bgmVolume.ToString("0.0");
         }
 
         private void ClickSound()
@@ -316,6 +336,8 @@ namespace SpeedTutorMainMenuSystem
             GameplayApply();
             BrightnessApply();
             VolumeApply();
+
+            PlayerPrefs.Save();
 
             menuNumber = 2;
         }
