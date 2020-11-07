@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(canInput);
+        //Debug.Log(SpeedCoef);
     }
 
     private IEnumerator ProcessOperation()
@@ -315,125 +315,126 @@ public class PlayerMovement : MonoBehaviour
     /// <returns></returns>
     private IEnumerator HitObstacle(Vector2 direction, Ground ground, bool byKnocked = false)
     {
-        canInput = false;
-        if (coroutineShoot != null)
-            StopCoroutine(coroutineShoot);
-        int index;
-        // Get hitJudgmentPoints inedx.
-        if (direction.x != 0)
-        {
-            if (!byKnocked)
-                index = 3;
-            else
-                index = (direction.x == -1) ? 2 : 3;
-        }
-        else
-            index = (direction.y == 1) ? 0 : 1;
-        //Debug.Log(transform.position - ground.transform.position);
-        GroundEvent groundEvent = ground.GetGroundEvent(transform.position - ground.transform.position);
-        Vector2 obstaclePoint = ground.GetBoundPoint(transform.position - ground.transform.position);
-        //Debug.Log(groundEvent);
-        if (groundEvent != null)
-        {
-            switch (groundEvent.behavior)
-            {
-                case GroundBehavior.None:
-                    // Hit obstacle.
-                    while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
-                    {
-                        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
-                        transform.position += (Vector3)delta;
-                        yield return null;
-                    }
-                    // Bounce.
-                    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
-                    {
-                        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
-                        yield return null;
-                    }
-                    break;
-                case GroundBehavior.Standable:
-                    if (groundEvent.needHit)
-                    {
-                        // Hit obstacle.
-                        while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
-                        {
-                            Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
-                            transform.position += (Vector3)delta;
-                            yield return null;
-                        }
-                        // Bounce.
-                        while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
-                        {
-                            transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
-                            yield return null;
-                        }
-                    }
-                    Quaternion q = Quaternion.FromToRotation(-transform.up, moveDirection);
-                    if (q.eulerAngles.z != 0)
-                    {
-                        q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
-                        while (Vector3.Distance(transform.rotation.eulerAngles, q.eulerAngles) > 5.625f * Time.deltaTime)
-                        {
-                            if (q.eulerAngles.z > 0)
-                                transform.Rotate(Vector3.forward, 5.625f);
-                            else
-                                transform.Rotate(-Vector3.forward, 5.625f);
-                            yield return null;
-                        }
-                        transform.rotation = q;
-                    }
-                    break;
-                case GroundBehavior.Rebounce:
-                    // Hit obstacle.
-                    while (Vector2.Distance(hitJudgmentPoints[index].position, ground.transform.position) > 0.02f * Time.deltaTime)
-                    {
-                        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, ground.transform.position, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
-                        transform.position += (Vector3)delta;
-                        yield return null;
-                    }
-                    //Debug.Log(groundEvent.reboundDirection);
-                    switch (groundEvent.reboundDirection)
-                    {
-                        case GameData.Direction.UP:
-                            movePoint = (Vector2)ground.transform.position + Vector2.up;
-                            break;
-                        case GameData.Direction.DOWN:
-                            movePoint = (Vector2)ground.transform.position + Vector2.down;
-                            break;
-                        case GameData.Direction.LEFT:
-                            movePoint = (Vector2)ground.transform.position + Vector2.left;
-                            break;
-                        case GameData.Direction.RIGHT:
-                            movePoint = (Vector2)ground.transform.position + Vector2.right;
-                            break;
-                    }
-                    // Bounce.
-                    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
-                    {
-                        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
-                        yield return null;
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            // Hit obstacle.
-            while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
-            {
-                Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
-                transform.position += (Vector3)delta;
-                yield return null;
-            }
-            // Bounce.
-            while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
-                yield return null;
-            }
-        }
-        canInput = true;
+        yield return null;
+        //canInput = false;
+        //if (coroutineShoot != null)
+        //    StopCoroutine(coroutineShoot);
+        //int index;
+        //// Get hitJudgmentPoints inedx.
+        //if (direction.x != 0)
+        //{
+        //    if (!byKnocked)
+        //        index = 3;
+        //    else
+        //        index = (direction.x == -1) ? 2 : 3;
+        //}
+        //else
+        //    index = (direction.y == 1) ? 0 : 1;
+        ////Debug.Log(transform.position - ground.transform.position);
+        //GroundEvent groundEvent = ground.GetGroundEvent(transform.position - ground.transform.position);
+        //Vector2 obstaclePoint = ground.GetBoundPoint(transform.position - ground.transform.position);
+        ////Debug.Log(groundEvent);
+        //if (groundEvent != null)
+        //{
+        //    switch (groundEvent.behavior)
+        //    {
+        //        case GroundBehavior.None:
+        //            // Hit obstacle.
+        //            while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+        //            {
+        //                Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+        //                transform.position += (Vector3)delta;
+        //                yield return null;
+        //            }
+        //            // Bounce.
+        //            while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+        //            {
+        //                transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+        //                yield return null;
+        //            }
+        //            break;
+        //        case GroundBehavior.Standable:
+        //            //if (groundEvent.needHit)
+        //            //{
+        //            //    // Hit obstacle.
+        //            //    while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+        //            //    {
+        //            //        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+        //            //        transform.position += (Vector3)delta;
+        //            //        yield return null;
+        //            //    }
+        //            //    // Bounce.
+        //            //    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+        //            //    {
+        //            //        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+        //            //        yield return null;
+        //            //    }
+        //            //}
+        //            Quaternion q = Quaternion.FromToRotation(-transform.up, moveDirection);
+        //            if (q.eulerAngles.z != 0)
+        //            {
+        //                q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
+        //                while (Vector3.Distance(transform.rotation.eulerAngles, q.eulerAngles) > 5.625f * Time.deltaTime)
+        //                {
+        //                    if (q.eulerAngles.z > 0)
+        //                        transform.Rotate(Vector3.forward, 5.625f);
+        //                    else
+        //                        transform.Rotate(-Vector3.forward, 5.625f);
+        //                    yield return null;
+        //                }
+        //                transform.rotation = q;
+        //            }
+        //            break;
+        //        case GroundBehavior.Rebounce:
+        //            // Hit obstacle.
+        //            while (Vector2.Distance(hitJudgmentPoints[index].position, ground.transform.position) > 0.02f * Time.deltaTime)
+        //            {
+        //                Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, ground.transform.position, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+        //                transform.position += (Vector3)delta;
+        //                yield return null;
+        //            }
+        //            //Debug.Log(groundEvent.reboundDirection);
+        //            switch (groundEvent.reboundDirection)
+        //            {
+        //                case GameData.Direction.UP:
+        //                    movePoint = (Vector2)ground.transform.position + Vector2.up;
+        //                    break;
+        //                case GameData.Direction.DOWN:
+        //                    movePoint = (Vector2)ground.transform.position + Vector2.down;
+        //                    break;
+        //                case GameData.Direction.LEFT:
+        //                    movePoint = (Vector2)ground.transform.position + Vector2.left;
+        //                    break;
+        //                case GameData.Direction.RIGHT:
+        //                    movePoint = (Vector2)ground.transform.position + Vector2.right;
+        //                    break;
+        //            }
+        //            // Bounce.
+        //            while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+        //            {
+        //                transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+        //                yield return null;
+        //            }
+        //            break;
+        //    }
+        //}
+        //else
+        //{
+        //    // Hit obstacle.
+        //    while (Vector2.Distance(hitJudgmentPoints[index].position, obstaclePoint) > 0.02f * Time.deltaTime)
+        //    {
+        //        Vector2 delta = Vector2.MoveTowards(hitJudgmentPoints[index].position, obstaclePoint, SpeedCoef * Time.deltaTime) - (Vector2)hitJudgmentPoints[index].position;
+        //        transform.position += (Vector3)delta;
+        //        yield return null;
+        //    }
+        //    // Bounce.
+        //    while (Vector2.Distance(transform.position, movePoint) > 0.02f * Time.deltaTime)
+        //    {
+        //        transform.position = Vector3.MoveTowards(transform.position, movePoint, SpeedCoef * Time.deltaTime);
+        //        yield return null;
+        //    }
+        //}
+        //canInput = true;
     }
 
     /// <summary>
@@ -459,6 +460,21 @@ public class PlayerMovement : MonoBehaviour
         maxDistance = Mathf.Floor(hit.distance / Constants.moveUnit);
         groundPosition = hit.collider.GetComponent<Ground>();
         return false;
+    }
+
+    /// <summary>
+    /// 玩家往指定方向動，速度剩滑行速度。
+    /// </summary>
+    /// <param name="direction">方向，給0表示往玩家的反方向</param>
+    public void Knock(Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+            moveDirection = -moveDirection;
+        else
+            moveDirection = direction;
+        StopMove();
+        canInput = true;
+        StartCoroutine(Slide());
     }
 
     /// <summary>
@@ -614,5 +630,49 @@ public class PlayerMovement : MonoBehaviour
         canInput = false;
         isBlackHole = false;
         firstTimeMiss = true;
+    }
+
+    public void StandOnGround(Vector2 direction)
+    {
+        StopMove();
+        Debug.Log("Stop3");
+        StartCoroutine("ShowStandOnGround", direction);
+    }
+
+    public IEnumerator ShowStandOnGround(Vector2 direction)
+    {
+        Debug.Log("Start");
+        Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
+        Debug.Log(q);
+        if (q.eulerAngles.z != 0)
+        {
+            q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
+            Debug.Log("Start2");
+            while (Vector3.Distance(transform.rotation.eulerAngles, q.eulerAngles) > 5.625f * Time.deltaTime)
+            {
+                Debug.Log("Start3");
+                if (q.eulerAngles.z > 0)
+                    transform.Rotate(Vector3.forward, 5.625f);
+                else
+                    transform.Rotate(-Vector3.forward, 5.625f);
+                yield return null;
+            }
+            Debug.Log("Start4");
+            transform.rotation = q;
+        }
+    }
+
+    public void StopMove()
+    {
+        Debug.Log("Stop1");
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
+        if (coroutineSlide != null)
+            StopCoroutine(coroutineSlide);
+        StopCoroutine("ShowStandOnGround");
+        SpeedCoef = 0;
+        movePoint = transform.position;
+        canInput = true;
+        Debug.Log("Stop2");
     }
 }
