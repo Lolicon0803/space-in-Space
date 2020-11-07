@@ -89,7 +89,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        //Debug.Log(SpeedCoef);
+        Debug.Log(GetComponent<Rigidbody2D>().velocity);
+        GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+
+        
     }
 
     private IEnumerator ProcessOperation()

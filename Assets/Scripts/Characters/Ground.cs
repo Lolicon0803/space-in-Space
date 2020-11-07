@@ -161,6 +161,8 @@ public class Ground : MonoBehaviour
         Color color = new Color(0, 1, 0);
         if (groundEvents == null)
             return;
+
+        int a = 1;
         foreach (GroundEvent ge in groundEvents)
         {
             color += new Color(1.0f / groundEvents.Length, 0, 1.0f / groundEvents.Length);
@@ -181,9 +183,10 @@ public class Ground : MonoBehaviour
             {
                 Vector3 d = Quaternion.AngleAxis(i, Vector3.forward) * right;
                 oldP = currentP;
-                currentP = transform.position + d.normalized;
+                currentP = transform.position + d.normalized * a * 0.2f;
                 Gizmos.DrawLine(oldP, currentP);
             }
+            a++;
         }
     }
 }

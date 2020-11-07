@@ -24,8 +24,6 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
 
     public bool isGoStartPoint;
 
-   
-    //初始位置
     private Vector2 startPoint;
 
     // 下一個移動點
@@ -62,33 +60,36 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            collider.GetComponent<PlayerMovement>().Knock(moveDiraction);
+            Debug.Log("撞到敵人");
+            gameObject.GetComponent<AudioSource>().Play();
+            // Call損血系統
+            Player.Singleton.lifeSystem.Hurt();
+        }
     }
 
     public IEnumerator Move()
     {
-      
 
-
-        // 回到初始位置判定
         if (routeIndex % routeMap.Count == 0 && isGoStartPoint)
         {
             transform.position = startPoint;
         }
 
-        // 確認下個移動方向
+        //確認方向
         moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
 
         // 下個移動點+朝路徑移動1格vector
         movePoint = (Vector2)transform.position + moveDiraction;
 
-        /**
-         * 往自己下個移動點的位置註冊撞擊
-         */
-        MapSystem.Singleton.SetMapEvent(movePoint, EventList.Hit, true,Vector2.right, (short)knockDistance, (short)knockPower);
-
-
-        // 移動
+        //移動
         while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
         {
             transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
