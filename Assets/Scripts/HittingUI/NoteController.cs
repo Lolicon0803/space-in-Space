@@ -3,21 +3,20 @@ using UnityEngine;
 
 public class NoteController : MonoBehaviour
 {
-    public TempoManager tempoManager;
+    public HittingController hittingController;
     public bool hasStarted;
-    public GameObject notePrefab;
-    public float noteInitPositionX = 6.0f;
-    public float movementSpeed = 1.4f;
-    public float generationSpeed = 1.4f;
+
     private float notesGenerationInterval;
     private bool isRunning;
+    private GameObject notePrefab;
+    private float noteInitPositionX = 7f;
+    private float movementSpeed = 2.2f;
+    private float generationSpeed = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        isRunning = false;
-        hasStarted = true;
-        notesGenerationInterval = (float)(60.0d / (tempoManager.BPM * generationSpeed));
+        StartCoroutine(initVariables());
     }
 
     // Update is called once per frame
@@ -29,6 +28,19 @@ public class NoteController : MonoBehaviour
         }
     }
 
+    IEnumerator initVariables()
+    {
+        // 有可能執行時 audioEngine 尚未設定完成 所以等到完成才設定參數
+        yield return new WaitUntil(() => hittingController.audioEngine.BPM > 0);
+
+        notePrefab = hittingController.notePrefab;
+        noteInitPositionX = hittingController.noteInitPositionX;
+        movementSpeed = hittingController.movementSpeed;
+        generationSpeed = hittingController.generationSpeed;
+        isRunning = false;
+        hasStarted = true;
+        notesGenerationInterval = (float)(60.0d / (hittingController.audioEngine.BPM * generationSpeed));
+    }
     IEnumerator GenerateNotes()
     {
         isRunning = true;

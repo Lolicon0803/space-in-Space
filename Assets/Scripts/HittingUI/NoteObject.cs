@@ -3,15 +3,15 @@
 public class NoteObject : MonoBehaviour
 {
     private float movementSpeed;
-    private NoteController noteController;
+    private HittingController hittingController;
     private float BPS;
 
     // Start is called before the first frame update
     void Start()
     {
-        noteController = GameObject.Find("NoteHolder").GetComponent<NoteController>();
-        movementSpeed = noteController.movementSpeed;
-        BPS = (float)(noteController.tempoManager.BPM / 60d);
+        hittingController = GameObject.Find("HittingUI").GetComponent<HittingController>();
+        movementSpeed = hittingController.movementSpeed;
+        BPS = (float)(hittingController.audioEngine.BPM / 60d);
     }
 
     // Update is called once per frame

@@ -26,7 +26,7 @@ public class TempoManager : MonoBehaviour
     public static double delay;
     private double adjustDelay;
     private double bpm;
-    
+
     public double BPM
     {
         get => bpm;
