@@ -42,3 +42,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Pause Menu
+    uniqueID: 3764575937
+    locked: 0
