@@ -40,7 +40,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private IEnumerator WaitPlayerStop()
     {
-        while (Vector2.Distance(transform.position, player.movePoint) >= player.SpeedCoef * Time.deltaTime)
+        while (Vector2.Distance(transform.position, player.movePoint) >= player.NowSpeed * Time.deltaTime)
             yield return null;
         animator.SetBool(walkL, false);
         animator.SetBool(walkR, false);

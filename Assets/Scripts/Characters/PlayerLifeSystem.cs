@@ -48,7 +48,7 @@ public class PlayerLifeSystem : MonoBehaviour
     {
         isDie = false;
         playerMovement = GetComponent<PlayerMovement>();
-        playerMovement.OnMiss += LossLife;
+        //playerMovement.OnMiss += LossLife;
         playerMovement.OnError += LossLife;
         InitializeHHeart();
     }
@@ -95,12 +95,12 @@ public class PlayerLifeSystem : MonoBehaviour
     public void LossLife()
     {
 
-        if (!Player.Singleton.movement.firstTimeMiss && !isDie)
-        {
-            //playerMovement.canInput = false;
-           // BreakHeart();
-            StartCoroutine(ShowRedEffect());
-        }
+        //if (!Player.Singleton.movement.firstTimeMiss && !isDie)
+        //{
+        //playerMovement.canInput = false;
+        BreakHeart();
+        StartCoroutine(ShowRedEffect());
+        //}
     }
 
     /// <summary>
@@ -139,8 +139,6 @@ public class PlayerLifeSystem : MonoBehaviour
         // Gameover.
         if (nowHp <= 0)
             GameOver();
-        else
-            playerMovement.canInput = true;
     }
 
     /// <summary>
@@ -165,6 +163,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void GameOver()
     {
         isDie = true;
+        transform.localScale = Vector3.zero;
         playerMovement.Die();
         StartCoroutine(ShowBlackEffect());
     }

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundEvents:
-  - inDirectionLeft: {x: 0, y: -1}
+  - inDirectionLeft: {x: 1, y: 1}
     inDirectionRight: {x: -1, y: 1}
     behavior: 0
     standDirection: {x: 1, y: 0}
