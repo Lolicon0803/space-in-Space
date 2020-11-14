@@ -24,9 +24,9 @@ public class PlayerAnimationManager : MonoBehaviour
     private void PlayWalkAnimation(Vector2 direction)
     {
         // Change sprite direction.
-        if (direction == Vector2.left)
+        if (direction == -(Vector2)transform.right)
             transform.localScale = new Vector3(-1, 1, 1);
-        else if (direction == Vector2.right)
+        else if (direction == (Vector2)transform.right)
             transform.localScale = new Vector3(1, 1, 1);
 
         // Left or right foot.
@@ -40,7 +40,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private IEnumerator WaitPlayerStop()
     {
-        while (Vector2.Distance(transform.position, player.movePoint.position) >= player.SpeedCoef * Time.deltaTime)
+        while (Vector2.Distance(transform.position, player.movePoint) >= player.NowSpeed * Time.deltaTime)
             yield return null;
         animator.SetBool(walkL, false);
         animator.SetBool(walkR, false);

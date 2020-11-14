@@ -60,17 +60,16 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (collider.CompareTag("Player"))
         {
-            collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
+            collider.GetComponent<PlayerMovement>().Knock(moveDiraction);
             Debug.Log("撞到敵人");
             gameObject.GetComponent<AudioSource>().Play();
-            // Call損血系統
             // Call損血系統
             Player.Singleton.lifeSystem.Hurt();
         }
@@ -78,7 +77,7 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
 
     public IEnumerator Move()
     {
-    
+
         if (routeIndex % routeMap.Count == 0 && isGoStartPoint)
         {
             transform.position = startPoint;

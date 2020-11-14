@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BlackHole : MonoBehaviour
 {
-    [Tooltip("For debug.")]
-    public bool drawArea;
     // 範圍半徑
     public float radius;
     // 節奏類型
@@ -40,7 +38,10 @@ public class BlackHole : MonoBehaviour
         if (isActive)
         {
             if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
+            {
                 Player.Singleton.movement.FallIntoBlackHole(this);
+                isActive = false;
+            }
         }
     }
 
@@ -57,9 +58,8 @@ public class BlackHole : MonoBehaviour
         isActive = false;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        if (drawArea)
-            Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }
