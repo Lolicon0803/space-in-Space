@@ -52,8 +52,10 @@ public class Ground : MonoBehaviour
     {
         Vector2 d = point - (Vector2)transform.position;
         int index = GetEventIndex(d);
+        Debug.Log("Iindex = " + index);
         if (index != -1)
         {
+            Debug.Log(System.Enum.GetName(typeof(GroundBehavior), groundEvents[index].behavior));
             switch (groundEvents[index].behavior)
             {
                 case GroundBehavior.Stop:

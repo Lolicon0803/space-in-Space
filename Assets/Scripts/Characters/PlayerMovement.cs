@@ -125,14 +125,14 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void HandleInput()
     {
+        // 先終止移動，避免跑兩個IEnumerator
+        StopMove();
         // 抓滑鼠位置算方向
         Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 d = (mouse - (Vector2)transform.position).normalized;
         MoveDirection = mouse - (Vector2)transform.position;
         MoveDirection = MoveDirection.normalized;
         transform.parent = null;
-        // 先終止移動，避免跑兩個IEnumerator
-        StopMove();
         // 算移動角度轉角色
         float angle = Vector2.SignedAngle(Vector2.right, MoveDirection);
         transform.rotation = Quaternion.Euler(0, 0, angle);
@@ -160,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Shoot(float speed = -1, float distance = -1)
     {
+        Debug.Log("Start Shoot");
         // 移動中，不可操作
         canInput = false;
         // 預先設置目的地
@@ -171,6 +172,10 @@ public class PlayerMovement : MonoBehaviour
             nowSpeed = moveSpeed;
         else
             nowSpeed = speed;
+        Debug.Log(MoveDirection);
+        Debug.Log(distance);
+        Debug.Log(transform.position);
+        Debug.Log(movePoint);
         Debug.DrawLine(transform.position, movePoint, Color.red, 3);
         // 直到到達目的地為止(可能需要改撞牆判斷)
         while (Vector2.Distance(transform.position, movePoint) > nowSpeed * speedChangeCoefficient * Time.deltaTime)
@@ -203,12 +208,12 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">方向，給0表示往玩家的反方向</param>
     public void Knock(Vector2 direction)
     {
+        StopMove();
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
         else
             MoveDirection = direction;
-        StopMove();
         canInput = true;
         StartCoroutine("Slide");
     }
@@ -378,9 +383,9 @@ public class PlayerMovement : MonoBehaviour
     {
         StopCoroutine(coroutineShoot);
         StopCoroutine("Slide");
-        nowSpeed = 0;
+        //nowSpeed = 0;
         movePoint = transform.position;
-        MoveDirection = Vector2.zero;
+        //MoveDirection = Vector2.zero;
         canInput = true;
     }
 
