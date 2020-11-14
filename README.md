@@ -15,7 +15,7 @@
 * Sprites
     #### 各種圖片
     
-## 地圖製作教學
+## Prefab Variable Description
 * SpaceJunk
 
 |名稱|型別|說明|
@@ -102,4 +102,14 @@
 |名稱|型別|說明|
 |-----|--------|-|
 |RebirthPoint|Vector2|玩家碰到後要設定的復活點|
+
+* HittingUI
+
+|名稱|型別|說明|
+|-----|--------|-|
+|Msg|Text|顯示訊息的文字|
+|Hitting Area|Sprite Renderer|擊打節拍的中央區塊|
+|Note Init Position X |float|節拍條產生的X座標（正負各有一個）|
+|Movement Speed|float|節拍條的移動速度|
+|Generation Speed|float|節拍條的產生速度|
 
