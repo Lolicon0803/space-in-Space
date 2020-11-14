@@ -15,11 +15,11 @@ public class PlayerData : MonoBehaviour
         playerDataType p = new playerDataType();
         string _playerName = InputData.text;
         p.name = _playerName;
-        SL.SaveData(p);
+        SL.SaveData(p, "GameData.txt");
     }
     public void LoadButton()
     {
-        playerDataType p = (playerDataType)SL.LoadData(typeof(playerDataType));
+        playerDataType p = (playerDataType)SL.LoadData(typeof(playerDataType), "GameData.txt");
         playerName.text = "Current Name:" + p.name;//載入時修改場景裡的資料
         Debug.Log(p);
     }

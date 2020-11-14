@@ -117,4 +117,4 @@
 ## Asset store
 |名稱|說明|
 |-----|-|
-|JSON .NET For Unity|**SaveAndLoad.cs**SaveData(Type dataType) -> SaveData(Type dataType, string savingFileName) <br> LoadData(Type dataType) -> LoadData(Type dataType, string savingFileName)|
+|JSON .NET For Unity|**SaveAndLoad.cs** <br>SaveData(Type dataType) -> SaveData(Type dataType, string savingFileName) <br> LoadData(Type dataType) -> LoadData(Type dataType, string savingFileName)|
