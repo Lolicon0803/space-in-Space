@@ -103,3 +103,7 @@
 |-----|--------|-|
 |RebirthPoint|Vector2|玩家碰到後要設定的復活點|
 
+## Asset store
+|名稱|說明|
+|-----|-|
+|JSON .NET For Unity|**SaveAndLoad.cs**SaveData(Type dataType) -> SaveData(Type dataType, string savingFileName) <br> LoadData(Type dataType) -> LoadData(Type dataType, string savingFileName)|

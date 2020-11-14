@@ -10,8 +10,8 @@ enum TextWriterState {
 }
 public class TextWriter : MonoBehaviour
 {
-
-    public Text txt;
+    SaveAndLoad SL;
+    public GameObject[] textBoxs;
     private int wordIndex;
     private int paragraghIndex;
     private Story story;
@@ -20,24 +20,33 @@ public class TextWriter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SL = new SaveAndLoad();
         NextStory();
     }
     void LoadStory()
     {
+
         story = new Story();
-        story.Add(
+        story.Add(new Paragraph(0, "A",
             "TESTTESTTESTTESTTESTTESTTESTTEST\n" +
-            "TESTTESTTESTTESTTESTTESTTESTTEST"
-            );
-        story.Add(
+            "TESTTESTTESTTESTTESTTESTTESTTEST"));
+        story.Add(new Paragraph(1, "B",
             "TEST2TEST2TEST2TEST2TEST2TEST2\n" +
             "TEST2TEST2TEST2TEST2TEST2TEST2"
-            );
+        ));
+        //story = (Story)SL.LoadData(typeof(Story), "story1.txt[0]");
+        SL.SaveData(story, "story1.txt");
     }
     void NextStory()
     {
         isEndOfStory = false;
-        txt.text = "";
+        foreach (var item in textBoxs)
+        {
+            for (int childIndex = 0; childIndex < item.transform.childCount; childIndex++)
+            {
+                item.transform.GetChild(childIndex).GetComponent<Text>().text = "";
+            }
+        }
         LoadStory();
         StartCoroutine(PrintStory());
     }
@@ -50,10 +59,17 @@ public class TextWriter : MonoBehaviour
             yield return StartCoroutine(PrintWord());
             float intervalTime = 3.0f;
             float flickerTime = 0.3f;
-            paragraghIndex++;
-            if (paragraghIndex >= story.Count) { isEndOfStory = true; }
+            
+            if (paragraghIndex +1 >= story.Count) { isEndOfStory = true; }
             yield return StartCoroutine(WaitSignal(intervalTime, flickerTime));
-            txt.text = "";
+            paragraghIndex++;
+            foreach (var item in textBoxs)
+            {
+                for (int childIndex = 0; childIndex < item.transform.childCount; childIndex++)
+                {
+                    item.transform.GetChild(childIndex).GetComponent<Text>().text = "";
+                }
+            }
             if (isEndOfStory)
             {
                 break;
@@ -66,9 +82,10 @@ public class TextWriter : MonoBehaviour
         wordIndex = 0;
         while (true)
         {
-            txt.text += story[paragraghIndex][wordIndex];
+            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(0).GetComponent<Text>().text = story[paragraghIndex].speaker;
+            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(1).GetComponent<Text>().text += story[paragraghIndex].text[wordIndex];
             wordIndex++;
-            if (wordIndex >= story[paragraghIndex].Length)
+            if (wordIndex >= story[paragraghIndex].text.Length)
             {
                 break;
             }
@@ -77,14 +94,17 @@ public class TextWriter : MonoBehaviour
     }
     IEnumerator WaitSignal(float intervalTime, float flickerTime)
     {
+        int textBoxIndex = story[paragraghIndex].textBoxIndex;
         while ((intervalTime >= 0 || isEndOfStory) && !keyDown )
         {
             intervalTime -= flickerTime;
-            txt.text += "_";
+            textBoxs[textBoxIndex].transform.GetChild(1).GetComponent<Text>().text += "_";
             yield return new WaitForSeconds(flickerTime);
             if (keyDown) { break; }
             intervalTime -= flickerTime;
-            txt.text = txt.text.Substring(0, txt.text.Length - 1);
+            textBoxs[textBoxIndex].transform.GetChild(1).GetComponent<Text>().text =
+                textBoxs[textBoxIndex].transform.GetChild(1).GetComponent<Text>().text
+                .Substring(0, textBoxs[textBoxIndex].transform.GetChild(1).GetComponent<Text>().text.Length - 1);
             yield return new WaitForSeconds(flickerTime);
         }
 
