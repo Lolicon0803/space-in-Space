@@ -113,3 +113,8 @@
 |Movement Speed|float|節拍條的移動速度|
 |Generation Speed|float|節拍條的產生速度|
 
+
+## Asset store
+|名稱|說明|
+|-----|-|
+|JSON .NET For Unity|**SaveAndLoad.cs**SaveData(Type dataType) -> SaveData(Type dataType, string savingFileName) <br> LoadData(Type dataType) -> LoadData(Type dataType, string savingFileName)|
