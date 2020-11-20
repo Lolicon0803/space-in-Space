@@ -9,9 +9,7 @@ public class NoteController : MonoBehaviour
     private float notesGenerationInterval;
     private bool isRunning;
     private GameObject notePrefab;
-    private float noteInitPositionX = 7f;
-    private float movementSpeed = 2.2f;
-    private float generationSpeed = 1f;
+    private float noteInitPositionX = 3f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +32,9 @@ public class NoteController : MonoBehaviour
         yield return new WaitUntil(() => hittingController.audioEngine.BPM > 0);
 
         notePrefab = hittingController.notePrefab;
-        noteInitPositionX = hittingController.noteInitPositionX;
-        movementSpeed = hittingController.movementSpeed;
-        generationSpeed = hittingController.generationSpeed;
         isRunning = false;
         hasStarted = true;
-        notesGenerationInterval = (float)(60.0d / (hittingController.audioEngine.BPM * generationSpeed));
+        notesGenerationInterval = (float)(60.0d / (hittingController.audioEngine.BPM));
     }
     IEnumerator GenerateNotes()
     {

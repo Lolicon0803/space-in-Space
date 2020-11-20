@@ -10,7 +10,6 @@ public class NoteObject : MonoBehaviour
     void Start()
     {
         hittingController = GameObject.Find("HittingUI").GetComponent<HittingController>();
-        movementSpeed = hittingController.movementSpeed;
         BPS = (float)(hittingController.audioEngine.BPM / 60d);
     }
 
@@ -19,7 +18,7 @@ public class NoteObject : MonoBehaviour
     {
         if (transform.position.x > 0)
         {
-            transform.Translate(-BPS * Time.deltaTime * movementSpeed, 0, 0);
+            transform.Translate(-BPS * Time.deltaTime * 1.1f, 0, 0);
             if (transform.position.x <= 0)
             {
                 Destroy(gameObject);
@@ -27,7 +26,7 @@ public class NoteObject : MonoBehaviour
         }
         else if (transform.position.x < 0)
         {
-            transform.Translate(BPS * Time.deltaTime * movementSpeed, 0, 0);
+            transform.Translate(BPS * Time.deltaTime * 1.1f, 0, 0);
             if (transform.position.x >= 0)
             {
                 Destroy(gameObject);

@@ -9,9 +9,6 @@ public class HittingController : MonoBehaviour
     public Text msg;
     public SpriteRenderer hittingArea;
     public GameObject notePrefab;
-    public float noteInitPositionX = 6.0f;
-    public float movementSpeed = 1.4f;
-    public float generationSpeed = 1.4f;
 
     // Start is called before the first frame update
     void Start()

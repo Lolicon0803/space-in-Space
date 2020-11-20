@@ -55,7 +55,7 @@ public class TempoManager : MonoBehaviour
     {
         improveDelayMode = false;
         BPM = 60;
-        delay = -350;
+        delay = -150;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
         touchDelayTimes = new List<double>();

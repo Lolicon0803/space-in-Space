@@ -26,7 +26,7 @@ public class TouchDelayAdjustScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        audioEngine.improveDelayMode = true;
+        // audioEngine.improveDelayMode = true;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             audioEngine.KeyDown();
