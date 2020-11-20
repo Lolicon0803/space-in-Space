@@ -25,7 +25,10 @@ public class HittingController : MonoBehaviour
         }
 
         TouchStates touchState = audioEngine.touchState;
-        changeMsg(touchState);
+        if (msg != null)
+        {
+            changeMsg(touchState);
+        }
         changeBtnColor(touchState);
     }
 
