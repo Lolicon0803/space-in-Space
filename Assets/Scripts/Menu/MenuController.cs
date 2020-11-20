@@ -59,7 +59,7 @@ namespace SpeedTutorMainMenuSystem
 
         public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
         public GameObject graphicsMenuFirstBtn, soundMenuFirstBtn, gameplayMenuFirstBtn;
-        
+
         //MAIN SECTION
         public IEnumerator ConfirmationBox()
         {
@@ -282,7 +282,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                SceneManager.LoadScene(_newGameButtonLevel);
+                ScenesManager.nextScene();
             }
 
             if (ButtonType == "No")
