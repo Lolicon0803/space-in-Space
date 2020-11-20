@@ -31,6 +31,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private GameObject soundMenu;
         [SerializeField] private GameObject gameplayMenu;
         [SerializeField] private GameObject confirmationMenu;
+        [SerializeField] private GameObject loadGameMenu;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -57,7 +58,7 @@ namespace SpeedTutorMainMenuSystem
 
         public AudioSource BGM;
 
-        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
+        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameMenuFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
         public GameObject graphicsMenuFirstBtn, soundMenuFirstBtn, gameplayMenuFirstBtn;
 
         //MAIN SECTION
@@ -180,11 +181,11 @@ namespace SpeedTutorMainMenuSystem
             {
                 mainMenuFirstBtn = GameObject.Find("Load Game UI Btn");
                 menuDefaultCanvas.SetActive(false);
-                loadGameDialog.SetActive(true);
+                loadGameMenu.SetActive(true);
                 menuNumber = 8;
 
                 EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(loadGameDialogFirstBtn);
+                EventSystem.current.SetSelectedGameObject(loadGameMenuFirstBtn);
             }
 
             if (buttonType == "NewGame")
@@ -349,6 +350,7 @@ namespace SpeedTutorMainMenuSystem
             menuDefaultCanvas.SetActive(true);
             newGameDialog.SetActive(false);
             loadGameDialog.SetActive(false);
+            loadGameMenu.SetActive(false);
             noSaveDialog.SetActive(false);
             GeneralSettingsCanvas.SetActive(false);
             graphicsMenu.SetActive(false);
