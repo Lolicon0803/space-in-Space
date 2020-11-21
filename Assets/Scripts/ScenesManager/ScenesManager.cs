@@ -3,10 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class ScenesManager : MonoBehaviour
 {
-    static public void nextScene()
+    static public void goToScene(int index)
     {
-        Scene sceneLoaded = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(sceneLoaded.buildIndex + 1);
+        SceneManager.LoadScene(index);
     }
 
     static public void backToMainMenu()
