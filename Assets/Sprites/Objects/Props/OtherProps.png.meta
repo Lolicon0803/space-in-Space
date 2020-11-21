@@ -1,49 +1,61 @@
 fileFormatVersion: 2
-guid: d6b0f39b6e04b344ea3ff90f8bb3eb00
+guid: 142974d097cb9d04a8c4be7d2ba0cd26
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 410472824391013539
-    second: AllBlackHoles_0
+      213: -1797384687075103460
+    second: OtherProps_0
   - first:
-      213: -1785637768158494001
-    second: AllBlackHoles_1
+      213: 8119991477750277905
+    second: OtherProps_1
   - first:
-      213: 5113061292728851912
-    second: AllBlackHoles_2
+      213: -6432542919116280261
+    second: OtherProps_2
   - first:
-      213: 2413025066208915628
-    second: AllBlackHoles_3
+      213: -3094190839699012918
+    second: OtherProps_3
   - first:
-      213: 6429496558462529126
-    second: AllBlackHoles_4
+      213: -7985419717850868311
+    second: OtherProps_4
   - first:
-      213: 254830889514558894
-    second: AllBlackHoles_5
+      213: 4786484794896265545
+    second: OtherProps_5
   - first:
-      213: -7096617572327015810
-    second: AllBlackHoles_6
+      213: 802902076082368189
+    second: OtherProps_6
   - first:
-      213: 17906791964710747
-    second: AllBlackHoles_7
+      213: 6548156961247832751
+    second: OtherProps_7
   - first:
-      213: -6070578114276382464
-    second: AllBlackHoles_8
+      213: 8844805728077635708
+    second: OtherProps_8
   - first:
-      213: 1545367487184014439
-    second: AllBlackHoles_9
+      213: 4890805146673220128
+    second: OtherProps_9
   - first:
-      213: 1762819326634386119
-    second: AllBlackHoles_10
+      213: 831170150989952171
+    second: OtherProps_10
   - first:
-      213: -3056078715991158934
-    second: AllBlackHoles_11
+      213: 3317216547755924314
+    second: OtherProps_11
   - first:
-      213: -6916178053101059566
-    second: AllBlackHoles_12
+      213: 9146347385985674449
+    second: OtherProps_12
   - first:
-      213: 8220919569356449597
-    second: AllBlackHoles_13
+      213: -1636758339692638131
+    second: OtherProps_13
+  - first:
+      213: 2689538458929232653
+    second: OtherProps_14
+  - first:
+      213: -7850851828449574585
+    second: OtherProps_15
+  - first:
+      213: -2239233490783025300
+    second: OtherProps_16
+  - first:
+      213: -8769647236290778264
+    second: OtherProps_17
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -141,286 +153,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AllBlackHoles_0
+      name: OtherProps_0
       rect:
         serializedVersion: 2
-        x: 208
-        y: 3512
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3a417c7ebda42b500800000000000000
-      internalID: 410472824391013539
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_1
-      rect:
-        serializedVersion: 2
-        x: 752
-        y: 3496
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc2446b19e32837e0800000000000000
-      internalID: -1785637768158494001
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_2
-      rect:
-        serializedVersion: 2
-        x: 1296
-        y: 3496
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8cd17e3d72e35f640800000000000000
-      internalID: 5113061292728851912
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_3
-      rect:
-        serializedVersion: 2
-        x: 1777
-        y: 3480
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ca0fe715389cc7120800000000000000
-      internalID: 2413025066208915628
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_4
-      rect:
-        serializedVersion: 2
-        x: 392
-        y: 2976
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 66e61c31e092a3950800000000000000
-      internalID: 6429496558462529126
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_5
-      rect:
-        serializedVersion: 2
-        x: 1016
-        y: 2944
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ea5ef470857598300800000000000000
-      internalID: 254830889514558894
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_6
-      rect:
-        serializedVersion: 2
-        x: 1720
-        y: 2927
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e7a37aedaefb38d90800000000000000
-      internalID: -7096617572327015810
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_7
-      rect:
-        serializedVersion: 2
-        x: 377
-        y: 2431
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b579f16e12e9f3000800000000000000
-      internalID: 17906791964710747
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_8
-      rect:
-        serializedVersion: 2
-        x: 1042
-        y: 2417
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 009ab4d4e59f0cba0800000000000000
-      internalID: -6070578114276382464
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_9
-      rect:
-        serializedVersion: 2
-        x: 1727
-        y: 2412
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 76c8a09ba8f327510800000000000000
-      internalID: 1545367487184014439
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_10
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 1765
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7c26c3776dac67810800000000000000
-      internalID: 1762819326634386119
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_11
-      rect:
-        serializedVersion: 2
-        x: 1065
-        y: 1767
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a6f07bf7990a695d0800000000000000
-      internalID: -3056078715991158934
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_12
-      rect:
-        serializedVersion: 2
-        x: 1711
-        y: 1784
-        width: 512
-        height: 512
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2120f8544bcc400a0800000000000000
-      internalID: -6916178053101059566
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AllBlackHoles_13
-      rect:
-        serializedVersion: 2
-        x: 393
-        y: 1188
-        width: 512
-        height: 512
+        x: 8
+        y: 800
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,8 +167,365 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d376c82cac2961270800000000000000
-      internalID: 8220919569356449597
+      spriteID: c1d692a66286e07e0800000000000000
+      internalID: -1797384687075103460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_1
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 800
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 117218a3a3100b070800000000000000
+      internalID: 8119991477750277905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_2
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 536
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3eae9fcb440bb6a0800000000000000
+      internalID: -6432542919116280261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_3
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 536
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac2097433d93f05d0800000000000000
+      internalID: -3094190839699012918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_4
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 800
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a5591f33171e2190800000000000000
+      internalID: -7985419717850868311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_5
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 800
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 941b992af820d6240800000000000000
+      internalID: 4786484794896265545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_6
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 800
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbe205a2f2b742b00800000000000000
+      internalID: 802902076082368189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_7
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 536
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faaada8001abfda50800000000000000
+      internalID: 6548156961247832751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_8
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 536
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c706869a2ff0fba70800000000000000
+      internalID: 8844805728077635708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_9
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 536
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02a0c194e51afd340800000000000000
+      internalID: 4890805146673220128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_10
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 272
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba4f9ad39d8e88b00800000000000000
+      internalID: 831170150989952171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_11
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 272
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5b1a04ffde190e20800000000000000
+      internalID: 3317216547755924314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_12
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 272
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1dcaff5fc7a5eee70800000000000000
+      internalID: 9146347385985674449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_13
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 272
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d40567346f01949e0800000000000000
+      internalID: -1636758339692638131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_14
+      rect:
+        serializedVersion: 2
+        x: 1064
+        y: 272
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0b7a368af8235520800000000000000
+      internalID: 2689538458929232653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_15
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 8
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 741890d8bdb2c0390800000000000000
+      internalID: -7850851828449574585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_16
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 8
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6748bc0105ace0e0800000000000000
+      internalID: -2239233490783025300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OtherProps_17
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 8
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86be66b5d44fb4680800000000000000
+      internalID: -8769647236290778264
       vertices: []
       indices: 
       edges: []
