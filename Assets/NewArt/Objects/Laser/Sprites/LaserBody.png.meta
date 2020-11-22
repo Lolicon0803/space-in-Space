@@ -1,0 +1,497 @@
+fileFormatVersion: 2
+guid: 491b85e9bbdfbc14b8273326a8cf482e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7743975817301801941
+    second: LaserBody_0
+  - first:
+      213: 947878780748610653
+    second: LaserBody_1
+  - first:
+      213: -1921980378159268790
+    second: LaserBody_2
+  - first:
+      213: 3604456780029162731
+    second: LaserBody_3
+  - first:
+      213: -5430201635335333387
+    second: LaserBody_4
+  - first:
+      213: 5157023133767967116
+    second: LaserBody_5
+  - first:
+      213: -9093678150106768531
+    second: LaserBody_6
+  - first:
+      213: -7262069491238724613
+    second: LaserBody_7
+  - first:
+      213: -1327981625010259107
+    second: LaserBody_8
+  - first:
+      213: -8416869839130719757
+    second: LaserBody_9
+  - first:
+      213: -6303748728657824712
+    second: LaserBody_10
+  - first:
+      213: 7132962306494273839
+    second: LaserBody_11
+  - first:
+      213: 5352888758334269625
+    second: LaserBody_12
+  - first:
+      213: -3933491143619322561
+    second: LaserBody_13
+  - first:
+      213: 2301846258474038754
+    second: LaserBody_0
+  - first:
+      213: 1866445734419985431
+    second: LaserBody_1
+  - first:
+      213: -8883649743589823628
+    second: LaserBody_2
+  - first:
+      213: 8684015692252389570
+    second: LaserBody_3
+  - first:
+      213: 4944646864949029543
+    second: LaserBody_4
+  - first:
+      213: 944364000491292804
+    second: LaserBody_5
+  - first:
+      213: 6003566975584553391
+    second: LaserBody_6
+  - first:
+      213: 5752685817950094846
+    second: LaserBody_7
+  - first:
+      213: 2591309555007194281
+    second: LaserBody_8
+  - first:
+      213: 5822438388109849684
+    second: LaserBody_9
+  - first:
+      213: -5975569906645639409
+    second: LaserBody_10
+  - first:
+      213: -6917111832666297368
+    second: LaserBody_11
+  - first:
+      213: 8025110740914404160
+    second: LaserBody_12
+  - first:
+      213: -3799322250407077972
+    second: LaserBody_13
+  - first:
+      213: 4549914531190400392
+    second: LaserBody_14
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 512
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LaserBody_0
+      rect:
+        serializedVersion: 2
+        x: 3066
+        y: 7898
+        width: 524
+        height: 76
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e538e3f9fcc1ff10800000000000000
+      internalID: 2301846258474038754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_1
+      rect:
+        serializedVersion: 2
+        x: 4602
+        y: 7858
+        width: 524
+        height: 156
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71475a0b182f6e910800000000000000
+      internalID: 1866445734419985431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_2
+      rect:
+        serializedVersion: 2
+        x: 6138
+        y: 7834
+        width: 524
+        height: 204
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47ba65430afe6b480800000000000000
+      internalID: -8883649743589823628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_3
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 7290
+        width: 524
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 104, z: 0, w: 114}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c02f902342d38870800000000000000
+      internalID: 8684015692252389570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_4
+      rect:
+        serializedVersion: 2
+        x: 2042
+        y: 7274
+        width: 524
+        height: 300
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 136, z: 0, w: 134}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aa2905302aee9440800000000000000
+      internalID: 4944646864949029543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_5
+      rect:
+        serializedVersion: 2
+        x: 3578
+        y: 7258
+        width: 524
+        height: 332
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 166, z: 0, w: 118}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48843f31e0e0b1d00800000000000000
+      internalID: 944364000491292804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_6
+      rect:
+        serializedVersion: 2
+        x: 5114
+        y: 7242
+        width: 524
+        height: 364
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 177, z: 0, w: 140}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa9cbf42b54f05350800000000000000
+      internalID: 6003566975584553391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_7
+      rect:
+        serializedVersion: 2
+        x: 6650
+        y: 7226
+        width: 524
+        height: 396
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 190, z: 0, w: 133}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef5c75bb545a5df40800000000000000
+      internalID: 5752685817950094846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_8
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 6698
+        width: 524
+        height: 428
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 205, z: 0, w: 157}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a487499f4e26f320800000000000000
+      internalID: 2591309555007194281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_9
+      rect:
+        serializedVersion: 2
+        x: 2042
+        y: 6674
+        width: 524
+        height: 476
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 221, z: 0, w: 190}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 454b2e98dd47dc050800000000000000
+      internalID: 5822438388109849684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_10
+      rect:
+        serializedVersion: 2
+        x: 3580
+        y: 6648
+        width: 524
+        height: 519
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 199, y: 230, z: 247, w: 207}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0f5fdf64d2821da0800000000000000
+      internalID: -5975569906645639409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_11
+      rect:
+        serializedVersion: 2
+        x: 5114
+        y: 6810
+        width: 524
+        height: 204
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8eb2646cf6b7100a0800000000000000
+      internalID: -6917111832666297368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_12
+      rect:
+        serializedVersion: 2
+        x: 6650
+        y: 6834
+        width: 524
+        height: 156
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04bff5333bbee5f60800000000000000
+      internalID: 8025110740914404160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserBody_13
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 6106
+        width: 524
+        height: 76
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca79f3dfa88164bc0800000000000000
+      internalID: -3799322250407077972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
