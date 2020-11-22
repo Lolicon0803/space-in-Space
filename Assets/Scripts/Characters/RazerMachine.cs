@@ -8,6 +8,7 @@ using Assets.Scripts.Characters;
 public class RazerMachine : MonoBehaviour
 {
     public GameData.RazerData razerData;
+
     public bool[] razerTempo;
     public TempoActionType tempoType;
 
@@ -19,6 +20,8 @@ public class RazerMachine : MonoBehaviour
     private RaycastHit2D hitObject;
     private bool isShooting = false;
 
+    private Animator animator;
+    private readonly int animationActiveKey = Animator.StringToHash("Active");
 
     //雷射音效 待全域化
     public AudioClip razerStart;
@@ -28,6 +31,7 @@ public class RazerMachine : MonoBehaviour
 
     void Awake()
     {
+        animator = GetComponent<Animator>();
         transform.GetChild(0).transform.Rotate(Vector3.forward, Mathf.Atan2(razerData.Direction.y, razerData.Direction.x) * Mathf.Rad2Deg);
     }
 
@@ -41,18 +45,18 @@ public class RazerMachine : MonoBehaviour
     void Update()
     {
 
-        if (isShooting)
-        {
-            hitObject = Physics2D.BoxCast(transform.position, new Vector2(1, 1), 0, razerData.Direction, razerData.distance, LayerMask.GetMask("Player"));
+        //if (isShooting)
+        //{
+        //    hitObject = Physics2D.BoxCast(transform.position, new Vector2(1, 1), 0, razerData.Direction, razerData.distance, LayerMask.GetMask("Player"));
 
-            if (hitObject.collider != null)
-            {
-                Debug.Log("撞到雷射 即死");
-                transform.GetChild(0).GetComponent<AudioSource>().Play();
-               // Player.Singleton.lifeSystem.GameOver();
-               Player.Singleton.lifeSystem.Hurt();
-            }
-        }
+        //    if (hitObject.collider != null)
+        //    {
+        //        Debug.Log("撞到雷射 即死");
+        //        transform.GetChild(0).GetComponent<AudioSource>().Play();
+        //       // Player.Singleton.lifeSystem.GameOver();
+        //       Player.Singleton.lifeSystem.Hurt();
+        //    }
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -63,6 +67,7 @@ public class RazerMachine : MonoBehaviour
 
             // Call損血系統
             Player.Singleton.lifeSystem.Hurt();
+            Player.Singleton.movement.Knock(Vector2.zero);
         }
     }
 
@@ -74,11 +79,14 @@ public class RazerMachine : MonoBehaviour
 
             if (razerWaitStatus)
             {
-                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, razerSize, 1);
+                Vector2 scale = Vector2.one / transform.localScale.x / 7.68f;
+                transform.GetChild(0).transform.localScale = new Vector3(scale.x * razerData.distance, scale.y * razerSize, 1);
+                animator.SetBool(animationActiveKey, true);
             }
             else
             {
                 transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
+                animator.SetBool(animationActiveKey, false);
             }
 
         }
@@ -86,7 +94,9 @@ public class RazerMachine : MonoBehaviour
         {
             if (razerTempo[razerTempoIndex])
             {
-                transform.GetChild(0).transform.localScale = new Vector3(razerData.distance, razerSize, 1);
+                Vector2 scale = Vector2.one / transform.localScale.x / 7.68f;
+                transform.GetChild(0).transform.localScale = new Vector3(scale.x * razerData.distance, scale.y * razerSize, 1);
+                animator.SetBool(animationActiveKey, true);
                 isShooting = true;
                 gameObject.GetComponent<AudioSource>().clip = razerPlaying;
                 gameObject.GetComponent<AudioSource>().Play();
@@ -95,7 +105,7 @@ public class RazerMachine : MonoBehaviour
             {
                 isShooting = false;
                 transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
-
+                animator.SetBool(animationActiveKey, false);
                 //關閉音效
                 gameObject.GetComponent<AudioSource>().Stop();
             }

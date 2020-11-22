@@ -7,20 +7,14 @@ using Assets.Scripts.Characters;
 
 public class Razer : MonoBehaviour
 {
-    void Awake()
+    public int damage = 0;
+
+    private void OnTriggerStay2D(Collider2D collision)
     {
+        if (collision.CompareTag("Player"))
+        {
+            Debug.Log("雷射射到。");
+            Player.Singleton.lifeSystem.Hurt(damage);
+        }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 }

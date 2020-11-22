@@ -16,9 +16,11 @@ public class PlayerLifeSystem : MonoBehaviour
     public int maxHp;
     private int nowHp;
 
-    // 玩家死亡後的起始場景，最好不要用這個。沒設定則為現在場景
-    // 不是指地圖設計上的場景，是指Asset/Scene裡的檔。
-    //public Scene startScene;
+    // 受傷後無敵時間
+    public int invincibleTempo;
+    // 成功噴射幾次就回血
+    public int recoverAfterShoot;
+
     // 復活點。
     public Vector2 startPosition;
 
@@ -41,12 +43,18 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
+    private bool isInvincible;
+    private int invincibleCount;
+    private int recoverCount;
     private bool isDie;
 
     // Start is called before the first frame update
     void Start()
     {
         isDie = false;
+        isInvincible = false;
+        invincibleCount = 0;
+        recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         //playerMovement.OnMiss += LossLife;
         playerMovement.OnError += LossLife;
@@ -94,24 +102,38 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-
-        //if (!Player.Singleton.movement.firstTimeMiss && !isDie)
-        //{
-        //playerMovement.canInput = false;
-        BreakHeart();
-        StartCoroutine(ShowRedEffect());
-        //}
+        if (!isDie && !isInvincible)
+        {
+            isInvincible = true;
+            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.TimeOut);
+            BreakHeart();
+            StartCoroutine(ShowRedEffect());
+        }
     }
 
     /// <summary>
     /// When miss or error, loss one hp and show red screen.
     /// </summary>
-    public void Hurt()
+    public void Hurt(int number = 1)
     {
-        if (!isDie)
+        if (!isDie && !isInvincible)
         {
-            BreakHeart();
+            isInvincible = true;
+            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
+            for (int i = 0; i < number && !isDie; i++)
+                BreakHeart();
             StartCoroutine(ShowRedEffect());
+        }
+    }
+
+    private void RemoveInvincibleStatus()
+    {
+        invincibleCount++;
+        if (invincibleCount == invincibleTempo)
+        {
+            isInvincible = false;
+            invincibleCount = 0;
+            ObjectTempoControl.Singleton.RemoveToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
         }
     }
 
@@ -121,20 +143,23 @@ public class PlayerLifeSystem : MonoBehaviour
     private void BreakHeart()
     {
         nowHp--;
-        // 換圖片用
-        switch (lastHeartState)
+        if (lastHeartIndex >= 0)
         {
-            case HeartStatus.Full:
-                lastHeartState = HeartStatus.Break;
-                heartImages[lastHeartIndex].sprite = breakHeart;
-                break;
-            case HeartStatus.Break:
-                lastHeartState = HeartStatus.Full;
-                heartImages[lastHeartIndex].sprite = BlackHear;
-                lastHeartIndex--;
-                break;
-            default:
-                break;
+            // 換圖片用
+            switch (lastHeartState)
+            {
+                case HeartStatus.Full:
+                    lastHeartState = HeartStatus.Break;
+                    heartImages[lastHeartIndex].sprite = breakHeart;
+                    break;
+                case HeartStatus.Break:
+                    lastHeartState = HeartStatus.Full;
+                    heartImages[lastHeartIndex].sprite = BlackHear;
+                    lastHeartIndex--;
+                    break;
+                default:
+                    break;
+            }
         }
         // Gameover.
         if (nowHp <= 0)
