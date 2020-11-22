@@ -73,6 +73,8 @@ public class TextWriter : MonoBehaviour
                 }
             }
         }
+
+
     }
 
     void ClearText()

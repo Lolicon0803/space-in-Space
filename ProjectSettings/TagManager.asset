@@ -45,3 +45,6 @@ TagManager:
   - name: Pause Menu
     uniqueID: 3764575937
     locked: 0
+  - name: TextBox
+    uniqueID: 4047343469
+    locked: 0

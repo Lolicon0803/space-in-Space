@@ -49,12 +49,13 @@ public class TempoManager : MonoBehaviour
     private float timeStep;
     public TempoActions tempoActions;
     public AudioSource BGM;
+    public float beatPerMinute;
 
     // Start is called before the first frame update
     void Start()
     {
         improveDelayMode = false;
-        BPM = 60;
+        BPM = beatPerMinute;
         delay = -150;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
