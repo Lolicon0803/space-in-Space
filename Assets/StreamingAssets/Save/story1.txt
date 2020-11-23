@@ -1,1 +1,13 @@
-[{"textBoxIndex":0,"speaker":"A","text":"TESTTESTTESTTESTTESTTESTTESTTEST\nTESTTESTTESTTESTTESTTESTTESTTEST"},{"textBoxIndex":1,"speaker":"B","text":"TEST2TEST2TEST2TEST2TEST2TEST2\nTEST2TEST2TEST2TEST2TEST2TEST2"}]
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"………"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"啊……… "},
+{"textBoxIndex":1,"speaker":"旁白","text":"(你緩緩的睜開眼睛)"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"………"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"啊，好痛。 "},
+{"textBoxIndex":1,"speaker":"旁白","text":"(你嘗試從冰冷的地面爬起)"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"………"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"我…怎麼會在這裡?"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"發生什麼事?什麼都想不起來。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"總之先到處看看吧。"},
+{"textBoxIndex":1,"speaker":"旁白","text":"[在星球上移動，找找看有沒有什麼線索吧!]"},
+]

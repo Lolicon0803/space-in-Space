@@ -25,7 +25,7 @@ public class PlayerAudioManager : MonoBehaviour
         playerMovement.OnWalk += PlayWalkAudio;
         playerMovement.OnFireBag += PlayFireBagAudio;
         playerMovement.OnFallIntoBlackHole += PlayFallIntoBlackHoleAudio;
-        playerMovement.OnMiss += PlayeMissAudio;
+        //playerMovement.OnMiss += PlayeMissAudio;
         playerMovement.OnError += PlayErrorAudio;
     }
 

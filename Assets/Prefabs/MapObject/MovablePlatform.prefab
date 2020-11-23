@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4366320086932214932}
   m_Layer: 8
   m_Name: MovablePlatform
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 32f71e4752d5c524a972f85c1e9eabf3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 70f40aa99709666489eedda79f63abef, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

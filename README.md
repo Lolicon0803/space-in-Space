@@ -115,6 +115,30 @@
 | ---- | ---- | -------------- |
 | Msg  | Text | 顯示訊息的文字 |
 
+-   TextWriter
+```
+使用說明:
+public class foo : MonoBehaviour
+{
+    public GameObject textWriter;
+    void Update()
+    {
+        // ...
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            textWriter.GetComponent<TextWriter>().Init();
+            textWriter.GetComponent<TextWriter>().LoadStory("story1.txt");
+            textWriter.GetComponent<TextWriter>().NextStory();
+        }
+        // ...
+    }
+}
+```
+
+| 名稱 | 型別 | 說明           |
+| ---- | ---- | -------------- |
+| TextBoxs  | GameObject[] | 文字框 + 文字 + 角色圖|
+| BeepSound  | Audio source | DDD sound|
 ## Asset store
 
 | 名稱                | 說明                                                                                                                                                                            |

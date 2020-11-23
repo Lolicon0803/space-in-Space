@@ -35,8 +35,6 @@ public class Bullet : MonoBehaviour
     {
         if (collider.CompareTag("Player"))
         {
-
-         
             Debug.Log("子彈命中 扣血");
             // Call損血系統
             Player.Singleton.lifeSystem.Hurt();
@@ -44,6 +42,10 @@ public class Bullet : MonoBehaviour
 
             //等待音樂播放結束
             StartCoroutine(AudioPlayFinished(gameObject.GetComponent<AudioSource>().clip.length));
+        }
+        else if (collider.CompareTag("Ground"))
+        {
+            DestroyMyself();
         }
     }
 
@@ -82,7 +84,7 @@ public class Bullet : MonoBehaviour
         StartCoroutine("Move");
     }
 
-    void DestroyMyself()
+    public void DestroyMyself()
     {
         ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
         Destroy(gameObject);
