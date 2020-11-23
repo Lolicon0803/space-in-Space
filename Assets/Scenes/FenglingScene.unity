@@ -1640,6 +1640,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6298967810242803451, guid: 755762cddf009794cbfae3867e7f27eb,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7261871193464705874, guid: 755762cddf009794cbfae3867e7f27eb,
         type: 3}
       propertyPath: m_Name
@@ -1648,7 +1653,7 @@ PrefabInstance:
     - target: {fileID: 7261871193464705874, guid: 755762cddf009794cbfae3867e7f27eb,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7261871193464705878, guid: 755762cddf009794cbfae3867e7f27eb,
         type: 3}
@@ -2608,7 +2613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 10
   invincibleTempo: 1
-  recoverAfterShoot: 0
+  recoverAfterShoot: 2
   startPosition: {x: -0.5, y: -1.5}
   canvas: {fileID: 428719541}
   redEffectImage: {fileID: 46591253}

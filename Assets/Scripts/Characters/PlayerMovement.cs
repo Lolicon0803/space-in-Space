@@ -160,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
         else
             nowSpeed = speed;
         Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
+        OnFireBag?.Invoke(MoveDirection);
         rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
         // 如果還沒動足夠距離，或是還有在動
         while (Vector2.Distance(transform.position, movePoint) < totalDistance && rigidbody.velocity.magnitude > Time.deltaTime)
@@ -181,7 +182,10 @@ public class PlayerMovement : MonoBehaviour
             // 慢慢變慢
             if (nowSpeed > slideSpeed)
                 nowSpeed = Mathf.Lerp(nowSpeed, slideSpeed, slowDownSpeed * Time.deltaTime);
-            GetComponent<Rigidbody2D>().velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
+            if (rigidbody.velocity.magnitude > Time.deltaTime)
+                rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
+            else
+                rigidbody.velocity = Vector2.zero;
             yield return null;
         }
     }
@@ -193,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
     public void Knock(Vector2 direction)
     {
         StopMove();
+        transform.parent = null;
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;

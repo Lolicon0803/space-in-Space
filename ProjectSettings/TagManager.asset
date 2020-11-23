@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - HitButton
+  - Ground
+  - Item
+  - Boss
+  - Bomb
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -18,7 +24,7 @@ TagManager:
   - Player
   - SpaceJunk
   - Anemy
-  - 
+  - Item
   - 
   - 
   - 

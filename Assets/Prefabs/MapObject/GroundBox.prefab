@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7352103657374002306}
   m_Layer: 8
   m_Name: GroundBox
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -49,11 +49,13 @@ MonoBehaviour:
     inDirectionRight: {x: -1, y: 1}
     behavior: 0
     standDirection: {x: 1, y: 0}
+    hasGravity: 0
     reboundDirection: {x: 0, y: 0}
   - inDirectionLeft: {x: -1, y: 1}
     inDirectionRight: {x: 1, y: 1}
     behavior: 1
     standDirection: {x: 0, y: -1}
+    hasGravity: 0
     reboundDirection: {x: 0, y: 0}
 --- !u!61 &7352103657374002306
 BoxCollider2D:

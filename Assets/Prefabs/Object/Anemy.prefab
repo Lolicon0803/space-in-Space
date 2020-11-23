@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5819147049318750534}
   m_Layer: 11
   m_Name: Anemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
     tempoType: 0
   bulletPrefab: {fileID: 8049714844354027376, guid: 4b3aabd1ddc02bf45bd327ace14080d8,
     type: 3}
+  fromBoss: 0
   moveSpeed: 3
 --- !u!82 &2153540237494493690
 AudioSource:

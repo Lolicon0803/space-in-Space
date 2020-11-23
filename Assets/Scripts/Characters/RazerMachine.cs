@@ -28,11 +28,13 @@ public class RazerMachine : MonoBehaviour
     public AudioClip razerPlaying;
     public AudioClip razerEnd;
 
+    private Razer razer;
 
     void Awake()
     {
         animator = GetComponent<Animator>();
-        transform.GetChild(0).transform.Rotate(Vector3.forward, Mathf.Atan2(razerData.Direction.y, razerData.Direction.x) * Mathf.Rad2Deg);
+        razer = transform.GetChild(0).GetComponent<Razer>();
+        razer.transform.Rotate(Vector3.forward, Mathf.Atan2(razerData.Direction.y, razerData.Direction.x) * Mathf.Rad2Deg);
     }
 
     // Start is called before the first frame update
@@ -79,13 +81,12 @@ public class RazerMachine : MonoBehaviour
 
             if (razerWaitStatus)
             {
-                Vector2 scale = Vector2.one / transform.localScale.x / 7.68f;
-                transform.GetChild(0).transform.localScale = new Vector3(scale.x * razerData.distance, scale.y * razerSize, 1);
+                razer.SetSize(razerData.distance, razerSize);
                 animator.SetBool(animationActiveKey, true);
             }
             else
             {
-                transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
+                razer.SetSize(0, 0);
                 animator.SetBool(animationActiveKey, false);
             }
 
@@ -94,8 +95,7 @@ public class RazerMachine : MonoBehaviour
         {
             if (razerTempo[razerTempoIndex])
             {
-                Vector2 scale = Vector2.one / transform.localScale.x / 7.68f;
-                transform.GetChild(0).transform.localScale = new Vector3(scale.x * razerData.distance, scale.y * razerSize, 1);
+                razer.SetSize(razerData.distance, razerSize);
                 animator.SetBool(animationActiveKey, true);
                 isShooting = true;
                 gameObject.GetComponent<AudioSource>().clip = razerPlaying;
@@ -104,7 +104,7 @@ public class RazerMachine : MonoBehaviour
             else
             {
                 isShooting = false;
-                transform.GetChild(0).transform.localScale = new Vector3(0, razerSize, 1);
+                razer.SetSize(0, 0);
                 animator.SetBool(animationActiveKey, false);
                 //關閉音效
                 gameObject.GetComponent<AudioSource>().Stop();

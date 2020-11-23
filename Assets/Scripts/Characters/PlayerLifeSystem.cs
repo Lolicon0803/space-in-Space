@@ -56,7 +56,7 @@ public class PlayerLifeSystem : MonoBehaviour
         invincibleCount = 0;
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
-        //playerMovement.OnMiss += LossLife;
+        playerMovement.OnFireBag += Recover;
         playerMovement.OnError += LossLife;
         InitializeHHeart();
     }
@@ -105,7 +105,7 @@ public class PlayerLifeSystem : MonoBehaviour
         if (!isDie && !isInvincible)
         {
             isInvincible = true;
-            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.TimeOut);
+            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
             BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
@@ -143,6 +143,7 @@ public class PlayerLifeSystem : MonoBehaviour
     private void BreakHeart()
     {
         nowHp--;
+        recoverCount = 0;
         if (lastHeartIndex >= 0)
         {
             // 換圖片用
@@ -164,6 +165,38 @@ public class PlayerLifeSystem : MonoBehaviour
         // Gameover.
         if (nowHp <= 0)
             GameOver();
+    }
+
+    private void Recover(Vector2 direction)
+    {
+        if (nowHp != maxHp)
+        {
+            recoverCount++;
+            if (recoverCount == recoverAfterShoot)
+            {
+                recoverCount = 0;
+                nowHp++;
+                // 換圖片用
+                switch (lastHeartState)
+                {
+                    case HeartStatus.Full:
+                        lastHeartState = HeartStatus.Break;
+                        heartImages[lastHeartIndex + 1].sprite = breakHeart;
+                        lastHeartIndex++;
+                        break;
+                    case HeartStatus.Break:
+                        lastHeartState = HeartStatus.Full;
+                        heartImages[lastHeartIndex].sprite = fullHeart;
+                        break;
+                    case HeartStatus.Black:
+                        lastHeartState = HeartStatus.Break;
+                        heartImages[lastHeartIndex].sprite = breakHeart;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     /// <summary>
