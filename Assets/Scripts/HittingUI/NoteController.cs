@@ -39,6 +39,9 @@ public class NoteController : MonoBehaviour
     IEnumerator GenerateNotes()
     {
         isRunning = true;
+
+        fillBlankWithNote();
+
         while (hasStarted)
         {
             GameObject leftNote = Instantiate(notePrefab, transform);
@@ -49,6 +52,19 @@ public class NoteController : MonoBehaviour
 
             yield return new WaitForSeconds(notesGenerationInterval);
         }
+
         isRunning = false;
+    }
+
+    void fillBlankWithNote()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            GameObject leftNote = Instantiate(notePrefab, transform);
+            GameObject rightNote = Instantiate(notePrefab, transform);
+
+            rightNote.transform.Translate(noteInitPositionX - 1.1f * (i + 1), 0, 0);
+            leftNote.transform.Translate(-noteInitPositionX + 1.1f * (i + 1), 0, 0);
+        }
     }
 }

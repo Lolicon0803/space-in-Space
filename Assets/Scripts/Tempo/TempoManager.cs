@@ -20,7 +20,6 @@ public enum TouchStates
 
 public class TempoManager : MonoBehaviour
 {
-    public SpriteRenderer sprite;
     public bool improveDelayMode;
     public TouchStates touchState;
     public static double delay;
@@ -132,33 +131,7 @@ public class TempoManager : MonoBehaviour
     {
         tempoActions[TempoActionType.Quarter]();
     }
-    // Update is called once per frame
-    void Update()
-    {
-        #region 狀態處理
-        switch (touchState)
-        {
-            case TouchStates.Reset:
-                break;
-            case TouchStates.Disable:
-                sprite.color = new Color(1, 1, 1, 1);
-                break;
-            case TouchStates.Enable:
-                sprite.color = new Color(1, 0, 0, 1);
-                break;
-            case TouchStates.Touched:
-                sprite.color = new Color(0, 1, 0, 1);
-                break;
-            case TouchStates.TouchFailed:
-                sprite.color = new Color(0, 0, 0, 1);
-                break;
-            case TouchStates.TimeOutFailed:
-                sprite.color = new Color(1, 1, 1, 1);
-                break;
-        }
 
-        #endregion
-    }
     // 打擊更改State
     public bool KeyDown()
     {
