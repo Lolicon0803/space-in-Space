@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using Assets.Scripts.TextWriter;
 enum TextWriterState {
     NextWord,
@@ -13,6 +14,7 @@ public class TextWriter : MonoBehaviour
     SaveAndLoad SL;
     public GameObject[] textBoxs;
     public AudioSource beepSound;
+    public UnityEvent onEndStory;
     private int wordIndex;
     private int paragraghIndex;
     private Story story;
@@ -69,6 +71,7 @@ public class TextWriter : MonoBehaviour
                 ClearSprite();
                 if (!isPrintingStory)
                 {
+                    onEndStory.Invoke();
                     break;
                 }
             }

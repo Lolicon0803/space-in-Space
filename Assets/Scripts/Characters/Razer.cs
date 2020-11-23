@@ -11,10 +11,13 @@ public class Razer : MonoBehaviour
     private SpriteRenderer sprite;
     private BoxCollider2D collider2D;
 
+    private AudioSource audioSource;
+
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void SetSize(float x, float y)

@@ -21,8 +21,10 @@ public class PlayerLifeSystem : MonoBehaviour
     // 成功噴射幾次就回血
     public int recoverAfterShoot;
 
+    // 復活場景
+    private int startScene;
     // 復活點。
-    public Vector2 startPosition;
+    private Vector2 startPosition;
 
     public Canvas canvas;
     public Image redEffectImage;
@@ -92,9 +94,10 @@ public class PlayerLifeSystem : MonoBehaviour
     /// 設定重生點。
     /// </summary>
     /// <param name="position">重生點。</param>
-    public void SetStartPosition(Vector2 position)
+    public void SetStartPosition(int index, Vector2 position)
     {
         startPosition = position;
+        startScene = index;
     }
 
     /// <summary>
@@ -104,7 +107,7 @@ public class PlayerLifeSystem : MonoBehaviour
     {
         if (!isDie && !isInvincible)
         {
-            isInvincible = true;
+            //isInvincible = true;
             ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
             BreakHeart();
             StartCoroutine(ShowRedEffect());
@@ -251,6 +254,8 @@ public class PlayerLifeSystem : MonoBehaviour
         // 玩家回到起始點。
         playerMovement.movePoint = startPosition;
         transform.position = startPosition;
+        if (startScene != -1)
+            ScenesManager.goToScene(startScene);
         // 黑屏結束
         while (alpha > 0)
         {

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8846295690717942182}
   - component: {fileID: 131329305878413791}
   m_Layer: 10
-  m_Name: SpaceJunk 1
+  m_Name: SpaceJunk1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 2659689453966325012, guid: 60b53ffad70861b47bad0366375d05c3,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -18,7 +18,7 @@ public class BlackHole : MonoBehaviour
 
     private LayerMask layerMask;
 
-    //private readonly int activateTrigger = Animator.StringToHash("Activate");
+    private readonly int activateTrigger = Animator.StringToHash("Activate");
 
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class BlackHole : MonoBehaviour
     private void Activate()
     {
         //Debug.Log("Black Hole activate");
-        //animator.SetTrigger(activateTrigger);
+        animator.SetTrigger(activateTrigger);
         isActive = true;
     }
 

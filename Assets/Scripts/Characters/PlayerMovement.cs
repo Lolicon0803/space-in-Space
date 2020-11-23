@@ -12,7 +12,6 @@ static class Constants
 public class PlayerMovement : MonoBehaviour
 {
     // GameData Todo:之後要移動
-
     // 移動距離係數
     private readonly Dictionary<string, float> distanceDictionary = new Dictionary<string, float> { { "rocket", 2f }, { "move", 1f } };
 
@@ -54,11 +53,10 @@ public class PlayerMovement : MonoBehaviour
 
     // All player behavier.
     public delegate void PlayerBehavierDelegate(Vector2 direction);
-    public event PlayerBehavierDelegate OnWalk;
     public event PlayerBehavierDelegate OnFireBag;
     public delegate void PlayerDamagedDelegate();
+    public event PlayerDamagedDelegate OnStop;
     public event PlayerDamagedDelegate OnFallIntoBlackHole;
-    //public event PlayerDamagedDelegate OnMiss;
     public event PlayerDamagedDelegate OnError;
 
     public Vector2 MoveDirection { get; private set; }
@@ -70,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Load Scene");
         rigidbody = GetComponent<Rigidbody2D>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
@@ -128,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, MoveDirection);
         transform.rotation = Quaternion.Euler(0, 0, angle);
         coroutineShoot = Shoot();
+        OnFireBag?.Invoke(MoveDirection);
         StartCoroutine(coroutineShoot);
     }
 
@@ -160,7 +160,6 @@ public class PlayerMovement : MonoBehaviour
         else
             nowSpeed = speed;
         Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
-        OnFireBag?.Invoke(MoveDirection);
         rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
         // 如果還沒動足夠距離，或是還有在動
         while (Vector2.Distance(transform.position, movePoint) < totalDistance && rigidbody.velocity.magnitude > Time.deltaTime)
@@ -182,6 +181,7 @@ public class PlayerMovement : MonoBehaviour
             // 慢慢變慢
             if (nowSpeed > slideSpeed)
                 nowSpeed = Mathf.Lerp(nowSpeed, slideSpeed, slowDownSpeed * Time.deltaTime);
+            rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
             if (rigidbody.velocity.magnitude > Time.deltaTime)
                 rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
             else
@@ -367,6 +367,7 @@ public class PlayerMovement : MonoBehaviour
     {
         StopCoroutine(coroutineShoot);
         StopCoroutine(coroutineSlide);
+        OnStop?.Invoke();
         //MoveDirection = Vector2.zero;
         canInput = true;
         //nowSpeed = 0;

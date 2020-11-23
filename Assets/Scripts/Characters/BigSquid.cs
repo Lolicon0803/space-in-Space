@@ -88,6 +88,18 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     public Vector2 summonBoundX = new Vector2(-7, 7);
     public Vector2 summonBoundY = new Vector2(-7, 7);
 
+    private AudioSource audioSource;
+
+    // 音效檔
+    public AudioClip audioSummonBomb;
+    public AudioClip audioSummonSquid;
+    public AudioClip audioTouchPlayer;
+    public AudioClip audioHurt;
+    public AudioClip audioPrepareLazer;
+    public AudioClip audioShootLazer;
+    public AudioClip audioDie;
+    // --
+
     private void Awake()
     {
         // 數據初始化--------
@@ -111,6 +123,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         maxRazerTime = 3;
         //--------------------
 
+        audioSource = GetComponent<AudioSource>();
+
         // 獲得路線
         foreach (GameData.RouteData item in route)
         {
@@ -125,6 +139,10 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     void Start()
     {
         OnDie = new UnityAction(() => { });
+    }
+
+    public void SetActive()
+    {
         // 註冊半拍節奏
         ObjectTempoControl.Singleton.AddToBeatAction(CountHalfTempo, TempoActionType.Half);
         // 註冊一拍節奏
@@ -167,9 +185,19 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         {
             // 計數增加
             moveCount++;
+            if (!usingRazer)
+            {
+                if (audioPrepareLazer != null)
+                {
+                    audioSource.clip = audioPrepareLazer;
+                    audioSource.PlayOneShot(audioPrepareLazer);
+                }
+            }
             // 達休息時間，下一拍結束後發射雷射
             if (moveCount == restTimeBeforeRazer + 1 && !usingRazer)
             {
+                audioSource.clip = null;
+                audioSource.Stop();
                 usingRazer = true;
                 moveCount = 0;
                 StartCoroutine(ControlRazer());
@@ -196,6 +224,7 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
                 position = position.normalized * (squidCircleInterRadius + position.magnitude);
             }
             Anemy newSquid = Instantiate(smallSquid, transform.position, Quaternion.identity);
+            newSquid.bulletData.direction = (GameData.Direction)Random.Range(3, 5);
             newSquid.OnDisappear += () => nowSquidNumber--;
             // 死亡時，刪除這隻小魷魚
             OnDie += () =>
@@ -207,6 +236,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
                 }
             };
             newSquid.gameObject.SetActive(true);
+            if (audioSummonSquid != null)
+                audioSource.PlayOneShot(audioSummonSquid);
             newSquid.SetDestination(position, 25);
         }
     }
@@ -243,6 +274,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
                     nowBombNumber--;
                 }
             };
+            if (audioSummonBomb != null)
+                audioSource.PlayOneShot(audioSummonBomb);
             newBomb.gameObject.SetActive(true);
             newBomb.SetDestination(position, 20);
         }
@@ -256,11 +289,17 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     {
         // 計算玩家位置
         Vector2 target = Vector2.down;
-        razer1.SetSize(10, 0.2f);
+        if (audioShootLazer != null)
+        {
+            audioSource.clip = audioShootLazer;
+            audioSource.loop = true;
+            audioSource.PlayOneShot(audioShootLazer);
+        }
+        razer1.SetSize(15, 0.2f);
         razer1.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
-        razer2.SetSize(10, 0.2f);
+        razer2.SetSize(15, 0.2f);
         razer2.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 45);
-        razer3.SetSize(10, 0.2f);
+        razer3.SetSize(15, 0.2f);
         razer3.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 45);
         // 持續三拍
         while (moveCount <= maxRazerTime)
@@ -269,6 +308,12 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         razer1.SetSize(0, 0);
         razer2.SetSize(0, 0);
         razer3.SetSize(0, 0);
+        if (audioShootLazer != null)
+        {
+            audioSource.Stop();
+            audioSource.clip = null;
+            audioSource.loop = false;
+        }
         razer1.transform.localRotation = Quaternion.identity;
         razer2.transform.localRotation = Quaternion.identity;
         razer3.transform.localRotation = Quaternion.identity;
@@ -302,6 +347,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
 
     public void Damaged(int number)
     {
+        if (audioHurt != null)
+            audioSource.PlayOneShot(audioHurt);
         nowHP -= number;
         if (hpBar != null)
             hpBar.fillAmount = (float)nowHP / maxHP;
@@ -317,6 +364,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         {
             ObjectTempoControl.Singleton.RemoveToBeatAction(CountHalfTempo, TempoActionType.Half);
             ObjectTempoControl.Singleton.RemoveToBeatAction(CountWholeTempo, TempoActionType.Whole);
+            if (audioDie != null)
+                audioSource.PlayOneShot(audioDie);
             OnDie?.Invoke();
             Destroy(gameObject);
         }
@@ -326,6 +375,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     {
         if (collision.CompareTag("Player"))
         {
+            if (audioTouchPlayer != null)
+                audioSource.PlayOneShot(audioTouchPlayer);
             Player.Singleton.movement.Knock(Vector2.zero, 3, 20);
             Player.Singleton.lifeSystem.Hurt(1);
         }
@@ -333,31 +384,25 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
 
     private void OnDrawGizmos()
     {
-        //Gizmos.color = Color.red;
-        //for (int i = 0; i < 2000; i++)
-        //{
-        //    Vector2 p = Random.insideUnitCircle * (bombCircleOuterRadius - bombCircleInterRadius);
-        //    p = p.normalized * (bombCircleInterRadius + p.magnitude);
-        //    while (p.x <= summonBoundX.x || p.x >= summonBoundX.y || p.y <= summonBoundY.x || p.y >= summonBoundY.y)
-        //    {
-        //        p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-        //        p = p.normalized * (squidCircleInterRadius + p.magnitude);
-        //    }
-        //    Gizmos.DrawSphere(p, 0.1f);
-        //}
+        Gizmos.color = Color.red;
+        for (int i = 0; i < 2000; i++)
+        {
+            Vector2 p = Random.insideUnitCircle * (bombCircleOuterRadius - bombCircleInterRadius);
+            p = p.normalized * (bombCircleInterRadius + p.magnitude);
+            p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
+            p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
+            Gizmos.DrawSphere(p, 0.1f);
+        }
 
-        //Gizmos.color = Color.green;
-        //for (int i = 0; i < 2000; i++)
-        //{
-        //    Vector2 p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-        //    p = p.normalized * (squidCircleInterRadius + p.magnitude);
-        //    while (p.x <= -7 || p.x >= 7 || p.y <= -7 || p.y >= 7)
-        //    {
-        //        p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-        //        p = p.normalized * (squidCircleInterRadius + p.magnitude);
-        //    }
-        //    Gizmos.DrawSphere(p, 0.1f);
-        //}
+        Gizmos.color = Color.green;
+        for (int i = 0; i < 2000; i++)
+        {
+            Vector2 p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
+            p = p.normalized * (squidCircleInterRadius + p.magnitude);
+            p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
+            p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
+            Gizmos.DrawSphere(p, 0.1f);
+        }
     }
 
 }

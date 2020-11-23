@@ -20,6 +20,10 @@ public class Npc : MonoBehaviour
   
     }
 
+    public void ActivatePlayerInput()
+    {
+        Player.Singleton.movement.canInput = true;
+    }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -30,6 +34,7 @@ public class Npc : MonoBehaviour
             textWriter.GetComponent<TextWriter>().LoadStory(storyName + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove();
+            Player.Singleton.movement.canInput = false;
         }
     }
 

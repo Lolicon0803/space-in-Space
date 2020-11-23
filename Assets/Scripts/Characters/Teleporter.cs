@@ -25,12 +25,15 @@ public class Teleporter : MonoBehaviour
     // 推人方向
     public Vector2 pushDirection;
 
+    private AudioSource audioSource;
+
     private bool isActive;
     private bool hasTarget;
 
     private void Awake()
     {
         isActive = false;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -49,6 +52,7 @@ public class Teleporter : MonoBehaviour
                 {
                     Player.Singleton.movement.TeleportIn(this);
                     hasTarget = true;
+                    audioSource.Play();
                 }
             }
         }
@@ -70,6 +74,7 @@ public class Teleporter : MonoBehaviour
         {
             Player.Singleton.movement.TeleportOut(exit);
             hasTarget = false;
+            audioSource.Play();
         }
     }
 

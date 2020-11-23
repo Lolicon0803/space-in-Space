@@ -13,8 +13,12 @@ public class WhiteHole : MonoBehaviour
     // 推人時的速度
     public float pushSpeed;
 
+    public AudioClip pushPlayerAudio;
+
     private Animator animator;
     private bool isActive;
+
+    private AudioSource audioSource;
 
     private LayerMask layerMask;
 
@@ -29,6 +33,7 @@ public class WhiteHole : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         ObjectTempoControl.Singleton.AddToBeatAction(Activate, actionType);
     }
 
@@ -41,6 +46,7 @@ public class WhiteHole : MonoBehaviour
             {
                 Vector2 direction = Player.Singleton.transform.position - transform.position;
                 Player.Singleton.movement.Knock(direction, pushUnit, pushSpeed);
+                audioSource.PlayOneShot(pushPlayerAudio);
                 isActive = false;
             }
         }

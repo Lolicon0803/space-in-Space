@@ -8,6 +8,8 @@ public class PlayerAnimationManager : MonoBehaviour
     private PlayerMovement player;
 
     private bool walkParameter;
+    private bool idleParameter;
+    private readonly int idle = Animator.StringToHash("Idle");
     private readonly int walkR = Animator.StringToHash("WalkR");
     private readonly int walkL = Animator.StringToHash("WalkL");
 
@@ -16,19 +18,21 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         player = GetComponent<PlayerMovement>();
-        player.OnWalk += PlayWalkAnimation;
         player.OnFireBag += PlayWalkAnimation;
+        player.OnStop += PlayIdleAnimation;
         walkParameter = false;
+        idleParameter = false;
+        ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
+    }
+
+    private void PlayIdleAnimation()
+    {
+        animator.SetBool(idle, idleParameter);
+        idleParameter = !idleParameter;
     }
 
     private void PlayWalkAnimation(Vector2 direction)
     {
-        // Change sprite direction.
-        if (direction == -(Vector2)transform.right)
-            transform.localScale = new Vector3(-1, 1, 1);
-        else if (direction == (Vector2)transform.right)
-            transform.localScale = new Vector3(1, 1, 1);
-
         // Left or right foot.
         walkParameter = !walkParameter;
         if (walkParameter)
