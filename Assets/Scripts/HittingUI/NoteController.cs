@@ -40,7 +40,7 @@ public class NoteController : MonoBehaviour
     {
         isRunning = true;
 
-        fillBlankWithNote();
+        // fillBlankWithNote();
 
         while (hasStarted)
         {

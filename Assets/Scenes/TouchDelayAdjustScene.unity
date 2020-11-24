@@ -315,7 +315,7 @@ RectTransform:
   - {fileID: 1028285047}
   - {fileID: 1817399539}
   m_Father: {fileID: 1825938564}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -701,12 +701,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896511328}
   m_CullTransparentMesh: 0
---- !u!4 &951730173 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
-    type: 3}
-  m_PrefabInstance: {fileID: 4782803992547307547}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &951730174 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
@@ -1404,7 +1398,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 951730173}
   - {fileID: 437388225}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1512,7 +1505,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1825938564}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 711766732, guid: 53e8feb810ae8a4498c0a842b5e6aaad, type: 3}
       propertyPath: m_IsActive
@@ -1526,6 +1519,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AudioEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
+        type: 3}
+      propertyPath: beatPerMinute
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1565,7 +1563,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1585,7 +1583,7 @@ PrefabInstance:
     - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: m_Volume
-      value: 0.195
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53e8feb810ae8a4498c0a842b5e6aaad, type: 3}
