@@ -63,9 +63,23 @@ public class PlayerLifeSystem : MonoBehaviour
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
-        playerMovement.OnError += LossLife;
+        //playerMovement.OnError += LossLife;
         InitializeHHeart();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            GameOver();
+    }
+
+    //IEnumerator TEST()
+    //{
+    //    //if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
+    //    {
+            
+    //    }
+    //}
 
     private void InitializeHHeart()
     {
@@ -262,7 +276,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 等轉場景的程式碼完整再接過去
         if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+            AsyncOperation operation = SceneManager.LoadSceneAsync(startScene);
             while (!operation.isDone)
             {
                 Debug.Log("Wait load scene");

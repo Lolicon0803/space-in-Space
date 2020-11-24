@@ -118,7 +118,7 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
 
         isResting = false;
         usingRazer = false;
-        razerAfterMoveTime = 20;
+        razerAfterMoveTime = 18;
         restTimeBeforeRazer = 2;
         maxRazerTime = 3;
         //--------------------
@@ -179,20 +179,15 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
             // 每三拍且小魷魚數量未達上限
             if (wholeCount % 3 == 0 && nowSquidNumber < maxSquidNumber)
                 SummonSquid(summonSquidNumber);
+            if (wholeCount == razerAfterMoveTime)
+                isResting = true;
         }
         // 休息中
         else
         {
+            Debug.Log("321");
             // 計數增加
             moveCount++;
-            if (!usingRazer)
-            {
-                if (audioPrepareLazer != null)
-                {
-                    audioSource.clip = audioPrepareLazer;
-                    audioSource.PlayOneShot(audioPrepareLazer);
-                }
-            }
             // 達休息時間，下一拍結束後發射雷射
             if (moveCount == restTimeBeforeRazer + 1 && !usingRazer)
             {
@@ -288,19 +283,19 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     private IEnumerator ControlRazer()
     {
         // 計算玩家位置
-        Vector2 target = Vector2.down;
+        Vector2 target = Vector2.left;
         if (audioShootLazer != null)
         {
             audioSource.clip = audioShootLazer;
             audioSource.loop = true;
             audioSource.PlayOneShot(audioShootLazer);
         }
-        razer1.SetSize(25, 0.2f);
+        razer1.SetSize(50, 0.2f);
         razer1.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
-        razer2.SetSize(25, 0.2f);
-        razer2.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 45);
-        razer3.SetSize(25, 0.2f);
-        razer3.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 45);
+        razer2.SetSize(50, 0.2f);
+        razer2.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 22.5f);
+        razer3.SetSize(50, 0.2f);
+        razer3.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 22.5f);
         // 持續三拍
         while (moveCount <= maxRazerTime)
             yield return null;
