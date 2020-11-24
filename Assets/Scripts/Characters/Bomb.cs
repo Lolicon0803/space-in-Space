@@ -33,6 +33,7 @@ public class Bomb : MonoBehaviour
 
     private IEnumerator enumeratorMove;
 
+    private bool isPlayerTouched;
     private bool finishSetting;
 
     private void Awake()
@@ -50,6 +51,16 @@ public class Bomb : MonoBehaviour
     private void Update()
     {
         canvas.localRotation = Quaternion.Euler(0, 0, -transform.localRotation.eulerAngles.z);
+        Collider2D hit2D = Physics2D.OverlapCircle(transform.position, radius, layerMask);
+        if (hit2D != null && isPlayerTouched)
+        {
+            if (hit2D.CompareTag("Enemy"))
+                Explosion();
+            else if (hit2D.CompareTag("Boss"))
+                Explosion();
+            else if (hit2D.CompareTag("Ground"))
+                Explosion();
+        }
     }
 
     /// <summary>
@@ -60,6 +71,7 @@ public class Bomb : MonoBehaviour
     public void SetDestination(Vector2 destination, float speed)
     {
         finishSetting = false;
+        isPlayerTouched = false;
         rigidbody.velocity = (destination - (Vector2)transform.position).normalized * speed;
         enumeratorMove = Move(destination, speed);
         StartCoroutine(enumeratorMove);
@@ -138,6 +150,7 @@ public class Bomb : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
+            isPlayerTouched = true;
             float pushedSpeed = Player.Singleton.movement.NowSpeed;
             if (pushedSpeed >= Player.Singleton.movement.moveSpeed)
             {

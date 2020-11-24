@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         }
         else if (singleton != this)
         {
+            Destroy(lifeSystem.canvas.gameObject);
             Destroy(gameObject);
         }
     }

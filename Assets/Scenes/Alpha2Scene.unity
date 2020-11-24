@@ -1372,7 +1372,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: beatPerMinute
-      value: 48
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1433,7 +1433,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: bac848e228f221848b1c077090621a71, type: 3}
+      objectReference: {fileID: 8300000, guid: c9163085f374f104db1c50c9252ea85f, type: 3}
     - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: Loop
@@ -3168,12 +3168,12 @@ PrefabInstance:
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.365
+      value: -16.44
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.561
+      value: -8.56
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
@@ -3219,6 +3219,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355867, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1262500749
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355867, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355867, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1436d5db8a52c84e8ebb608e4c5535c, type: 3}
@@ -6257,12 +6272,12 @@ PrefabInstance:
     - target: {fileID: 558568770223462791, guid: faf8d8cb9d05d174680436e1439b0cca,
         type: 3}
       propertyPath: rebirthPoint.x
-      value: 7.734741
+      value: -16.459
       objectReference: {fileID: 0}
     - target: {fileID: 558568770223462791, guid: faf8d8cb9d05d174680436e1439b0cca,
         type: 3}
       propertyPath: rebirthPoint.y
-      value: -2.891257
+      value: -8.57
       objectReference: {fileID: 0}
     - target: {fileID: 558568770223462842, guid: faf8d8cb9d05d174680436e1439b0cca,
         type: 3}
