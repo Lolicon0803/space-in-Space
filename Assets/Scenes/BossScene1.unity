@@ -1035,7 +1035,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: beatPerMinute
-      value: 87
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1106,7 +1106,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 39bf56545c90c1d4c9ae50466ed75e60, type: 3}
+      objectReference: {fileID: 8300000, guid: c9163085f374f104db1c50c9252ea85f, type: 3}
     - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: m_Volume
