@@ -7,6 +7,8 @@ public class DataBase : MonoBehaviour
 
     public Dictionary<string, bool> readStories;
 
+    public Dictionary<string, bool> collectItems;
+
     private static DataBase singleton;
     public static DataBase Singleton
     {

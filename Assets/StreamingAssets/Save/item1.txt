@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這是...哈洽馬洽馬的遺物"},
+{"textBoxIndex":1,"speaker":"旁白","text":"[獲得了哈洽馬文件]"},
+]
