@@ -27,9 +27,11 @@ public class PlayerLifeSystem : MonoBehaviour
     private Vector2 startPosition;
 
     public Canvas canvas;
+    // 受傷紅屏
     public Image redEffectImage;
+    // 愛心
     public Image heartImagePrefab;
-
+    // 死亡黑屏
     public Image blackImage;
 
     public Sprite fullHeart;
@@ -53,6 +55,8 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        startScene = -1;
+        startPosition = new Vector2(-16.537f, -8.552f);
         isDie = false;
         isInvincible = false;
         invincibleCount = 0;
@@ -245,7 +249,7 @@ public class PlayerLifeSystem : MonoBehaviour
         while (alpha < 1)
         {
             alpha += 0.5f * Time.deltaTime;
-            redEffectImage.color = new Color(0, 0, 0, alpha);
+            blackImage.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
 
@@ -254,18 +258,29 @@ public class PlayerLifeSystem : MonoBehaviour
         // 玩家回到起始點。
         playerMovement.movePoint = startPosition;
         transform.position = startPosition;
-        if (startScene != -1)
-            ScenesManager.goToScene(startScene);
+        // 同場景不轉
+        // 等轉場景的程式碼完整再接過去
+        if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
+        {
+            AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+            while (!operation.isDone)
+            {
+                Debug.Log("Wait load scene");
+                yield return null;
+            }
+        }
+
         // 黑屏結束
         while (alpha > 0)
         {
             alpha -= 0.5f * Time.deltaTime;
-            redEffectImage.color = new Color(0, 0, 0, alpha);
+            blackImage.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
         // 愛心出來。
         foreach (Image image in heartImages)
             image.color = new Color(1, 1, 1, 1);
+        blackImage.color = new Color(0, 0, 0, 0);
         playerMovement.ResetStatus();
         isDie = false;
     }

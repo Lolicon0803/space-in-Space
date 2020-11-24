@@ -45,6 +45,12 @@ public class BossSceneManager : MonoBehaviour
 
     private IEnumerator ForceMovePlayer()
     {
+        // 照理說不應該要這行
+        while(Player.Singleton == null)
+        {
+            Debug.Log("沒有玩家");
+            yield return null;
+        }
         Player.Singleton.movement.StopMove();
         Player.Singleton.transform.rotation = Quaternion.identity;
         Player.Singleton.transform.position = new Vector3(-17.214f, -3.579f, 0);
