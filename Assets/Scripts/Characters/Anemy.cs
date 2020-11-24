@@ -36,8 +36,12 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
     private int routeIndex = 0;
 
+    public int waitTempo = 0;
+
     public delegate void EnemyEvent();
     public event EnemyEvent OnDisappear;
+
+    public int bulletAddTempo = 0;
 
     void Awake()
     {
@@ -99,31 +103,42 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
     public IEnumerator Move()
     {
-        if (routeMap.Count > 0)
+        if (waitTempo != 0)
         {
-            if (routeIndex % routeMap.Count == 0)
-            {
-                CreateBullet();
-            }
-            //確認方向
-            moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
-
-            // 下個移動點+朝路徑移動1格vector
-            movePoint = (Vector2)transform.position + moveDiraction;
-
-            //移動
-            while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
-            {
-                transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
-                yield return null;
-            }
-
-            transform.position = movePoint;
-            routeIndex = (routeIndex + 1) % routeMap.Count;
+            waitTempo--;
         }
         else
         {
-            CreateBullet();
+
+            if (routeIndex % bulletAddTempo == 0)
+            {
+                CreateBullet();
+            }
+
+            if (routeMap.Count > 0)
+            {
+                if (routeIndex % routeMap.Count == 0)
+                {
+                    CreateBullet();
+                }
+                //確認方向
+                moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
+
+                // 下個移動點+朝路徑移動1格vector
+                movePoint = (Vector2)transform.position + moveDiraction;
+
+                //移動
+                while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
+                {
+                    transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
+                    yield return null;
+                }
+
+                transform.position = movePoint;
+                routeIndex = (routeIndex + 1) % routeMap.Count;
+
+            }
+       
         }
     }
 

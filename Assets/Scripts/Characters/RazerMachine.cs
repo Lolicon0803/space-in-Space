@@ -20,6 +20,9 @@ public class RazerMachine : MonoBehaviour
     private RaycastHit2D hitObject;
     private bool isShooting = false;
 
+
+    public bool autoRotation=false;
+    public float autoRotationSpeed = 0;
     private Animator animator;
     private readonly int animationActiveKey = Animator.StringToHash("Active");
 
@@ -29,6 +32,7 @@ public class RazerMachine : MonoBehaviour
     public AudioClip razerEnd;
 
     private Razer razer;
+
 
     void Awake()
     {
@@ -46,7 +50,11 @@ public class RazerMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (autoRotation)
+        {
+            this.transform.Rotate(Vector3.forward, autoRotationSpeed);
+           // razer.transform.Rotate(Vector3.forward, autoRotationSpeed);
+        }
         //if (isShooting)
         //{
         //    hitObject = Physics2D.BoxCast(transform.position, new Vector2(1, 1), 0, razerData.Direction, razerData.distance, LayerMask.GetMask("Player"));
@@ -124,10 +132,10 @@ public class RazerMachine : MonoBehaviour
         for (int i = 1; i <= razerData.distance; i++)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(transform.position + (Vector3)razerData.Direction.normalized * i, Vector3.one);
+            Gizmos.DrawWireCube(transform.position + transform.up.normalized * i, Vector3.one);
         }
 
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)razerData.Direction.normalized * razerData.distance);
+        Gizmos.DrawLine(transform.position, transform.position + transform.up.normalized * razerData.distance);
     }
 
 }

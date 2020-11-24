@@ -6,6 +6,7 @@ public class Npc : MonoBehaviour
 {
     public GameObject textWriter;
     public string storyName;
+    public bool isdestroy;
 
 
     // Start is called before the first frame update
@@ -17,7 +18,7 @@ public class Npc : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-  
+     
     }
 
     public void ActivatePlayerInput()
@@ -35,6 +36,12 @@ public class Npc : MonoBehaviour
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove();
             Player.Singleton.movement.canInput = false;
+
+            if (isdestroy)
+            {
+                DataBase.Singleton.collectItems[storyName] = true;
+                Destroy(gameObject);
+            }
         }
     }
 

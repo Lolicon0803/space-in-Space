@@ -71,6 +71,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57ad206834a02e64aaa8c0b76795f982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneIndex: -1
   rebirthPoint: {x: 2.5, y: -0.5}
 --- !u!212 &-2630891463947369091
 SpriteRenderer:
@@ -108,8 +109,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1262500749
+  m_SortingLayer: 1
   m_SortingOrder: 1
   m_Sprite: {fileID: -2239233490783025300, guid: 142974d097cb9d04a8c4be7d2ba0cd26,
     type: 3}

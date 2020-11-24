@@ -223,7 +223,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.5, y: 0}
@@ -267,14 +267,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3756800328638381931}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.0002617804, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children:
   - {fileID: 3224600717098329061}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.03}
 --- !u!212 &3756800328638381928
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -311,8 +311,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1262500749
+  m_SortingLayer: 1
   m_SortingOrder: 1
   m_Sprite: {fileID: -5005186954749611405, guid: f2a499dac6a04ea43a5d7e8f100de7dc,
     type: 3}
@@ -339,13 +339,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   razerData:
-    Direction: {x: -1, y: 0}
+    Direction: {x: 0, y: 0}
     distance: 5
   razerTempo: 010101000000
   tempoType: 2
   razerSize: 1
   waitTempo: 3
   razerWaitStatus: 0
+  autoRotation: 0
+  autoRotationSpeed: 0
   razerStart: {fileID: 8300000, guid: 066b566658fe9034382c0995fd3532b6, type: 3}
   razerPlaying: {fileID: 8300000, guid: a9bd3b571591a594ca47085ac45cd50a, type: 3}
   razerEnd: {fileID: 8300000, guid: 64ff66c3ae32581499833ee2f9902092, type: 3}
