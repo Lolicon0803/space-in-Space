@@ -31,6 +31,7 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private GameObject soundMenu;
         [SerializeField] private GameObject gameplayMenu;
         [SerializeField] private GameObject confirmationMenu;
+        [SerializeField] private GameObject loadGameMenu;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -49,22 +50,28 @@ namespace SpeedTutorMainMenuSystem
         [SerializeField] private Text brightnessText;
         [Space(10)]
         [SerializeField] private Text volumeText;
-        [SerializeField] private Text BGMvolumeText; 
+        [SerializeField] private Text BGMvolumeText;
         [SerializeField] private Slider volumeSlider;
+        [SerializeField] private Slider BGMvolumeSlider;
         [Space(10)]
         #endregion
 
         public AudioSource BGM;
 
-        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
+        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameMenuFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
         public GameObject graphicsMenuFirstBtn, soundMenuFirstBtn, gameplayMenuFirstBtn;
-        
+
         //MAIN SECTION
         public IEnumerator ConfirmationBox()
         {
             confirmationMenu.SetActive(true);
             yield return new WaitForSeconds(2);
             confirmationMenu.SetActive(false);
+        }
+
+        private void Start()
+        {
+            LoadGameSetting();
         }
 
         private void Update()
@@ -89,6 +96,20 @@ namespace SpeedTutorMainMenuSystem
                     ClickSound();
                 }
             }
+        }
+
+        private void LoadGameSetting()
+        {
+            float volume = PlayerPrefs.GetFloat("masterVolume", defaultVolume);
+            float bgmVolume = PlayerPrefs.GetFloat("BGM", defaultVolume);
+
+            AudioListener.volume = volume;
+            BGM.volume = bgmVolume;
+
+            volumeSlider.value = volume;
+            volumeText.text = volume.ToString("0.0");
+            BGMvolumeSlider.value = bgmVolume;
+            BGMvolumeText.text = bgmVolume.ToString("0.0");
         }
 
         private void ClickSound()
@@ -160,11 +181,11 @@ namespace SpeedTutorMainMenuSystem
             {
                 mainMenuFirstBtn = GameObject.Find("Load Game UI Btn");
                 menuDefaultCanvas.SetActive(false);
-                loadGameDialog.SetActive(true);
+                loadGameMenu.SetActive(true);
                 menuNumber = 8;
 
                 EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(loadGameDialogFirstBtn);
+                EventSystem.current.SetSelectedGameObject(loadGameMenuFirstBtn);
             }
 
             if (buttonType == "NewGame")
@@ -262,7 +283,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                SceneManager.LoadScene(_newGameButtonLevel);
+                ScenesManager.goToScene(1);
             }
 
             if (ButtonType == "No")
@@ -317,6 +338,8 @@ namespace SpeedTutorMainMenuSystem
             BrightnessApply();
             VolumeApply();
 
+            PlayerPrefs.Save();
+
             menuNumber = 2;
         }
 
@@ -327,6 +350,7 @@ namespace SpeedTutorMainMenuSystem
             menuDefaultCanvas.SetActive(true);
             newGameDialog.SetActive(false);
             loadGameDialog.SetActive(false);
+            loadGameMenu.SetActive(false);
             noSaveDialog.SetActive(false);
             GeneralSettingsCanvas.SetActive(false);
             graphicsMenu.SetActive(false);

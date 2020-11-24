@@ -28,15 +28,13 @@ public class Player : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
+            DontDestroyOnLoad(lifeSystem.canvas);
+            DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {
             Destroy(gameObject);
         }
-        //movement = GetComponent<PlayerMovement>();
-        //lifeSystem = GetComponent<PlayerLifeSystem>();
-        //audioManager = GetComponent<PlayerAudioManager>();
-        //animationManager = GetComponent<PlayerAnimationManager>();
     }
 
     // Start is called before the first frame update

@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - HitButton
+  - Ground
+  - Item
+  - Boss
+  - Bomb
+  - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -17,7 +24,7 @@ TagManager:
   - Player
   - SpaceJunk
   - Anemy
-  - 
+  - Item
   - 
   - 
   - 
@@ -41,6 +48,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Object
+    uniqueID: 3032466547
+    locked: 0
   - name: Pause Menu
     uniqueID: 3764575937
+    locked: 0
+  - name: TextBox
+    uniqueID: 4047343469
     locked: 0

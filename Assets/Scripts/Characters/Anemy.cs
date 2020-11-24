@@ -21,6 +21,9 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
     public Bullet bulletPrefab;
 
+    // 是不是被boss叫的
+    public bool fromBoss = false;
+
     private Vector2 startPoint;
 
     // 下一個移動點
@@ -33,6 +36,12 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
     private int routeIndex = 0;
 
+    public int waitTempo = 0;
+
+    public delegate void EnemyEvent();
+    public event EnemyEvent OnDisappear;
+
+    public int bulletAddTempo = 0;
 
     void Awake()
     {
@@ -53,13 +62,32 @@ public class Anemy : MonoBehaviour, IObjectBehavier
     void Start()
     {
         movePoint = transform.position;
-        ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
+        if (!fromBoss)
+            ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// For boss, let enemy go to destination.
+    /// </summary>
+    /// <param name="destination"></param>
+    /// <param name="speed"></param>
+    public void SetDestination(Vector2 destination, float speed)
     {
-     
+        StartCoroutine(MoveTo(destination, speed));
+    }
+
+    /// <summary>
+    /// Go to destination.
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator MoveTo(Vector2 destination, float speed)
+    {
+        while (Vector2.Distance(transform.position, destination) > speed * Time.deltaTime)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+            yield return null;
+        }
+        ObjectTempoControl.Singleton.AddToBeatAction(CanMove, tempoType);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -75,27 +103,43 @@ public class Anemy : MonoBehaviour, IObjectBehavier
 
     public IEnumerator Move()
     {
-
-        if (routeIndex % routeMap.Count == 0)
+        if (waitTempo != 0)
         {
-            CreateBullet();
+            waitTempo--;
         }
-
-        //確認方向
-        moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
-
-        // 下個移動點+朝路徑移動1格vector
-        movePoint = (Vector2)transform.position + moveDiraction;
-
-        //移動
-        while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
+        else
         {
-            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
-            yield return null;
-        }
 
-        transform.position = movePoint;
-        routeIndex = (routeIndex + 1) % routeMap.Count;
+            if (routeIndex % bulletAddTempo == 0)
+            {
+                CreateBullet();
+            }
+
+            if (routeMap.Count > 0)
+            {
+                if (routeIndex % routeMap.Count == 0)
+                {
+                    CreateBullet();
+                }
+                //確認方向
+                moveDiraction = GameData.Map.directionMap[(int)routeMap[routeIndex]];
+
+                // 下個移動點+朝路徑移動1格vector
+                movePoint = (Vector2)transform.position + moveDiraction;
+
+                //移動
+                while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
+                {
+                    transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, (float)moveSpeed * Time.deltaTime);
+                    yield return null;
+                }
+
+                transform.position = movePoint;
+                routeIndex = (routeIndex + 1) % routeMap.Count;
+
+            }
+       
+        }
     }
 
     public void CreateBullet()
@@ -108,6 +152,13 @@ public class Anemy : MonoBehaviour, IObjectBehavier
     void CanMove()
     {
         StartCoroutine("Move");
+    }
+
+    public void Disappear()
+    {
+        ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
+        OnDisappear?.Invoke();
+        Destroy(gameObject);
     }
 
 }

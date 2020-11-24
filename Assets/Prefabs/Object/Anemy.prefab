@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2542091110408993429}
   - component: {fileID: 2542091110408993430}
   - component: {fileID: 2153540237494493690}
+  - component: {fileID: 5819147049318750534}
   m_Layer: 11
   m_Name: Anemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2542091110408993431}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.501, y: -0.492, z: -1.4482422}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -70,10 +71,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ce0e5e0206327144eb179db5564b6eb9, type: 3}
+  m_SortingLayerID: -1262500749
+  m_SortingLayer: 1
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 8596640243658272642, guid: 56745472b1335c64ca95cdd2dc823435,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,18 +99,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.046934843, y: 0.015648127}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0.04466667, z: 0, w: 0}
+    border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8, y: 0.8}
+    oldSize: {x: 2.56, y: 2.56}
     newSize: {x: 12, y: 12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.7}
+  m_Size: {x: 1.9700017, y: 2.48386}
   m_EdgeRadius: 0
 --- !u!114 &2542091110408993430
 MonoBehaviour:
@@ -123,7 +125,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigid: {fileID: 0}
-  route: []
+  route:
+  - direction: 5
+    distance: 1
   tempoType: 2
   bulletData:
     speed: 5
@@ -132,7 +136,9 @@ MonoBehaviour:
     tempoType: 0
   bulletPrefab: {fileID: 8049714844354027376, guid: 4b3aabd1ddc02bf45bd327ace14080d8,
     type: 3}
+  fromBoss: 0
   moveSpeed: 3
+  waitTempo: 0
 --- !u!82 &2153540237494493690
 AudioSource:
   m_ObjectHideFlags: 0
@@ -143,7 +149,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 93090a8d34e73254a97d271b55d9a74e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8117abe047ec4774a82202cbb75640f8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -229,3 +235,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &5819147049318750534
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2542091110408993431}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d9bf01bd08fa33d4e892eb4cbbe84e6d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

@@ -1,0 +1,9 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"………"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"那...那個是..."},
+{"textBoxIndex":1,"speaker":"?????","text":"!!!!!!!!!!!!"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"為什麼會有這麼大的魷魚!!!"},
+{"textBoxIndex":1,"speaker":"大魷魚","text":"!!!!!!!!!!!"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"沒辦法了，上吧!"},
+{"textBoxIndex":1,"speaker":"旁白","text":"[推動大魷魚丟出的炸彈來打敗牠吧!]"},
+]

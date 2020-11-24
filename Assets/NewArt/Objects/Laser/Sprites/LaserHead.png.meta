@@ -1,0 +1,617 @@
+fileFormatVersion: 2
+guid: c40ca5a9de1a80b4987c3b5e5f9a9698
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8349104839467360103
+    second: LaserHead_0
+  - first:
+      213: 5343297795462617842
+    second: LaserHead_1
+  - first:
+      213: -6908868550526336894
+    second: LaserHead_2
+  - first:
+      213: 2754439061120237915
+    second: LaserHead_3
+  - first:
+      213: -5047695081654920564
+    second: LaserHead_4
+  - first:
+      213: -1233610975309833273
+    second: LaserHead_5
+  - first:
+      213: -8071661486818113086
+    second: LaserHead_6
+  - first:
+      213: -5693878898941780092
+    second: LaserHead_7
+  - first:
+      213: -5775541798205690433
+    second: LaserHead_8
+  - first:
+      213: 8093590888669978924
+    second: LaserHead_9
+  - first:
+      213: -1199038113493782221
+    second: LaserHead_10
+  - first:
+      213: 417943203156341567
+    second: LaserHead_11
+  - first:
+      213: 4301683481923346790
+    second: LaserHead_12
+  - first:
+      213: 6429723561456191734
+    second: LaserHead_13
+  - first:
+      213: 1666685530320081025
+    second: LaserHead_14
+  - first:
+      213: -4935419268783141833
+    second: LaserHead_15
+  - first:
+      213: 1452076299632247599
+    second: LaserHead_16
+  - first:
+      213: -7102983919073715523
+    second: LaserHead_17
+  - first:
+      213: 2442163953169228088
+    second: LaserHead_18
+  - first:
+      213: 2271976945911098974
+    second: LaserHead_0
+  - first:
+      213: 1990273444971407916
+    second: LaserHead_1
+  - first:
+      213: 7566442392799136025
+    second: LaserHead_2
+  - first:
+      213: -648732116202860151
+    second: LaserHead_3
+  - first:
+      213: -9072324180825133288
+    second: LaserHead_4
+  - first:
+      213: 5715386120595832053
+    second: LaserHead_5
+  - first:
+      213: 327399877574709302
+    second: LaserHead_6
+  - first:
+      213: -2055987601725059578
+    second: LaserHead_7
+  - first:
+      213: 1645191096762859929
+    second: LaserHead_8
+  - first:
+      213: 2245568869126810982
+    second: LaserHead_9
+  - first:
+      213: 8602307701465336415
+    second: LaserHead_10
+  - first:
+      213: -5959714875098954691
+    second: LaserHead_11
+  - first:
+      213: 30145021233408364
+    second: LaserHead_12
+  - first:
+      213: 2456464119208033246
+    second: LaserHead_13
+  - first:
+      213: -4800976637125910870
+    second: LaserHead_14
+  - first:
+      213: -5340761596066595529
+    second: LaserHead_15
+  - first:
+      213: -6827881597028146622
+    second: LaserHead_16
+  - first:
+      213: 945567277911127274
+    second: LaserHead_17
+  - first:
+      213: 8388551530963674055
+    second: LaserHead_18
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LaserHead_0
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 7914
+        width: 44
+        height: 44
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5e68eeaefea78f10800000000000000
+      internalID: 2271976945911098974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_1
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 7898
+        width: 76
+        height: 76
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2ae96d372fde9b10800000000000000
+      internalID: 1990273444971407916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_2
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 7866
+        width: 140
+        height: 140
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 919cf3c7447610960800000000000000
+      internalID: 7566442392799136025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_3
+      rect:
+        serializedVersion: 2
+        x: 1690
+        y: 7834
+        width: 204
+        height: 204
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9815753d39d3ff6f0800000000000000
+      internalID: -648732116202860151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_4
+      rect:
+        serializedVersion: 2
+        x: 2170
+        y: 7802
+        width: 268
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81f2bba8931a81280800000000000000
+      internalID: -9072324180825133288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_5
+      rect:
+        serializedVersion: 2
+        x: 2682
+        y: 7802
+        width: 396
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fcff403561215f40800000000000000
+      internalID: 5715386120595832053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_6
+      rect:
+        serializedVersion: 2
+        x: 4218
+        y: 7802
+        width: 396
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 630d85a34782b8400800000000000000
+      internalID: 327399877574709302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_7
+      rect:
+        serializedVersion: 2
+        x: 5754
+        y: 7802
+        width: 396
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60e02985b2aa773e0800000000000000
+      internalID: -2055987601725059578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_8
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 7290
+        width: 396
+        height: 268
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9918f2ef594e4d610800000000000000
+      internalID: 1645191096762859929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_9
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 7274
+        width: 396
+        height: 300
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66daafa2dfcd92f10800000000000000
+      internalID: 2245568869126810982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_10
+      rect:
+        serializedVersion: 2
+        x: 3194
+        y: 7258
+        width: 396
+        height: 332
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5ac27a0749816770800000000000000
+      internalID: 8602307701465336415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_11
+      rect:
+        serializedVersion: 2
+        x: 4730
+        y: 7242
+        width: 396
+        height: 364
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d348d13a5e6da4da0800000000000000
+      internalID: -5959714875098954691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_12
+      rect:
+        serializedVersion: 2
+        x: 6266
+        y: 7226
+        width: 396
+        height: 396
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c692d52bcb81b6000800000000000000
+      internalID: 30145021233408364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_13
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 6698
+        width: 396
+        height: 428
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edb33ecf91d171220800000000000000
+      internalID: 2456464119208033246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_14
+      rect:
+        serializedVersion: 2
+        x: 1658
+        y: 6674
+        width: 396
+        height: 476
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aae19296f218f5db0800000000000000
+      internalID: -4800976637125910870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_15
+      rect:
+        serializedVersion: 2
+        x: 3194
+        y: 6650
+        width: 396
+        height: 524
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73df66cff9dc1e5b0800000000000000
+      internalID: -5340761596066595529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_16
+      rect:
+        serializedVersion: 2
+        x: 4730
+        y: 6810
+        width: 396
+        height: 204
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 242e5b8fcdd7e31a0800000000000000
+      internalID: -6827881597028146622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_17
+      rect:
+        serializedVersion: 2
+        x: 6266
+        y: 6834
+        width: 396
+        height: 156
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae4302fed645f1d00800000000000000
+      internalID: 945567277911127274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LaserHead_18
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 6106
+        width: 396
+        height: 76
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c326274c2f1a6470800000000000000
+      internalID: 8388551530963674055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,20 +5,20 @@ using Assets.Scripts.Characters;
 
 public class WhiteHole : MonoBehaviour
 {
-    [Tooltip("For debug.")]
-    public bool drawArea;
     // 範圍半徑
     public float radius;
     public TempoActionType actionType;
-    // 範圍
-    //public float radius;
     // 推人推多遠
     public int pushUnit;
     // 推人時的速度
     public float pushSpeed;
 
+    public AudioClip pushPlayerAudio;
+
     private Animator animator;
     private bool isActive;
+
+    private AudioSource audioSource;
 
     private LayerMask layerMask;
 
@@ -33,6 +33,7 @@ public class WhiteHole : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         ObjectTempoControl.Singleton.AddToBeatAction(Activate, actionType);
     }
 
@@ -43,17 +44,10 @@ public class WhiteHole : MonoBehaviour
         {
             if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
             {
-                //Debug.Log("White Hole push player.");
-                Vector2 position = Player.Singleton.transform.position;
-                // 從左邊撞
-                if (position.x >= transform.position.x + Constants.moveUnit / 2.0f)
-                    Player.Singleton.movement.Knock(Vector2.right, pushUnit, pushSpeed);
-                else if (position.x <= transform.position.x - Constants.moveUnit / 2.0f)
-                    Player.Singleton.movement.Knock(Vector2.left, pushUnit, pushSpeed);
-                else if (position.y >= transform.position.y + Constants.moveUnit / 2.0f)
-                    Player.Singleton.movement.Knock(Vector2.up, pushUnit, pushSpeed);
-                else if (position.y <= transform.position.y - Constants.moveUnit / 2.0f)
-                    Player.Singleton.movement.Knock(Vector2.down, pushUnit, pushSpeed);
+                Vector2 direction = Player.Singleton.transform.position - transform.position;
+                Player.Singleton.movement.Knock(direction, pushUnit, pushSpeed);
+                audioSource.PlayOneShot(pushPlayerAudio);
+                isActive = false;
             }
         }
     }
@@ -71,9 +65,13 @@ public class WhiteHole : MonoBehaviour
         isActive = false;
     }
 
-    private void OnDrawGizmos()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (drawArea)
-            Gizmos.DrawWireSphere(transform.position, radius);
+        
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 }

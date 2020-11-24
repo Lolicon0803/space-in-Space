@@ -16,16 +16,22 @@ public class PlayerLifeSystem : MonoBehaviour
     public int maxHp;
     private int nowHp;
 
-    // 玩家死亡後的起始場景，最好不要用這個。沒設定則為現在場景
-    // 不是指地圖設計上的場景，是指Asset/Scene裡的檔。
-    //public Scene startScene;
+    // 受傷後無敵時間
+    public int invincibleTempo;
+    // 成功噴射幾次就回血
+    public int recoverAfterShoot;
+
+    // 復活場景
+    private int startScene;
     // 復活點。
-    public Vector2 startPosition;
+    private Vector2 startPosition;
 
     public Canvas canvas;
+    // 受傷紅屏
     public Image redEffectImage;
+    // 愛心
     public Image heartImagePrefab;
-
+    // 死亡黑屏
     public Image blackImage;
 
     public Sprite fullHeart;
@@ -41,14 +47,22 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
+    private bool isInvincible;
+    private int invincibleCount;
+    private int recoverCount;
     private bool isDie;
 
     // Start is called before the first frame update
     void Start()
     {
+        startScene = -1;
+        startPosition = new Vector2(-16.537f, -8.552f);
         isDie = false;
+        isInvincible = false;
+        invincibleCount = 0;
+        recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
-        playerMovement.OnMiss += LossLife;
+        playerMovement.OnFireBag += Recover;
         playerMovement.OnError += LossLife;
         InitializeHHeart();
     }
@@ -84,9 +98,10 @@ public class PlayerLifeSystem : MonoBehaviour
     /// 設定重生點。
     /// </summary>
     /// <param name="position">重生點。</param>
-    public void SetStartPosition(Vector2 position)
+    public void SetStartPosition(int index, Vector2 position)
     {
         startPosition = position;
+        startScene = index;
     }
 
     /// <summary>
@@ -94,9 +109,10 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-        if (!Player.Singleton.movement.firstTimeMiss && !isDie)
+        if (!isDie)
         {
-            playerMovement.canInput = false;
+            //isInvincible = true;
+            //ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
             BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
@@ -105,12 +121,26 @@ public class PlayerLifeSystem : MonoBehaviour
     /// <summary>
     /// When miss or error, loss one hp and show red screen.
     /// </summary>
-    public void Hurt()
+    public void Hurt(int number = 1)
     {
-        if (!isDie)
+        if (!isDie && !isInvincible)
         {
-            BreakHeart();
+            isInvincible = true;
+            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
+            for (int i = 0; i < number && !isDie; i++)
+                BreakHeart();
             StartCoroutine(ShowRedEffect());
+        }
+    }
+
+    private void RemoveInvincibleStatus()
+    {
+        invincibleCount++;
+        if (invincibleCount == invincibleTempo)
+        {
+            isInvincible = false;
+            invincibleCount = 0;
+            ObjectTempoControl.Singleton.RemoveToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
         }
     }
 
@@ -120,26 +150,60 @@ public class PlayerLifeSystem : MonoBehaviour
     private void BreakHeart()
     {
         nowHp--;
-        // 換圖片用
-        switch (lastHeartState)
+        recoverCount = 0;
+        if (lastHeartIndex >= 0)
         {
-            case HeartStatus.Full:
-                lastHeartState = HeartStatus.Break;
-                heartImages[lastHeartIndex].sprite = breakHeart;
-                break;
-            case HeartStatus.Break:
-                lastHeartState = HeartStatus.Full;
-                heartImages[lastHeartIndex].sprite = BlackHear;
-                lastHeartIndex--;
-                break;
-            default:
-                break;
+            // 換圖片用
+            switch (lastHeartState)
+            {
+                case HeartStatus.Full:
+                    lastHeartState = HeartStatus.Break;
+                    heartImages[lastHeartIndex].sprite = breakHeart;
+                    break;
+                case HeartStatus.Break:
+                    lastHeartState = HeartStatus.Full;
+                    heartImages[lastHeartIndex].sprite = BlackHear;
+                    lastHeartIndex--;
+                    break;
+                default:
+                    break;
+            }
         }
         // Gameover.
         if (nowHp <= 0)
             GameOver();
-        else
-            playerMovement.canInput = true;
+    }
+
+    private void Recover(Vector2 direction)
+    {
+        if (nowHp != maxHp)
+        {
+            recoverCount++;
+            if (recoverCount == recoverAfterShoot)
+            {
+                recoverCount = 0;
+                nowHp++;
+                // 換圖片用
+                switch (lastHeartState)
+                {
+                    case HeartStatus.Full:
+                        lastHeartState = HeartStatus.Break;
+                        heartImages[lastHeartIndex + 1].sprite = breakHeart;
+                        lastHeartIndex++;
+                        break;
+                    case HeartStatus.Break:
+                        lastHeartState = HeartStatus.Full;
+                        heartImages[lastHeartIndex].sprite = fullHeart;
+                        break;
+                    case HeartStatus.Black:
+                        lastHeartState = HeartStatus.Break;
+                        heartImages[lastHeartIndex].sprite = breakHeart;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -164,6 +228,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void GameOver()
     {
         isDie = true;
+        transform.localScale = Vector3.zero;
         playerMovement.Die();
         StartCoroutine(ShowBlackEffect());
     }
@@ -184,25 +249,38 @@ public class PlayerLifeSystem : MonoBehaviour
         while (alpha < 1)
         {
             alpha += 0.5f * Time.deltaTime;
-            redEffectImage.color = new Color(0, 0, 0, alpha);
+            blackImage.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
 
         InitializeHHeart();
 
         // 玩家回到起始點。
-        playerMovement.movePoint.position = startPosition;
+        playerMovement.movePoint = startPosition;
         transform.position = startPosition;
+        // 同場景不轉
+        // 等轉場景的程式碼完整再接過去
+        if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
+        {
+            AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+            while (!operation.isDone)
+            {
+                Debug.Log("Wait load scene");
+                yield return null;
+            }
+        }
+
         // 黑屏結束
         while (alpha > 0)
         {
             alpha -= 0.5f * Time.deltaTime;
-            redEffectImage.color = new Color(0, 0, 0, alpha);
+            blackImage.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
         // 愛心出來。
         foreach (Image image in heartImages)
             image.color = new Color(1, 1, 1, 1);
+        blackImage.color = new Color(0, 0, 0, 0);
         playerMovement.ResetStatus();
         isDie = false;
     }
