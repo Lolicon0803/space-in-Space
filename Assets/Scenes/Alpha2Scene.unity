@@ -1372,7 +1372,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: beatPerMinute
-      value: 48
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169766, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1433,11 +1433,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: bac848e228f221848b1c077090621a71, type: 3}
+      objectReference: {fileID: 8300000, guid: c9163085f374f104db1c50c9252ea85f, type: 3}
     - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: Loop
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
+        type: 3}
+      propertyPath: reverbZoneMixCustomCurve.m_Curve.Array.data[0].value
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 53e8feb810ae8a4498c0a842b5e6aaad, type: 3}
@@ -6726,9 +6731,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1262500749
+  m_SortingLayer: 1
+  m_SortingOrder: 1
   m_Sprite: {fileID: 4547903276314047079, guid: 9a1ca51a78a2d234b9d56b3ad87e4ad7,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
