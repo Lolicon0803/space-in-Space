@@ -25,10 +25,26 @@ public class PlayerAnimationManager : MonoBehaviour
         ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
     }
 
-    private void PlayIdleAnimation()
+    public void PlayIdleAnimation()
     {
         animator.SetBool(idle, idleParameter);
         idleParameter = !idleParameter;
+    }
+
+    public void BackWalkToIdle()
+    {
+        animator.SetBool(walkL, false);
+        animator.SetBool(walkR, false);
+    }
+
+    public void PlayWalkAnimation()
+    {
+        // Left or right foot.
+        walkParameter = !walkParameter;
+        if (walkParameter)
+            animator.SetBool(walkL, true);
+        else
+            animator.SetBool(walkR, true);
     }
 
     private void PlayWalkAnimation(Vector2 direction)

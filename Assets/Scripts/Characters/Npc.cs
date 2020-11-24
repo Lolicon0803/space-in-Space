@@ -27,9 +27,9 @@ public class Npc : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("Player") && !DataBase.Singleton.number1Npc)
+        if (collider.CompareTag("Player") && !DataBase.Singleton.readStories.ContainsKey(storyName))
         {
-            DataBase.Singleton.number1Npc = true;
+            DataBase.Singleton.readStories[storyName] = true;
             textWriter.GetComponent<TextWriter>().Init();
             textWriter.GetComponent<TextWriter>().LoadStory(storyName + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();

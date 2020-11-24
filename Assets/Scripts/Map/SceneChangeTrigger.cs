@@ -9,6 +9,9 @@ public class SceneChangeTrigger : MonoBehaviour
     [Header("切場景用")]
     public int targetIndex = -1;
     public Vector2 targetPosition;
+    [Header("是否要與前一個場景相同x或相同y")]
+    public bool sameX;
+    public bool sameY;
     [Header("切畫面用")]
     [Tooltip("進入第二個畫面時相機位置")]
     public Vector3 cameraPositionIn;
@@ -28,6 +31,10 @@ public class SceneChangeTrigger : MonoBehaviour
         {
             if (targetIndex != -1)
             {
+                if (sameX)
+                    targetPosition.x = Player.Singleton.transform.position.x;
+                if (sameY)
+                    targetPosition.y = Player.Singleton.transform.position.y;
                 Player.Singleton.transform.position = targetPosition;
                 ScenesManager.goToScene(targetIndex);
             }

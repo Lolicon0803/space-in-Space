@@ -295,11 +295,11 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
             audioSource.loop = true;
             audioSource.PlayOneShot(audioShootLazer);
         }
-        razer1.SetSize(15, 0.2f);
+        razer1.SetSize(25, 0.2f);
         razer1.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
-        razer2.SetSize(15, 0.2f);
+        razer2.SetSize(25, 0.2f);
         razer2.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 45);
-        razer3.SetSize(15, 0.2f);
+        razer3.SetSize(25, 0.2f);
         razer3.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 45);
         // 持續三拍
         while (moveCount <= maxRazerTime)

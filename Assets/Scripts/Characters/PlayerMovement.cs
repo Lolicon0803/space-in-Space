@@ -47,6 +47,8 @@ public class PlayerMovement : MonoBehaviour
     // 黑洞中，優先度最高
     public bool isBlackHole = false;
 
+    private bool isStanding;
+
     private IEnumerator coroutineShoot;
     private IEnumerator coroutineSlide;
     private IEnumerator coroutineStandOnGround;
@@ -68,7 +70,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Load Scene");
+        isStanding = false;
         rigidbody = GetComponent<Rigidbody2D>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
@@ -103,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
                     if (TempoManager.Singleton.KeyDown())
                         HandleInput();
                     // 沒有打在節拍上且不在地上
-                    else if (!IsOnGround())
+                    else if (!isStanding)
                         OnError?.Invoke();
                 }
             }
@@ -128,6 +130,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, angle);
         coroutineShoot = Shoot();
         OnFireBag?.Invoke(MoveDirection);
+        isStanding = false;
         StartCoroutine(coroutineShoot);
     }
 
@@ -197,6 +200,7 @@ public class PlayerMovement : MonoBehaviour
     public void Knock(Vector2 direction)
     {
         StopMove();
+        isStanding = false;
         transform.parent = null;
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
@@ -217,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
     public void Knock(Vector2 direction, float impactFactor, float impactSpeed)
     {
         StopMove();
+        isStanding = false;
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
@@ -234,6 +239,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isBlackHole)
             return;
+        isStanding = false;
         // Stop all movement.
         StopMove();
         isBlackHole = true;
@@ -273,6 +279,7 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportIn(Teleporter entrance)
     {
         StopMove();
+        isStanding = false;
         canInput = false;
         MoveDirection = Vector2.zero;
         StartCoroutine("DisplayTeleportIn", entrance);
@@ -285,6 +292,7 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportOut(Teleporter exit)
     {
         StopMove();
+        isStanding = false;
         StopCoroutine("DisplayTeleportIn");
         transform.localScale = Vector2.zero;
         canInput = false;
@@ -323,6 +331,7 @@ public class PlayerMovement : MonoBehaviour
     public void StandOnGround(Vector2 direction)
     {
         StopMove();
+        isStanding = true;
         StopCoroutine(coroutineStandOnGround);
         coroutineStandOnGround = ShowStandOnGround(direction);
         StartCoroutine(coroutineStandOnGround);
@@ -363,13 +372,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void StopMove()
+    public void StopMove(bool enableInput = true)
     {
         StopCoroutine(coroutineShoot);
         StopCoroutine(coroutineSlide);
         OnStop?.Invoke();
         //MoveDirection = Vector2.zero;
-        canInput = true;
+        canInput = enableInput;
         //nowSpeed = 0;
         movePoint = transform.position;
         GetComponent<Rigidbody2D>().velocity = Vector2.zero; 
@@ -377,7 +386,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Die()
     {
-        StopMove();
+        StopMove(false);
         isBlackHole = false;
     }
 
