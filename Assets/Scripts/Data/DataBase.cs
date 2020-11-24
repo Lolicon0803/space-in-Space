@@ -5,7 +5,7 @@ using UnityEngine;
 public class DataBase : MonoBehaviour
 {
 
-    public bool number1Npc = false;
+    public Dictionary<string, bool> readStories;
 
     private static DataBase singleton;
     public static DataBase Singleton
@@ -25,6 +25,8 @@ public class DataBase : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
+            readStories = new Dictionary<string, bool>();
+            DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {

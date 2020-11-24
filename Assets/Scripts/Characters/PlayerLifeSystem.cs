@@ -105,10 +105,10 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-        if (!isDie && !isInvincible)
+        if (!isDie)
         {
             //isInvincible = true;
-            ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
+            //ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
             BreakHeart();
             StartCoroutine(ShowRedEffect());
         }

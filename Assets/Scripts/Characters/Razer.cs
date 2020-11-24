@@ -9,7 +9,7 @@ public class Razer : MonoBehaviour
 {
     public int damage = 0;
     private SpriteRenderer sprite;
-    private BoxCollider2D collider2D;
+    private new BoxCollider2D collider2D;
 
     private AudioSource audioSource;
 
@@ -18,6 +18,7 @@ public class Razer : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         collider2D = GetComponent<BoxCollider2D>();
         audioSource = GetComponent<AudioSource>();
+        transform.localScale = new Vector3(transform.localScale.x / transform.parent.localScale.x, transform.localScale.y / transform.parent.localScale.y);
     }
 
     public void SetSize(float x, float y)
