@@ -48,12 +48,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackGround
+    uniqueID: 3268465515
+    locked: 0
+  - name: Planet
+    uniqueID: 2684157945
+    locked: 0
   - name: Object
     uniqueID: 3032466547
     locked: 0
-  - name: Pause Menu
-    uniqueID: 3764575937
+  - name: AudioEngine
+    uniqueID: 310789459
     locked: 0
   - name: TextBox
     uniqueID: 4047343469
+    locked: 0
+  - name: Pause Menu
+    uniqueID: 3764575937
     locked: 0
