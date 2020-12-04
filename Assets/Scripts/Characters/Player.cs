@@ -28,12 +28,14 @@ public class Player : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
-            DontDestroyOnLoad(lifeSystem.canvas);
+            DontDestroyOnLoad(lifeSystem.lifeCanvas);
+            DontDestroyOnLoad(lifeSystem.dieCanvas);
             DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {
-            Destroy(lifeSystem.canvas.gameObject);
+            Destroy(lifeSystem.lifeCanvas.gameObject);
+            Destroy(lifeSystem.dieCanvas.gameObject);
             Destroy(gameObject);
         }
     }

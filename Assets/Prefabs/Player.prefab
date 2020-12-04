@@ -124,9 +124,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingLayerID: -1262500749
+  m_SortingLayer: 1
+  m_SortingOrder: 9
   m_Sprite: {fileID: 1140132963800525788, guid: e51fc6883592f4b43ba0f6a950ed4c66,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -299,12 +299,13 @@ MonoBehaviour:
   maxHp: 20
   invincibleTempo: 1
   recoverAfterShoot: 5
-  startPosition: {x: -16.401, y: -8.554}
-  canvas: {fileID: 0}
+  lifeCanvas: {fileID: 0}
+  dieCanvas: {fileID: 0}
   redEffectImage: {fileID: 0}
   heartImagePrefab: {fileID: 9147603659539169249, guid: d4a714a16961a3449a23925138acf679,
     type: 3}
-  blackImage: {fileID: 0}
+  blackCircleImage: {fileID: 0}
+  blackBgImage: {fileID: 0}
   fullHeart: {fileID: 4606908045521496030, guid: 6733aaa2c93d89e40a6eee27362e5e47,
     type: 3}
   breakHeart: {fileID: -4195582761621981391, guid: 6733aaa2c93d89e40a6eee27362e5e47,
