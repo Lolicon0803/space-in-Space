@@ -6,14 +6,18 @@ using UnityEngine.UI;
 public class HittingController : MonoBehaviour
 {
     public TempoManager audioEngine;
-    public Text msg;
     public SpriteRenderer hittingArea;
     public GameObject notePrefab;
+    public AudioSource audioSource;
+    public AudioClip[] clips;
+    public Sprite[] sprites;
+    private bool isRunning;
 
     // Start is called before the first frame update
     void Start()
     {
         audioEngine.ResetAdjustArgs();
+        isRunning = false;
     }
 
     // Update is called once per frame
@@ -25,60 +29,33 @@ public class HittingController : MonoBehaviour
         }
 
         TouchStates touchState = audioEngine.touchState;
-        if (msg != null)
-        {
-            changeMsg(touchState);
-        }
-        changeBtnColor(touchState);
+        changeBtnSprite(touchState);
     }
 
-    void changeMsg(TouchStates touchState)
+    void changeBtnSprite(TouchStates touchState)
     {
-        switch (touchState)
+        if (touchState == TouchStates.Touched && !isRunning)
         {
-            case TouchStates.Reset:
-                msg.text = "";
-                break;
-            case TouchStates.Disable:
-                break;
-            case TouchStates.Enable:
-                break;
-            case TouchStates.TimeOut:
-                msg.text = "TimeOut";
-                break;
-            case TouchStates.Touched:
-                msg.text = "Success";
-                break;
-            case TouchStates.TouchFailed:
-                msg.text = "Failed";
-                break;
-            case TouchStates.TimeOutFailed:
-                msg.text = "Failed";
-                break;
+            audioSource.PlayOneShot(clips[0], 0.2f);
+            StartCoroutine(playHitAnim());
+        }
+        else if (touchState == TouchStates.TouchFailed || touchState == TouchStates.TimeOutFailed || touchState == TouchStates.TimeOut)
+        {
+            audioSource.PlayOneShot(clips[1], 0.03f);
         }
     }
 
-    void changeBtnColor(TouchStates touchState)
+    IEnumerator playHitAnim()
     {
-        switch (touchState)
-        {
-            case TouchStates.Reset:
-                break;
-            case TouchStates.Disable:
-                hittingArea.color = new Color(1, 1, 1, 1);
-                break;
-            case TouchStates.Enable:
-                hittingArea.color = new Color(1, 0, 0, 1);
-                break;
-            case TouchStates.Touched:
-                hittingArea.color = new Color(0, 1, 0, 1);
-                break;
-            case TouchStates.TouchFailed:
-                hittingArea.color = new Color(0, 0, 0, 1);
-                break;
-            case TouchStates.TimeOutFailed:
-                hittingArea.color = new Color(1, 1, 1, 1);
-                break;
-        }
+        isRunning = true;
+        hittingArea.sprite = sprites[0];
+        yield return new WaitForSeconds(0.08f);
+        hittingArea.sprite = sprites[2];
+        yield return new WaitForSeconds(0.08f);
+        hittingArea.sprite = sprites[1];
+        yield return new WaitForSeconds(0.08f);
+        hittingArea.sprite = sprites[0];
+        yield return new WaitForSeconds(0.5f);
+        isRunning = false;
     }
 }
