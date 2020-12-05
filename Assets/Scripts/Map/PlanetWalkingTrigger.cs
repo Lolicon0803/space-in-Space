@@ -6,16 +6,16 @@ using UnityEngine.Events;
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlanetWalkingTrigger : MonoBehaviour
 {
-    [Header("切場景用")]
-    public int targetIndex = -1;
-
-
+    public int direction = 0;
+    public PlanetWalkingEffect planetWalkingEffect;
+ 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            if (targetIndex != -1)
+            if (direction != 0)
             {
+                planetWalkingEffect.planetWalking(direction);
             }
         }
     }

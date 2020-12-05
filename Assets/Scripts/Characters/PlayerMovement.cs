@@ -116,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void TryJump()
     {
-        if (IsGroundOnPlanet && Input.GetKeyDown(KeyCode.A))
+        if (IsGroundOnPlanet && canInput && Input.GetKeyDown(KeyCode.A))
         {
             speedY = initJumpSpeedOnPlanet;
         }
@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
     private void PlayerControlOnPlanet()
     {
         transform.Translate(Vector3.up * Time.deltaTime * speedY);
-        if (IsGroundOnPlanet)
+        if (IsGroundOnPlanetForFalling)
         {
             //掉回星球上
             if (speedY < 0)
@@ -134,24 +134,21 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            speedY -= accelerationOfGravity;
+            speedY -= accelerationOfGravity * Time.deltaTime;
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (canInput)
         {
-            transform.Translate(Vector3.left * Time.deltaTime * moveSpeedOnPlanet);
-            transform.localScale = new Vector3(-1, 1, 1);
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Translate(Vector3.left * Time.deltaTime * moveSpeedOnPlanet);
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.Translate(Vector3.right * Time.deltaTime * moveSpeedOnPlanet);
+                transform.localScale = new Vector3(1, 1, 1);
+            }
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * moveSpeedOnPlanet);
-            transform.localScale = new Vector3(1,1,1);
-        }
-    }
-    /// <summary>水平移動</summary>
-    void MovementX()
-    {
-        //horizontalDirection = Input.GetAxis(HORIZONTAL);
-        //playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
     }
     bool IsGroundOnPlanet
     {
@@ -160,6 +157,17 @@ public class PlayerMovement : MonoBehaviour
             Vector2 start = groundCheck.position;
             Vector2 end = new Vector2(start.x, start.y - distance);
 
+            Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
+    bool IsGroundOnPlanetForFalling
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - 0.1f);
             Debug.DrawLine(start, end, Color.blue);
             bool grounded = Physics2D.Linecast(start, end, groundLayer);
             return grounded;
