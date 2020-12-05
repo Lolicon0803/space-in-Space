@@ -24,6 +24,19 @@ public class PlayerMovement : MonoBehaviour
     // 噴射轉滑行的下降速度
     public float slowDownSpeed = 10.0f;
 
+    // 星球上速度係數們
+    // 移動速度
+    public float moveSpeedOnPlanet = 5f;
+    // 跳躍速度初速
+    public float initJumpSpeedOnPlanet = 5f;
+    public float accelerationOfGravity = 0.1f;
+    //目前垂直速度
+    float speedY;
+
+    [Header("偵測地板的射線起點(星球用)")]
+    public Transform groundCheck;
+    public float distance = 0f;
+
     // 速度改變係數
     private float speedChangeCoefficient = 1.0f;
     private float accumulatedCoefficient = 0.0f;
@@ -43,6 +56,9 @@ public class PlayerMovement : MonoBehaviour
 
     // 是否第一次空拍
     //public bool firstTimeMiss;
+
+    // 是否在有重力的星球上
+    public bool isOnPlanet = false;
 
     // 黑洞中，優先度最高
     public bool isBlackHole = false;
@@ -79,7 +95,14 @@ public class PlayerMovement : MonoBehaviour
         ResetStatus();
         StartCoroutine(ProcessOperation());
     }
-
+    void Update()
+    {
+        if (isOnPlanet)
+        {
+            PlayerControlOnPlanet();
+            TryJump();
+        }
+    }
     public void ResetStatus()
     {
         StopMove();
@@ -91,22 +114,75 @@ public class PlayerMovement : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
     }
+    private void TryJump()
+    {
+        if (IsGroundOnPlanet && Input.GetKeyDown(KeyCode.A))
+        {
+            speedY = initJumpSpeedOnPlanet;
+        }
+    }
+    private void PlayerControlOnPlanet()
+    {
+        transform.Translate(Vector3.up * Time.deltaTime * speedY);
+        if (IsGroundOnPlanet)
+        {
+            //掉回星球上
+            if (speedY < 0)
+            {
+                speedY = 0;
+            }
+        }
+        else
+        {
+            speedY -= accelerationOfGravity;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.Translate(Vector3.left * Time.deltaTime * moveSpeedOnPlanet);
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * moveSpeedOnPlanet);
+            transform.localScale = new Vector3(1,1,1);
+        }
+    }
+    /// <summary>水平移動</summary>
+    void MovementX()
+    {
+        //horizontalDirection = Input.GetAxis(HORIZONTAL);
+        //playerRigidbody2D.AddForce(new Vector2(xForce * horizontalDirection, 0));
+    }
+    bool IsGroundOnPlanet
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - distance);
 
+            Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
     private IEnumerator ProcessOperation()
     {
         while (true)
         {
-            if (canInput)
+            if (!isOnPlanet)
             {
-                // 滑鼠左鍵
-                if (Input.GetMouseButtonDown(0))
+                if (canInput)
                 {
-                    // 打在節拍上
-                    if (TempoManager.Singleton.KeyDown())
-                        HandleInput();
-                    // 沒有打在節拍上且不在地上
-                    else if (!isStanding)
-                        OnError?.Invoke();
+                    // 滑鼠左鍵
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        // 打在節拍上
+                        if (TempoManager.Singleton.KeyDown())
+                            HandleInput();
+                        // 沒有打在節拍上且不在地上
+                        else if (!isStanding)
+                            OnError?.Invoke();
+                    }
                 }
             }
             yield return null;
