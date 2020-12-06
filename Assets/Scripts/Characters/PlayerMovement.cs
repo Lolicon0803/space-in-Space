@@ -67,10 +67,16 @@ public class PlayerMovement : MonoBehaviour
 
     private LayerMask groundLayer;
 
+    // 降速用的時間點
+    private float slowDownTime;
+    // 是否立刻降速到最低
+    private bool stopInstantly;
+
     // Start is called before the first frame update
     void Start()
     {
         isStanding = false;
+        stopInstantly = false;
         rigidbody = GetComponent<Rigidbody2D>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
@@ -108,6 +114,11 @@ public class PlayerMovement : MonoBehaviour
                     else if (!isStanding)
                         OnError?.Invoke();
                 }
+                // 滑鼠右鍵
+                if (Input.GetMouseButton(1))
+                    stopInstantly = true;
+                else
+                    stopInstantly = false;
             }
             yield return null;
         }
@@ -173,7 +184,7 @@ public class PlayerMovement : MonoBehaviour
         }
         movePoint = transform.position;
         canInput = true;
-        StopCoroutine(coroutineSlide);
+        slowDownTime = 0;
         StartCoroutine(coroutineSlide);
     }
 
@@ -181,14 +192,19 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-            // 慢慢變慢
-            if (nowSpeed > slideSpeed)
-                nowSpeed = Mathf.Lerp(nowSpeed, slideSpeed, slowDownSpeed * Time.deltaTime);
+            //慢慢變慢
+            if (nowSpeed - slideSpeed > 0.001f)
+                nowSpeed = 1 / Mathf.Exp(slowDownTime - Mathf.Log(moveSpeed - slideSpeed)) + slideSpeed;
+            else
+                nowSpeed = slideSpeed;
             rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
             if (rigidbody.velocity.magnitude > Time.deltaTime)
                 rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
             else
                 rigidbody.velocity = Vector2.zero;
+            slowDownTime += slowDownSpeed * Time.deltaTime;
+            if (stopInstantly)
+                slowDownTime *= 2;
             yield return null;
         }
     }
