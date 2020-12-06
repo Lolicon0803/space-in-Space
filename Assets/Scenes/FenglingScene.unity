@@ -464,12 +464,12 @@ PrefabInstance:
     - target: {fileID: 656591637642824993, guid: 88b8b5d552c0dd843bd08cdce8da8101,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 656591637642824993, guid: 88b8b5d552c0dd843bd08cdce8da8101,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 656591637642824993, guid: 88b8b5d552c0dd843bd08cdce8da8101,
         type: 3}
@@ -1057,7 +1057,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: beatPerMinute
-      value: 48
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -1123,7 +1123,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: bac848e228f221848b1c077090621a71, type: 3}
+      objectReference: {fileID: 8300000, guid: d3c26349c4213494ebcc33a3e3aca126, type: 3}
     - target: {fileID: 4782803993737258015, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: Loop
@@ -1237,6 +1237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textWriter: {fileID: 1515932414}
   storyName: story1
+  isdestroy: 0
 --- !u!61 &612236288
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1548,18 +1549,14 @@ MonoBehaviour:
   maxHp: 20
   invincibleTempo: 0
   recoverAfterShoot: 0
-  startPosition: {x: -6.5, y: -2.5}
   canvas: {fileID: 386241822}
   redEffectImage: {fileID: 257214802}
   heartImagePrefab: {fileID: 9147603659539169249, guid: d4a714a16961a3449a23925138acf679,
     type: 3}
   blackImage: {fileID: 2046321772}
-  fullHeart: {fileID: 4606908045521496030, guid: 6733aaa2c93d89e40a6eee27362e5e47,
-    type: 3}
-  breakHeart: {fileID: -4195582761621981391, guid: 6733aaa2c93d89e40a6eee27362e5e47,
-    type: 3}
-  BlackHear: {fileID: 516283494600122218, guid: 6733aaa2c93d89e40a6eee27362e5e47,
-    type: 3}
+  fullHeart: {fileID: 21300000, guid: 8e8d954dad1de2d49bdda0f6ae8571ee, type: 3}
+  breakHeart: {fileID: 21300000, guid: 9d39fc4e4f4d77a4598258d11e511d97, type: 3}
+  BlackHear: {fileID: 21300000, guid: a4dffabc47eb3f34bbd136a48d560607, type: 3}
 --- !u!114 &998834116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4545,7 +4542,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4e542ea9471ea48baab9befa4ffa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  number1Npc: 0
 --- !u!4 &1595728765
 Transform:
   m_ObjectHideFlags: 0
