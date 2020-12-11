@@ -1,16 +1,16 @@
 fileFormatVersion: 2
-guid: 6733aaa2c93d89e40a6eee27362e5e47
+guid: 00bf32054b623e346ad1ef9b9000b4a2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4606908045521496030
-    second: Heart_0
+      213: 8878078320020611388
+    second: TempoBarSensor_0
   - first:
-      213: -4195582761621981391
-    second: Heart_1
+      213: -2551424115684489038
+    second: TempoBarSensor_1
   - first:
-      213: 516283494600122218
-    second: Heart_2
+      213: -1159157281892805984
+    second: TempoBarSensor_2
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -92,29 +92,17 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heart_0
+      name: TempoBarSensor_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 50
-        height: 50
+        width: 248
+        height: 248
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -122,20 +110,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed7a23e75760fef30800000000000000
-      internalID: 4606908045521496030
+      spriteID: c31ece8a135453b70800000000000000
+      internalID: 8878078320020611388
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heart_1
+      name: TempoBarSensor_1
       rect:
         serializedVersion: 2
-        x: 50
+        x: 257
         y: 0
-        width: 50
-        height: 50
+        width: 248
+        height: 248
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 137f4cb15bb46c5c0800000000000000
-      internalID: -4195582761621981391
+      spriteID: 2b8c249e845879cd0800000000000000
+      internalID: -2551424115684489038
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heart_2
+      name: TempoBarSensor_2
       rect:
         serializedVersion: 2
-        x: 100
+        x: 512
         y: 0
-        width: 50
-        height: 50
+        width: 248
+        height: 248
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +152,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6f990b5a153a2700800000000000000
-      internalID: 516283494600122218
+      spriteID: 0a2d8f5f798d9efe0800000000000000
+      internalID: -1159157281892805984
       vertices: []
       indices: 
       edges: []
