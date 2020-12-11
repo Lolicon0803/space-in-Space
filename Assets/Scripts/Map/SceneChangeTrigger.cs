@@ -27,8 +27,10 @@ public class SceneChangeTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("S");
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("I");
             if (targetIndex != -1)
             {
                 if (sameX)

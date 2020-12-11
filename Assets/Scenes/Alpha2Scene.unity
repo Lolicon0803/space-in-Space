@@ -2037,6 +2037,16 @@ PrefabInstance:
       propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
         type: 3}
       propertyPath: m_Name
@@ -3178,12 +3188,12 @@ PrefabInstance:
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.71
+      value: 16.17
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.1
+      value: -6.43
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
