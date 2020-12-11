@@ -22,17 +22,19 @@ public class PlayerLifeSystem : MonoBehaviour
     public int recoverAfterShoot;
 
     // 復活場景
-    private int startScene;
+    private int startSceneIndex;
     // 復活點。
     private Vector2 startPosition;
 
-    public Canvas canvas;
+    public Canvas lifeCanvas;
+    public CanvasGroup dieCanvas;
     // 受傷紅屏
     public Image redEffectImage;
     // 愛心
     public Image heartImagePrefab;
     // 死亡黑屏
-    public Image blackImage;
+    public Image blackCircleImage;
+    public Image blackBgImage;
 
     public Sprite fullHeart;
     public Sprite breakHeart;
@@ -55,7 +57,7 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        startScene = -1;
+        startSceneIndex = -1;
         startPosition = new Vector2(-16.537f, -8.552f);
         isDie = false;
         isInvincible = false;
@@ -76,7 +78,7 @@ public class PlayerLifeSystem : MonoBehaviour
             heartImages = new Image[total];
             for (int i = 0; i < total; i++)
             {
-                heartImages[i] = Instantiate(heartImagePrefab, canvas.transform);
+                heartImages[i] = Instantiate(heartImagePrefab, lifeCanvas.transform);
                 heartImages[i].rectTransform.offsetMin = new Vector2(heartImages[i].rectTransform.offsetMin.x + 75 * i, heartImages[i].rectTransform.offsetMin.y);
                 heartImages[i].rectTransform.offsetMax = new Vector2(heartImages[i].rectTransform.offsetMax.x + 75 * i, heartImages[i].rectTransform.offsetMax.y);
             }
@@ -101,7 +103,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void SetStartPosition(int index, Vector2 position)
     {
         startPosition = position;
-        startScene = index;
+        startSceneIndex = index;
     }
 
     /// <summary>
@@ -123,6 +125,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void Hurt(int number = 1)
     {
+        Debug.Log(isInvincible);
         if (!isDie && !isInvincible)
         {
             isInvincible = true;
@@ -227,9 +230,9 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        isDie = true;
-        transform.localScale = Vector3.zero;
         playerMovement.Die();
+        isDie = true;
+        //transform.localScale = Vector3.zero;
         StartCoroutine(ShowBlackEffect());
     }
 
@@ -239,19 +242,15 @@ public class PlayerLifeSystem : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ShowBlackEffect()
     {
-        // 可能要改。愛心動態生成所以圖層比黑屏高。
-        foreach (Image image in heartImages)
-            image.color = new Color(1, 1, 1, 0);
-
-        // 黑屏慢慢出現。
-        float alpha = 0;
-        blackImage.color = new Color(0, 0, 0, alpha);
-        while (alpha < 1)
-        {
-            alpha += 0.5f * Time.deltaTime;
-            blackImage.color = new Color(0, 0, 0, alpha);
-            yield return null;
-        }
+        // 黑圈縮小聚焦到玩家上
+        blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        blackCircleImage.rectTransform.sizeDelta = new Vector2(1536, 1536);
+        dieCanvas.alpha = 1;
+        yield return ShowBlackCircle(new Vector2(80, 80));
+        // 播玩家死亡動畫
+        yield return new WaitForSeconds(1.0f);
+        // 黑圈縮到底
+        yield return ShowBlackCircle(Vector2.zero);
 
         InitializeHHeart();
 
@@ -260,9 +259,9 @@ public class PlayerLifeSystem : MonoBehaviour
         transform.position = startPosition;
         // 同場景不轉
         // 等轉場景的程式碼完整再接過去
-        if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
+        if (startSceneIndex != -1 && startSceneIndex != SceneManager.GetActiveScene().buildIndex)
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+            AsyncOperation operation = SceneManager.LoadSceneAsync(startSceneIndex);
             while (!operation.isDone)
             {
                 Debug.Log("Wait load scene");
@@ -270,18 +269,25 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
 
-        // 黑屏結束
-        while (alpha > 0)
-        {
-            alpha -= 0.5f * Time.deltaTime;
-            blackImage.color = new Color(0, 0, 0, alpha);
-            yield return null;
-        }
-        // 愛心出來。
-        foreach (Image image in heartImages)
-            image.color = new Color(1, 1, 1, 1);
-        blackImage.color = new Color(0, 0, 0, 0);
+        blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        // 黑圈打開
+        yield return ShowBlackCircle(new Vector2(80, 80));
+        // 看有沒有復活動畫
+        yield return new WaitForSeconds(1.0f);
+        // 黑圈全開
+        yield return ShowBlackCircle(new Vector2(1536, 1536));
+        dieCanvas.alpha = 0;
         playerMovement.ResetStatus();
         isDie = false;
+    }
+
+    private IEnumerator ShowBlackCircle(Vector2 destination)
+    {
+        while (Vector2.Distance(blackCircleImage.rectTransform.sizeDelta, destination) > Mathf.Epsilon)
+        {
+            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 15);
+            yield return null;
+        }
+        blackCircleImage.rectTransform.sizeDelta = destination;
     }
 }

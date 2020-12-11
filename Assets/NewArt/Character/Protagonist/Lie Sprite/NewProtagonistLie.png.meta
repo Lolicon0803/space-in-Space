@@ -1,7 +1,31 @@
 fileFormatVersion: 2
 guid: 3d914b68a0370364492de273aefedd2f
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -8933247993643474897
+    second: NewProtagonistLie_0
+  - first:
+      213: 3344292058100767176
+    second: NewProtagonistLie_1
+  - first:
+      213: -3534307023923761119
+    second: NewProtagonistLie_2
+  - first:
+      213: 2122219059695395834
+    second: NewProtagonistLie_3
+  - first:
+      213: -540830021753609554
+    second: NewProtagonistLie_0
+  - first:
+      213: 6935748535695486841
+    second: NewProtagonistLie_1
+  - first:
+      213: 3600369458852153486
+    second: NewProtagonistLie_2
+  - first:
+      213: -3043594768073616702
+    second: NewProtagonistLie_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -40,12 +64,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -71,9 +95,117 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: NewProtagonistLie_0
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 649
+        width: 440
+        height: 176
+      alignment: 9
+      pivot: {x: 0.35, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea2628de5f59e78f0800000000000000
+      internalID: -540830021753609554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NewProtagonistLie_1
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 647
+        width: 448
+        height: 176
+      alignment: 9
+      pivot: {x: 0.35, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97fa099cb8ab04060800000000000000
+      internalID: 6935748535695486841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NewProtagonistLie_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 128
+        width: 440
+        height: 176
+      alignment: 9
+      pivot: {x: 0.35, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e884c0f72f417f130800000000000000
+      internalID: 3600369458852153486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NewProtagonistLie_3
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 129
+        width: 448
+        height: 176
+      alignment: 9
+      pivot: {x: 0.35, y: 0.8}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c21cb02faaf2c5d0800000000000000
+      internalID: -3043594768073616702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

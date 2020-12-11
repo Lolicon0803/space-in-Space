@@ -1,16 +1,19 @@
 fileFormatVersion: 2
-guid: 6733aaa2c93d89e40a6eee27362e5e47
+guid: d5f90d48e3eab4c4291695a5844348e3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4606908045521496030
-    second: Heart_0
+      213: 3412739641140108467
+    second: NewSpeedArea_0
   - first:
-      213: -4195582761621981391
-    second: Heart_1
+      213: 4333973229276015772
+    second: NewSpeedArea_1
   - first:
-      213: 516283494600122218
-    second: Heart_2
+      213: 1067732812590023012
+    second: NewSpeedArea_2
+  - first:
+      213: -9079884711182788048
+    second: NewSpeedArea_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -108,13 +111,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Heart_0
+      name: NewSpeedArea_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 50
-        height: 50
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -122,20 +125,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ed7a23e75760fef30800000000000000
-      internalID: 4606908045521496030
+      spriteID: 3bcdc054f9c7c5f20800000000000000
+      internalID: 3412739641140108467
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heart_1
+      name: NewSpeedArea_1
       rect:
         serializedVersion: 2
-        x: 50
+        x: 256
         y: 0
-        width: 50
-        height: 50
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,20 +146,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 137f4cb15bb46c5c0800000000000000
-      internalID: -4195582761621981391
+      spriteID: c9cac0d80bd552c30800000000000000
+      internalID: 4333973229276015772
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Heart_2
+      name: NewSpeedArea_2
       rect:
         serializedVersion: 2
-        x: 100
+        x: 512
         y: 0
-        width: 50
-        height: 50
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +167,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6f990b5a153a2700800000000000000
-      internalID: 516283494600122218
+      spriteID: 4610571065951de00800000000000000
+      internalID: 1067732812590023012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NewSpeedArea_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03a137466f4cdf180800000000000000
+      internalID: -9079884711182788048
       vertices: []
       indices: 
       edges: []

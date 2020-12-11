@@ -73,6 +73,14 @@ public class MovablePlatform : MonoBehaviour, IObjectBehavier
         routeIndex = (routeIndex + 1) % routeMap.Count;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            Player.Singleton.movement.StopMove();
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Player"))

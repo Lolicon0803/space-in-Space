@@ -25,7 +25,7 @@ TagManager:
   - SpaceJunk
   - Anemy
   - Item
-  - 
+  - Bomb
   - 
   - 
   - 
@@ -51,9 +51,12 @@ TagManager:
   - name: Object
     uniqueID: 3032466547
     locked: 0
-  - name: Pause Menu
-    uniqueID: 3764575937
+  - name: HittingUI
+    uniqueID: 2993497477
     locked: 0
   - name: TextBox
     uniqueID: 4047343469
+    locked: 0
+  - name: Pause Menu
+    uniqueID: 3764575937
     locked: 0

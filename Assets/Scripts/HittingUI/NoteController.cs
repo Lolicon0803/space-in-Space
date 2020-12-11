@@ -5,11 +5,16 @@ public class NoteController : MonoBehaviour
 {
     public HittingController hittingController;
     public bool hasStarted;
+    private float lastDelay;
 
     private float notesGenerationInterval;
+    private float initNotesGenerationInterval;
     private bool isRunning;
     private GameObject notePrefab;
-    private float noteInitPositionX = 3f;
+    private float SPB;
+    private double delay;
+    private int counter;
+    const float noteInitPositionX = 3f - 0.1f;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +31,11 @@ public class NoteController : MonoBehaviour
         }
     }
 
+    public void setLastDelay(float value)
+    {
+        lastDelay = value / 1000;
+    }
+
     IEnumerator initVariables()
     {
         // 有可能執行時 audioEngine 尚未設定完成 所以等到完成才設定參數
@@ -34,7 +44,12 @@ public class NoteController : MonoBehaviour
         notePrefab = hittingController.notePrefab;
         isRunning = false;
         hasStarted = true;
+        lastDelay = 0;
+        counter = 0;
+        SPB = (float)(1 / ((this.hittingController.audioEngine.BPM) / 60));
+        delay = hittingController.audioEngine.GetCurrentDelayTime() / 1000;
         notesGenerationInterval = (float)(60.0d / (hittingController.audioEngine.BPM));
+        initNotesGenerationInterval = notesGenerationInterval;
     }
     IEnumerator GenerateNotes()
     {
@@ -50,10 +65,37 @@ public class NoteController : MonoBehaviour
             rightNote.transform.Translate(noteInitPositionX, 0, 0);
             leftNote.transform.Translate(-noteInitPositionX, 0, 0);
 
+            correctGenerateSpeed();
+
             yield return new WaitForSeconds(notesGenerationInterval);
         }
 
         isRunning = false;
+    }
+
+    void correctGenerateSpeed()
+    {
+        if (Mathf.Abs((float)(lastDelay - delay)) > 0.025)
+        {
+            counter++;
+            if (counter > 5)
+            {
+                if (lastDelay >= 0 && lastDelay <= SPB / 2)
+                {
+                    notesGenerationInterval += (float)(delay - lastDelay) / 100;
+                }
+                else
+                {
+                    notesGenerationInterval += (float)((SPB - lastDelay + delay) / 100);
+                }
+                counter = 0;
+            }
+        }
+        else
+        {
+            counter = 0;
+            notesGenerationInterval = initNotesGenerationInterval;
+        }
     }
 
     void fillBlankWithNote()

@@ -8,35 +8,24 @@ using UnityEngine.Events;
 /// <summary>
 /// 第一隻大型魷魚BOSS
 /// 攻擊模式:
-///     1. 3 <= HP <= 7
-///         * 每 0.5 拍移動一格
-///         * 每 2 拍召喚魷魚炸彈 1 顆，最多 7 顆
-///         * 每 5 拍召喚小魷魚 1 隻，最多 3 隻
-///         * 每移動 20 次休息 2 拍，timeout 時發射雷射3發持續 3 拍。
-///     2. 1 <= HP <= 2
-///         * 每 0.5 拍移動一格，速度加快
+///     1. 3 <= HP <= 10
+///         * 每  2 拍召喚魷魚炸彈 1 顆，最多 7 顆
+///         * 每  5 拍召喚小魷魚 1 隻，最多 3 隻
+///         * 每 15 拍休息 2 拍，突刺觸手 2 下。
+///     2. 0 <= HP <= 2
 ///         * 每 2 拍召喚魷魚炸彈 2 顆，最多 7 顆
 ///         * 每 5 拍召喚小魷魚 2 隻，最多 5 隻
-///         * 每移動 15 次休息 2 拍，timeout時發射雷射持續 3 拍。
-///   --3. HP = 1
-///         * 召喚白洞到正中間     
+///         * 每 15 拍休息 1 拍，突刺觸手 2 下。
+///     3. HP == 6 || HP == 3
+///         * 舉手 2 拍後大揮手 1 次。
 /// </summary>
-public class BigSquid : MonoBehaviour, IObjectBehavier
+public class BigSquid : MonoBehaviour
 {
     public int maxHP;
     private int nowHP;
 
     public Bomb bomb;
     public Anemy smallSquid;
-    public Razer razer1;
-    public Razer razer2;
-    public Razer razer3;
-
-    public float moveSpeed;
-    //使用者輸入用
-    public GameData.RouteData[] route;
-    //迴圈讀取用
-    private List<GameData.Direction> routeMap = new List<GameData.Direction>();
 
     public Image hpBar;
 
@@ -47,20 +36,15 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     public float squidCircleInterRadius;
     public float squidCircleOuterRadius;
 
-    private int routeIndex = 0;
-    // 下一個移動點
-    private Vector2 movePoint;
-    // 移動方向
-    private Vector2 moveDirection;
-
     // 半拍節奏計數
     private int halfCount;
     // 一拍節奏計數
     private int wholeCount;
-    // 移動計數
-    private int moveCount;
-    // 使用雷射
-    private bool usingRazer;
+    // 觸手攻擊計數
+    private int attackCount;
+    // 大揮手計數
+    private int bigHandCount;
+
     // 炸彈最多數量
     private int maxBombNumber;
     // 現在炸彈數量
@@ -73,14 +57,19 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     private int nowSquidNumber;
     // 魷魚一次召喚數量
     private int summonSquidNumber;
+
+    private BigSquidHand[] hands;
+
     // 休息中
     private bool isResting;
-    // 移動幾拍後雷射
-    private int razerAfterMoveTime;
-    // 雷射前休息時間
-    private int restTimeBeforeRazer;
-    // 雷射最多持續時間
-    private int maxRazerTime;
+    // 使用觸手
+    private bool usingHand;
+    // 每幾拍觸手攻擊
+    private int handAfterTempo;
+    // 觸手前休息時間
+    private int restTimeBeforeHand;
+    // 大揮手
+    private bool useBigHand;
     // 死亡時呼叫，讓所有召喚物消失。
     public UnityAction OnDie;
 
@@ -88,15 +77,18 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
     public Vector2 summonBoundX = new Vector2(-7, 7);
     public Vector2 summonBoundY = new Vector2(-7, 7);
 
+    private Animator animator;
     private AudioSource audioSource;
+
+    // 動畫狀態機參數
+    private readonly int animeIdleSpeed = Animator.StringToHash("IdleSpeed");
+    private readonly int animeAttackHand = Animator.StringToHash("AttackHand");
 
     // 音效檔
     public AudioClip audioSummonBomb;
     public AudioClip audioSummonSquid;
     public AudioClip audioTouchPlayer;
     public AudioClip audioHurt;
-    public AudioClip audioPrepareLazer;
-    public AudioClip audioShootLazer;
     public AudioClip audioDie;
     // --
 
@@ -106,7 +98,8 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         nowHP = maxHP;
         halfCount = 0;
         wholeCount = 0;
-        moveCount = 0;
+        attackCount = 0;
+        bigHandCount = 8;
 
         maxBombNumber = 7;
         nowBombNumber = 0;
@@ -117,28 +110,23 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         summonSquidNumber = 1;
 
         isResting = false;
-        usingRazer = false;
-        razerAfterMoveTime = 20;
-        restTimeBeforeRazer = 2;
-        maxRazerTime = 3;
+        usingHand = false;
+        useBigHand = false;
+        handAfterTempo = 15;
+        restTimeBeforeHand = 2;
         //--------------------
 
+        animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-
-        // 獲得路線
-        foreach (GameData.RouteData item in route)
-        {
-            for (int i = 0; i < item.distance; i++)
-            {
-                routeMap.Add(item.direction);
-            }
-        }
+        hands = GetComponentsInChildren<BigSquidHand>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         OnDie = new UnityAction(() => { });
+        animator.SetFloat(animeIdleSpeed, TempoManager.Singleton.beatPerMinute / 60.0f);
+        SetActive();
     }
 
     public void SetActive()
@@ -159,19 +147,26 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
 
         // 半拍計數
         halfCount++;
-
-        // 移動
-        if (routeMap.Count > 0 && !isResting)
-            StartCoroutine(Move());
     }
 
     private void CountWholeTempo()
     {
-        if (!isResting)
+        if (useBigHand && !isResting)
+        {
+            bigHandCount++;
+            animator.SetInteger(animeAttackHand, bigHandCount);
+            if (bigHandCount == 12)
+            {
+                bigHandCount = 8;
+                useBigHand = false;
+                foreach (BigSquidHand hand in hands)
+                    hand.EndAttack();
+            }
+        }
+        else if (!isResting)
         {
             // 一拍計數
             wholeCount++;
-
             // 每兩拍且炸彈數量未達上限
             if (wholeCount % 2 == 0 && nowBombNumber < maxBombNumber)
                 SummonBomb(summonBombNumber);
@@ -179,30 +174,57 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
             // 每三拍且小魷魚數量未達上限
             if (wholeCount % 3 == 0 && nowSquidNumber < maxSquidNumber)
                 SummonSquid(summonSquidNumber);
+
+            // 抵達開始使用觸手拍點
+            if (wholeCount % handAfterTempo == 0)
+                isResting = true;
         }
         // 休息中
         else
         {
             // 計數增加
-            moveCount++;
-            if (!usingRazer)
+            attackCount++;
+            // 達休息時間，下一拍結束後發射雷射
+            if (attackCount == restTimeBeforeHand + 1 || usingHand)
             {
-                if (audioPrepareLazer != null)
+                foreach (BigSquidHand hand in hands)
+                    hand.StartAttack();
+                usingHand = true;
+                int count = animator.GetInteger(animeAttackHand) + 1;
+                animator.SetInteger(animeAttackHand, count);
+                if (count == 7)
                 {
-                    audioSource.clip = audioPrepareLazer;
-                    audioSource.PlayOneShot(audioPrepareLazer);
+                    usingHand = false;
+                    attackCount = 0;
+                    animator.SetInteger(animeAttackHand, 0);
+                    isResting = false;
+                    foreach (BigSquidHand hand in hands)
+                        hand.EndAttack();
                 }
             }
-            // 達休息時間，下一拍結束後發射雷射
-            if (moveCount == restTimeBeforeRazer + 1 && !usingRazer)
-            {
-                audioSource.clip = null;
-                audioSource.Stop();
-                usingRazer = true;
-                moveCount = 0;
-                StartCoroutine(ControlRazer());
-            }
         }
+    }
+
+    public void SetHandKnockDirection(GameData.Direction direction)
+    {
+        Vector2 d = Vector2.zero;
+        switch (direction)
+        {
+            case GameData.Direction.UP:
+                d = Vector2.up;
+                break;
+            case GameData.Direction.DOWN:
+                d = Vector2.down;
+                break;
+            case GameData.Direction.LEFT:
+                d = Vector2.left;
+                break;
+            case GameData.Direction.RIGHT:
+                d = Vector2.right;
+                break;
+        }
+        foreach (BigSquidHand hand in hands)
+            hand.SetKnockDirection(d);
     }
 
     /// <summary>
@@ -281,70 +303,6 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         }
     }
 
-    /// <summary>
-    /// 控制雷射
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator ControlRazer()
-    {
-        // 計算玩家位置
-        Vector2 target = Vector2.down;
-        if (audioShootLazer != null)
-        {
-            audioSource.clip = audioShootLazer;
-            audioSource.loop = true;
-            audioSource.PlayOneShot(audioShootLazer);
-        }
-        razer1.SetSize(25, 0.2f);
-        razer1.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg);
-        razer2.SetSize(25, 0.2f);
-        razer2.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg + 45);
-        razer3.SetSize(25, 0.2f);
-        razer3.transform.Rotate(Vector3.forward, Mathf.Atan2(target.y, target.x) * Mathf.Rad2Deg - 45);
-        // 持續三拍
-        while (moveCount <= maxRazerTime)
-            yield return null;
-        // 關閉
-        razer1.SetSize(0, 0);
-        razer2.SetSize(0, 0);
-        razer3.SetSize(0, 0);
-        if (audioShootLazer != null)
-        {
-            audioSource.Stop();
-            audioSource.clip = null;
-            audioSource.loop = false;
-        }
-        razer1.transform.localRotation = Quaternion.identity;
-        razer2.transform.localRotation = Quaternion.identity;
-        razer3.transform.localRotation = Quaternion.identity;
-        isResting = false;
-        usingRazer = false;
-        moveCount = 0;
-    }
-
-    public IEnumerator Move()
-    {
-        //確認方向
-        moveDirection = GameData.Map.directionMap[(int)routeMap[routeIndex]];
-        // 下個移動點 + 朝路徑移動1格vector
-        movePoint = (Vector2)transform.position + moveDirection;
-        //移動
-        while (Vector2.Distance(transform.position, movePoint) > moveSpeed * Time.deltaTime)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.deltaTime);
-            yield return null;
-        }
-        transform.position = movePoint;
-        routeIndex = (routeIndex + 1) % routeMap.Count;
-
-        moveCount++;
-        if (moveCount == razerAfterMoveTime)
-        {
-            moveCount = 0;
-            isResting = true;
-        }
-    }
-
     public void Damaged(int number)
     {
         if (audioHurt != null)
@@ -352,13 +310,19 @@ public class BigSquid : MonoBehaviour, IObjectBehavier
         nowHP -= number;
         if (hpBar != null)
             hpBar.fillAmount = (float)nowHP / maxHP;
+        if (nowHP == 6 || nowHP == 3)
+        {
+            useBigHand = true;
+            foreach (BigSquidHand hand in hands)
+                hand.StartAttack();
+        }
         if (nowHP < 4)
         {
-            moveSpeed *= 2;
             summonBombNumber = 2;
             maxSquidNumber = 5;
             summonSquidNumber = 2;
-            razerAfterMoveTime = 15;
+            handAfterTempo = 10;
+            restTimeBeforeHand = 1;
         }
         if (nowHP <= 0)
         {
