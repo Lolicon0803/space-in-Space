@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BackgroundmoveScript : MonoBehaviour
 {
-    private float speed = 0.001f;
+    private float speed = 0.0001f;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +15,7 @@ public class BackgroundmoveScript : MonoBehaviour
     void Update()
     {
         float new_x = GetComponent<Renderer>().material.GetTextureOffset("_MainTex").x;
-        GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x + speed, 0));
+        float new_y = GetComponent<Renderer>().material.GetTextureOffset("_MainTex").y;
+        GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x + speed, new_y + speed/3));
     }
 }
