@@ -58,7 +58,8 @@ public class Ground : MonoBehaviour
             switch (groundEvents[index].behavior)
             {
                 case GroundBehavior.Stop:
-                    Player.Singleton.movement.StopMove();
+                    Player.Singleton.movement.Knock(Vector2.zero);
+                    Player.Singleton.movement.ZeroMoveDirection();
                     break;
                 case GroundBehavior.Standable:
                     if (groundEvents[index].hasGravity)
@@ -102,12 +103,13 @@ public class Ground : MonoBehaviour
         return -1;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.CompareTag("Player"))
+        
+        if (collision.CompareTag("Player"))
         {
             Debug.DrawRay(transform.position, -Player.Singleton.movement.MoveDirection, Color.red, 10);
-            ProcessEvent(collision.GetContact(0).point);
+            ProcessEvent(Player.Singleton.transform.position);
         }
     }
 
