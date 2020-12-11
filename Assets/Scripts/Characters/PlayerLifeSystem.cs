@@ -65,16 +65,8 @@ public class PlayerLifeSystem : MonoBehaviour
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
-        //playerMovement.OnError += LossLife;
+        playerMovement.OnError += LossLife;
         InitializeHHeart();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Hurt(99);
-        }
     }
 
     private void InitializeHHeart()
@@ -238,9 +230,9 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
+        playerMovement.Die();
         isDie = true;
         //transform.localScale = Vector3.zero;
-        playerMovement.Die();
         StartCoroutine(ShowBlackEffect());
     }
 

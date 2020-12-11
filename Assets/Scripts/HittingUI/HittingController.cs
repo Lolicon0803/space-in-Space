@@ -19,11 +19,6 @@ public class HittingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            audioEngine.KeyDown();
-        }
-
         TouchStates touchState = audioEngine.touchState;
         if (msg != null)
         {

@@ -35,23 +35,23 @@ public class PlayerMovement : MonoBehaviour
         private set { nowSpeed = value; }
     }
 
-    // 下一個移動點
+    // 現在位置
     public Vector2 movePoint;
 
     // 是否可以操作
     public bool canInput;
 
     // 是否第一次空拍
-    //public bool firstTimeMiss;
+    public bool firstTimeMiss;
 
     // 黑洞中，優先度最高
     public bool isBlackHole = false;
 
-    private bool isStanding;
+    private bool isDie;
 
     private IEnumerator coroutineShoot;
-    private IEnumerator coroutineSlide;
-    private IEnumerator coroutineStandOnGround;
+    //private IEnumerator coroutineSlide;
+    //private IEnumerator coroutineStandOnGround;
 
     // All player behavier.
     public delegate void PlayerBehavierDelegate(Vector2 direction);
@@ -61,29 +61,40 @@ public class PlayerMovement : MonoBehaviour
     public event PlayerDamagedDelegate OnFallIntoBlackHole;
     public event PlayerDamagedDelegate OnError;
 
-    public Vector2 MoveDirection { get; private set; }
+    private PlayerAnimationManager animationManager;
 
-    private new Rigidbody2D rigidbody;
+    public Vector2 MoveDirection { get; private set; }
 
     private LayerMask groundLayer;
 
     // 降速用的時間點
-    private float slowDownTime;
-    // 是否立刻降速到最低
-    private bool stopInstantly;
+    //private float slowDownTime;
+    //// 是否立刻降速到最低
+    //private bool stopInstantly;
 
     // Start is called before the first frame update
     void Start()
     {
-        isStanding = false;
-        stopInstantly = false;
-        rigidbody = GetComponent<Rigidbody2D>();
+        animationManager = GetComponent<PlayerAnimationManager>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
-        coroutineSlide = Slide();
-        coroutineStandOnGround = ShowStandOnGround(Vector2.zero);
         ResetStatus();
         StartCoroutine(ProcessOperation());
+        ObjectTempoControl.Singleton.AddToBeatAction(() =>
+        {
+            if (canInput && !isDie)
+            {
+                if (firstTimeMiss == false)
+                    OnError?.Invoke();
+                firstTimeMiss = false;
+                Punish();
+            }
+        }, TempoActionType.TimeOut);
+        if (TempoManager.Singleton.beatPerMinute > 60)
+        {
+            moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+            slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+        }
     }
 
     public void ResetStatus()
@@ -91,6 +102,8 @@ public class PlayerMovement : MonoBehaviour
         StopMove();
         canInput = true;
         isBlackHole = false;
+        firstTimeMiss = true;
+        isDie = false;
         nowSpeed = 0;
         MoveDirection = Vector2.zero;
         movePoint = transform.position;
@@ -102,23 +115,37 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-            if (canInput)
+            if (canInput && !isDie)
             {
-                // 滑鼠左鍵
-                if (Input.GetMouseButtonDown(0))
+                float x = 0;
+                float y = 0;
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                    x = -1;
+                else if (Input.GetKeyDown(KeyCode.RightArrow))
+                    x = 1;
+                else if (Input.GetKeyDown(KeyCode.UpArrow))
+                    y = 1;
+                else if (Input.GetKeyDown(KeyCode.DownArrow))
+                    y = -1;
+                // 有移動
+                if (x != 0 || y != 0)
                 {
                     // 打在節拍上
                     if (TempoManager.Singleton.KeyDown())
+                    {
+                        firstTimeMiss = true;
+                        MoveDirection = new Vector2(x, y);
                         HandleInput();
-                    // 沒有打在節拍上且不在地上
-                    else if (!isStanding)
-                        OnError?.Invoke();
+                    }
+                    // 打錯拍點
+                    else
+                    {
+                        if (firstTimeMiss == false)
+                            OnError?.Invoke();
+                        firstTimeMiss = false;
+                        Punish();
+                    }
                 }
-                // 滑鼠右鍵
-                if (Input.GetMouseButton(1))
-                    stopInstantly = true;
-                else
-                    stopInstantly = false;
             }
             yield return null;
         }
@@ -131,18 +158,12 @@ public class PlayerMovement : MonoBehaviour
     {
         // 先終止移動，避免跑兩個IEnumerator
         StopMove();
-        // 抓滑鼠位置算方向
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        MoveDirection = mouse - (Vector2)transform.position;
-        MoveDirection = MoveDirection.normalized;
         transform.parent = null;
-        // 算移動角度轉角色
-        float angle = Vector2.SignedAngle(Vector2.right, MoveDirection);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        DontDestroyOnLoad(gameObject);
         coroutineShoot = Shoot();
-        OnFireBag?.Invoke(MoveDirection);
-        isStanding = false;
         StartCoroutine(coroutineShoot);
+        // 噴射事件
+        OnFireBag?.Invoke(MoveDirection);
     }
 
     private bool IsOnGround()
@@ -152,21 +173,19 @@ public class PlayerMovement : MonoBehaviour
         return c != null;
     }
 
-    //private bool IsFrontHasGround()
-    //{
-    //    // 判斷前方一格下方是否有地板
-    //    Collider2D c = Physics2D.Raycast(movePoint + new Vector2(Constants.moveUnit * MoveDirection.x, 0), -transform.up, Constants.moveUnit, obstacleLayer).collider;
-    //    return c != null;
-    //}
+    private void Punish()
+    {
+        Knock(MoveDirection, 1, slideSpeed);
+    }
 
     /// <summary>
-    /// Let player move to move point.
+    /// Let player move to movePoint.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator Shoot(float speed = -1, float distance = -1)
+    private IEnumerator Shoot(bool enableInput = false, float speed = -1, float distance = -1)
     {
         // 移動中，不可操作
-        canInput = false;
+        canInput = enableInput;
         // 取得移動距離
         float totalDistance = (distance == -1) ? distanceDictionary["rocket"] : distance;
         if (speed == -1)
@@ -174,77 +193,94 @@ public class PlayerMovement : MonoBehaviour
         else
             nowSpeed = speed;
         Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
-        rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
-        // 如果還沒動足夠距離，或是還有在動
-        while (Vector2.Distance(transform.position, movePoint) < totalDistance && rigidbody.velocity.magnitude > Time.deltaTime)
+        // 取得移動終點
+        movePoint += MoveDirection * totalDistance;
+        // 校正回格子上
+        movePoint.x = Mathf.Floor(movePoint.x) + 0.5f;
+        movePoint.y = Mathf.Floor(movePoint.y) + 0.5f;
+        // 直到抵達movePoint
+        while (Vector2.Distance(transform.position, movePoint) > nowSpeed * speedChangeCoefficient * Time.deltaTime)
         {
-            // 給速度移動
-            rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
+            // 移動
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, nowSpeed * speedChangeCoefficient * Time.deltaTime);
             yield return null;
         }
-        movePoint = transform.position;
+        // 移動結束
+        transform.position = movePoint;
         canInput = true;
-        slowDownTime = 0;
-        StartCoroutine(coroutineSlide);
+        //slowDownTime = 0;
+        //StartCoroutine(coroutineSlide);
     }
 
-    private IEnumerator Slide()
-    {
-        while (true)
-        {
-            //慢慢變慢
-            if (nowSpeed - slideSpeed > 0.001f)
-                nowSpeed = 1 / Mathf.Exp(slowDownTime - Mathf.Log(moveSpeed - slideSpeed)) + slideSpeed;
-            else
-                nowSpeed = slideSpeed;
-            rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
-            if (rigidbody.velocity.magnitude > Time.deltaTime)
-                rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
-            else
-                rigidbody.velocity = Vector2.zero;
-            slowDownTime += slowDownSpeed * Time.deltaTime;
-            if (stopInstantly)
-                slowDownTime *= 2;
-            yield return null;
-        }
-    }
+    //private IEnumerator Slide()
+    //{
+    //    while (true)
+    //    {
+    //        //慢慢變慢
+    //        if (nowSpeed - slideSpeed > 0.001f)
+    //            nowSpeed = 1 / Mathf.Exp(slowDownTime - Mathf.Log(moveSpeed - slideSpeed)) + slideSpeed;
+    //        else
+    //            nowSpeed = slideSpeed;
+    //        rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
+    //        if (rigidbody.velocity.magnitude > Time.deltaTime)
+    //            rigidbody.velocity = MoveDirection * nowSpeed * speedChangeCoefficient;
+    //        else
+    //            rigidbody.velocity = Vector2.zero;
+    //        slowDownTime += slowDownSpeed * Time.deltaTime;
+    //        if (stopInstantly)
+    //            slowDownTime *= 2;
+    //        yield return null;
+    //    }
+    //}
 
     /// <summary>
     /// 玩家往指定方向動，速度剩滑行速度。
     /// </summary>
     /// <param name="direction">方向，給0表示往玩家的反方向</param>
-    public void Knock(Vector2 direction)
+    public void Knock(Vector2 direction, bool enableInput = false)
     {
-        StopMove();
-        isStanding = false;
+        if (isDie)
+            return;
+        StopMove(false);
         transform.parent = null;
+        DontDestroyOnLoad(gameObject);
+        float distance = 0;
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
         else
+        {
             MoveDirection = direction;
-        canInput = true;
+            distance = 1;
+        }
         nowSpeed = slideSpeed;
-        StartCoroutine(coroutineSlide);
+        coroutineShoot = Shoot(enableInput, slideSpeed, distance);
+        StartCoroutine(coroutineShoot);
     }
 
     /// <summary>
     /// Force knock player.
     /// </summary>
     /// <param name="direction">推或吸的方向.零向量表示玩家反方向</param>
-    /// <param name="impactFactor">推動或吸動幾個單位.</param>
-    /// <param name="impactSpeed">推動或吸動速度.</param>
-    public void Knock(Vector2 direction, float impactFactor, float impactSpeed)
+    /// <param name="knockDistance">推動或吸動幾個單位.</param>
+    /// <param name="knockSpeed">推動或吸動速度.</param>
+    public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false)
     {
-        StopMove();
-        isStanding = false;
+        if (isDie)
+            return;
+        StopMove(false);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
         else
             MoveDirection = direction;
-        coroutineShoot = Shoot(impactSpeed, impactFactor);
+        coroutineShoot = Shoot(enableInput, knockSpeed, knockDistance);
         StartCoroutine(coroutineShoot);
+    }
+
+    public void ZeroMoveDirection()
+    {
+        MoveDirection = Vector2.zero;
     }
 
     /// <summary>
@@ -255,7 +291,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isBlackHole)
             return;
-        isStanding = false;
         // Stop all movement.
         StopMove();
         isBlackHole = true;
@@ -295,7 +330,6 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportIn(Teleporter entrance)
     {
         StopMove();
-        isStanding = false;
         canInput = false;
         MoveDirection = Vector2.zero;
         StartCoroutine("DisplayTeleportIn", entrance);
@@ -308,7 +342,6 @@ public class PlayerMovement : MonoBehaviour
     public void TeleportOut(Teleporter exit)
     {
         StopMove();
-        isStanding = false;
         StopCoroutine("DisplayTeleportIn");
         transform.localScale = Vector2.zero;
         canInput = false;
@@ -347,61 +380,37 @@ public class PlayerMovement : MonoBehaviour
     public void StandOnGround(Vector2 direction)
     {
         StopMove();
-        isStanding = true;
-        StopCoroutine(coroutineStandOnGround);
-        coroutineStandOnGround = ShowStandOnGround(direction);
-        StartCoroutine(coroutineStandOnGround);
+        MoveDirection = Vector2.zero;
+        Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
+        q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
+        transform.rotation = q;
+        animationManager.PlayLie();
     }
 
-    public IEnumerator ShowStandOnGround(Vector2 direction)
+    public void BackToGrid()
     {
-        Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
-        float angle = Vector2.SignedAngle(-transform.up, direction);
-        if (angle != 0)
-        {
-            q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
-            bool ok1 = true;
-            bool ok2 = false;
-
-            while (!ok1 || !ok2)
-            {
-                //if (collider2d.IsTouchingLayers(obstacleLayer))
-                //{
-                //    transform.position += -(Vector3)direction * Time.deltaTime;
-                //    movePoint = transform.position;
-                //}
-                //else
-                //    ok1 = true;
-                float rotateSpeed = 1080f;
-                if (Vector3.Distance(transform.rotation.eulerAngles, q.eulerAngles) > rotateSpeed * Time.deltaTime)
-                {
-                    if (q.eulerAngles.z > 0)
-                        transform.Rotate(Vector3.forward, rotateSpeed * Time.deltaTime);
-                    else
-                        transform.Rotate(-Vector3.forward, rotateSpeed * Time.deltaTime);
-                }
-                else
-                    ok2 = true;
-                yield return null;
-            }
-            transform.rotation = q;
-        }
+        Vector2 now = transform.position;
+        now.x = Mathf.Floor(now.x) + 0.5f;
+        now.y = Mathf.Floor(now.y) + 0.5f;
+        transform.position = now;
     }
 
     public void StopMove(bool enableInput = true)
     {
         StopCoroutine(coroutineShoot);
-        StopCoroutine(coroutineSlide);
+        //StopCoroutine(coroutineSlide);
         OnStop?.Invoke();
         //MoveDirection = Vector2.zero;
         canInput = enableInput;
         //nowSpeed = 0;
         movePoint = transform.position;
-        GetComponent<Rigidbody2D>().velocity = Vector2.zero; 
     }
 
     public void Die()
     {
+        isDie = true;
+        transform.parent = null;
+        DontDestroyOnLoad(gameObject);
         StopMove(false);
         isBlackHole = false;
     }
@@ -417,5 +426,10 @@ public class PlayerMovement : MonoBehaviour
         speedChangeCoefficient = 1;
         accumulatedCoefficient -= coefficient;
         speedChangeCoefficient *= (accumulatedCoefficient == 0) ? 1 : accumulatedCoefficient;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(movePoint, 1);
     }
 }

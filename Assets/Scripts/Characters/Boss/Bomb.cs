@@ -28,17 +28,21 @@ public class Bomb : MonoBehaviour
 
     public new Rigidbody2D rigidbody;
 
+    private CircleCollider2D collider;
+
     public delegate void BombEvent();
     public event BombEvent OnBomb;
 
     private IEnumerator enumeratorMove;
 
-    private bool isBeTouched;
+    private bool playerTouched;
+    private bool bossTouched;
     private bool finishSetting;
 
     private void Awake()
     {
         tempoCount = 0;
+        collider = GetComponent<CircleCollider2D>();
     }
 
     // Start is called before the first frame update
@@ -51,15 +55,26 @@ public class Bomb : MonoBehaviour
     private void Update()
     {
         canvas.localRotation = Quaternion.Euler(0, 0, -transform.localRotation.eulerAngles.z);
-        Collider2D hit2D = Physics2D.OverlapCircle(transform.position, radius, layerMask);
-        if (hit2D != null && isBeTouched)
+        // 炸彈被推後撞到東西立刻爆炸
+        Collider2D hit2D = Physics2D.OverlapCircle(transform.position, collider.radius * transform.localScale.x, layerMask); 
+        if (hit2D != null)
         {
-            if (hit2D.CompareTag("Enemy"))
-                Explosion();
-            else if (hit2D.CompareTag("Boss"))
-                Explosion();
-            else if (hit2D.CompareTag("Ground"))
-                Explosion();
+            if (playerTouched)
+            {
+                if (hit2D.CompareTag("Enemy"))
+                    Explosion();
+                else if (hit2D.CompareTag("Boss"))
+                    Explosion();
+                else if (hit2D.CompareTag("Ground"))
+                    Explosion();
+            }
+            else if (bossTouched)
+            {
+                if (hit2D.CompareTag("Player"))
+                    Explosion();
+                else if (hit2D.CompareTag("Ground"))
+                    Explosion();
+            }
         }
     }
 
@@ -71,7 +86,8 @@ public class Bomb : MonoBehaviour
     public void SetDestination(Vector2 destination, float speed)
     {
         finishSetting = false;
-        isBeTouched = false;
+        playerTouched = false;
+        bossTouched = false;
         rigidbody.velocity = (destination - (Vector2)transform.position).normalized * speed;
         enumeratorMove = Move(destination, speed);
         StartCoroutine(enumeratorMove);
@@ -106,6 +122,7 @@ public class Bomb : MonoBehaviour
         gameObject.layer = LayerMask.GetMask("IgnoreRaycast");
         rigidbody.velocity = Vector2.zero;
         tempoCount = 0;
+        // 取得爆炸範圍內的物件
         RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, radius, Vector2.zero, 0, layerMask);
         if (hits.Length > 0)
         {
@@ -119,7 +136,7 @@ public class Bomb : MonoBehaviour
                 }
                 else if (hits[i].collider.CompareTag("Boss"))
                 {
-                    hits[i].collider.GetComponent<BigSquid>().Damaged(damage);
+                    hits[i].collider.GetComponentInParent<BigSquid>().Damaged(damage);
                 }
                 else if (hits[i].collider.CompareTag("Enemy"))
                 {
@@ -135,8 +152,18 @@ public class Bomb : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void Knock(Vector2 direcion, float power)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="direcion"></param>
+    /// <param name="power"></param>
+    /// <param name="toucher">玩家: 0, Boss: 1</param>
+    public void Knock(Vector2 direcion, float power, int toucher)
     {
+        if (toucher == 0)
+            playerTouched = true;
+        else if (toucher == 1)
+            bossTouched = true;
         rigidbody.velocity = direcion * power;
     }
 
@@ -150,11 +177,10 @@ public class Bomb : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            isBeTouched = true;
             float pushedSpeed = Player.Singleton.movement.NowSpeed;
             if (pushedSpeed >= Player.Singleton.movement.moveSpeed)
             {
-                Knock(Player.Singleton.movement.MoveDirection, pushedSpeed);
+                Knock(Player.Singleton.movement.MoveDirection, pushedSpeed, 0);
                 Player.Singleton.movement.Knock(Vector2.zero);
             }
         }

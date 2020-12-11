@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6148774467585475197}
   m_Layer: 13
   m_Name: Bomb
-  m_TagString: Item
+  m_TagString: Bomb
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6148774467585475185}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.33, y: -3.8, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children:
   - {fileID: 2651801244668127869}
   m_Father: {fileID: 0}
@@ -55,7 +55,7 @@ MonoBehaviour:
   pushDistance: 2
   layerMask:
     serializedVersion: 2
-    m_Bits: 15872
+    m_Bits: 16128
   canvas: {fileID: 2651801244668127869}
   countdownText: {fileID: 8018303396843463545}
   rigidbody: {fileID: 6148774467585475197}
@@ -137,7 +137,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 1
-  m_Mass: 30.581518
+  m_Mass: 0.30581522
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 0

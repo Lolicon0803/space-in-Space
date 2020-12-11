@@ -1131,16 +1131,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1401079132}
     m_Modifications:
-    - target: {fileID: 6298967810242803451, guid: 755762cddf009794cbfae3867e7f27eb,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1262500749
-      objectReference: {fileID: 0}
-    - target: {fileID: 6298967810242803451, guid: 755762cddf009794cbfae3867e7f27eb,
-        type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7261871193464705874, guid: 755762cddf009794cbfae3867e7f27eb,
         type: 3}
       propertyPath: m_Name
@@ -1885,6 +1875,11 @@ PrefabInstance:
     - target: {fileID: 4366320086932214932, guid: b9adb1957b7094f479f38b3e005c9a98,
         type: 3}
       propertyPath: groundEvents.Array.data[1].hasGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4366320086932214933, guid: b9adb1957b7094f479f38b3e005c9a98,
+        type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4366320086932214934, guid: b9adb1957b7094f479f38b3e005c9a98,
@@ -3149,11 +3144,6 @@ PrefabInstance:
       propertyPath: blackBgImage
       value: 
       objectReference: {fileID: 2056387592}
-    - target: {fileID: 4222905995013355841, guid: e1436d5db8a52c84e8ebb608e4c5535c,
-        type: 3}
-      propertyPath: maxHp
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355845, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_Name
@@ -3162,12 +3152,12 @@ PrefabInstance:
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.32
+      value: 10.21
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.47
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
@@ -7802,14 +7792,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1401079132}
     m_Modifications:
-    - target: {fileID: 2017852640, guid: 442c6228bca2ac445a0bdced020edc78, type: 3}
-      propertyPath: m_PlayOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017852640, guid: 442c6228bca2ac445a0bdced020edc78, type: 3}
-      propertyPath: Loop
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2558678738363558994, guid: 442c6228bca2ac445a0bdced020edc78,
         type: 3}
       propertyPath: m_Name
@@ -7869,16 +7851,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558678738363559001, guid: 442c6228bca2ac445a0bdced020edc78,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1262500749
-      objectReference: {fileID: 0}
-    - target: {fileID: 2558678738363559001, guid: 442c6228bca2ac445a0bdced020edc78,
-        type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 442c6228bca2ac445a0bdced020edc78, type: 3}
