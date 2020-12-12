@@ -1,0 +1,7 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"感謝老天，地圖沒有被燒毀，真是奇蹟。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"……"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"從地圖來看，我所在的位置是奇爾星23號衛星。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這星際距離，沒有空間跳躍是回不了母星的。看來必須先前往奇爾星尋求幫助才行。"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【設法離開奇爾星23號衛星並抵達奇爾星】"},
+]
