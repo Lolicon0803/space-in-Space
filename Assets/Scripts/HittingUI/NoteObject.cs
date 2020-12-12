@@ -18,16 +18,16 @@ public class NoteObject : MonoBehaviour
         hittingController = GameObject.Find("HittingUI").GetComponent<HittingController>();
         noteController = GameObject.Find("NoteHolder").GetComponent<NoteController>();
         BPS = (float)(hittingController.audioEngine.BPM / 60);
-        moveTime = Mathf.Abs(transform.position.x) / BPS;
+        moveTime = Mathf.Abs(transform.localPosition.x) / BPS;
 
-        startPos = transform.position;
-        if (transform.position.x < 0)
+        startPos = transform.localPosition;
+        if (transform.localPosition.x < 0)
         {
-            endPos = new Vector3(0.1f, transform.position.y, transform.position.z);
+            endPos = new Vector3(0.1f, transform.localPosition.y, transform.localPosition.z);
         }
         else
         {
-            endPos = new Vector3(-0.1f, transform.position.y, transform.position.z);
+            endPos = new Vector3(-0.1f, transform.localPosition.y, transform.localPosition.z);
         }
 
         StartCoroutine(Move());
@@ -39,10 +39,14 @@ public class NoteObject : MonoBehaviour
 
         while (timeElapsed < moveTime)
         {
-            transform.position = Vector3.Lerp(startPos, endPos, timeElapsed / moveTime);
+            transform.localPosition = Vector3.Lerp(startPos, endPos, timeElapsed / moveTime);
             timeElapsed += Time.deltaTime;
 
             yield return null;
+            if (hittingController.isPause())
+            {
+                Destroy(gameObject);
+            }
         }
         noteController.setLastDelay((float)(hittingController.audioEngine.getTime() % (1000 / BPS)));
         Destroy(gameObject);

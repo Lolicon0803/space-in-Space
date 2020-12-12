@@ -55,8 +55,6 @@ public class NoteController : MonoBehaviour
     {
         isRunning = true;
 
-        // fillBlankWithNote();
-
         while (hasStarted)
         {
             GameObject leftNote = Instantiate(notePrefab, transform);
@@ -67,6 +65,7 @@ public class NoteController : MonoBehaviour
 
             correctGenerateSpeed();
 
+            yield return new WaitUntil(() => !hittingController.isPause());
             yield return new WaitForSeconds(notesGenerationInterval);
         }
 
@@ -95,18 +94,6 @@ public class NoteController : MonoBehaviour
         {
             counter = 0;
             notesGenerationInterval = initNotesGenerationInterval;
-        }
-    }
-
-    void fillBlankWithNote()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            GameObject leftNote = Instantiate(notePrefab, transform);
-            GameObject rightNote = Instantiate(notePrefab, transform);
-
-            rightNote.transform.Translate(noteInitPositionX - 1.1f * (i + 1), 0, 0);
-            leftNote.transform.Translate(-noteInitPositionX + 1.1f * (i + 1), 0, 0);
         }
     }
 }

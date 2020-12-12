@@ -11,6 +11,8 @@ public class HittingController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] clips;
     public Sprite[] sprites;
+
+    private bool isStop;
     private bool isRunning;
 
     // Start is called before the first frame update
@@ -18,13 +20,27 @@ public class HittingController : MonoBehaviour
     {
         audioEngine.ResetAdjustArgs();
         isRunning = false;
+        isStop = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        TouchStates touchState = audioEngine.touchState;
-        changeBtnSprite(touchState);
+        if (!isStop)
+        {
+            TouchStates touchState = audioEngine.touchState;
+            changeBtnSprite(touchState);
+        }
+    }
+
+    public void Pause()
+    {
+        isStop = !isStop;
+    }
+
+    public bool isPause()
+    {
+        return isStop;
     }
 
     void changeBtnSprite(TouchStates touchState)
@@ -36,7 +52,8 @@ public class HittingController : MonoBehaviour
         }
         else if (touchState == TouchStates.TouchFailed || touchState == TouchStates.TimeOutFailed || touchState == TouchStates.TimeOut)
         {
-            audioSource.PlayOneShot(clips[1], 0.03f);
+            // 改為文字
+            // audioSource.PlayOneShot(clips[1], 0.03f);
         }
     }
 
@@ -50,7 +67,7 @@ public class HittingController : MonoBehaviour
         hittingArea.sprite = sprites[1];
         yield return new WaitForSeconds(0.08f);
         hittingArea.sprite = sprites[0];
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         isRunning = false;
     }
 }
