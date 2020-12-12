@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class typeWriterTest : MonoBehaviour
+public class TypeWriterTest : MonoBehaviour
 {
     public GameObject textWriter;
+    public string fileName;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +19,7 @@ public class typeWriterTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             textWriter.GetComponent<TextWriter>().Init();
-            textWriter.GetComponent<TextWriter>().LoadStory("story1.txt");
+            textWriter.GetComponent<TextWriter>().LoadStory(fileName);
             textWriter.GetComponent<TextWriter>().NextStory();
         }
 
