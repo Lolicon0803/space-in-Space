@@ -56,6 +56,18 @@ MonoBehaviour:
   beepSound: {fileID: 6869953512602916365}
   text: {fileID: 6869953512631451794}
   speakerName: {fileID: 6869953513149660071}
+  speaker: {fileID: 6869953513040645755}
+  dialogBox: {fileID: 6869953513166744088}
+  speakerFrames:
+  - {fileID: 0}
+  - {fileID: 21300000, guid: 967a3df5910bf3a47a9748726c8d58bd, type: 3}
+  - {fileID: 21300000, guid: cae172457f712f8478a8163c75658be8, type: 3}
+  - {fileID: 21300000, guid: bf04ad4303fe4c04fb8132fed8e5e46b, type: 3}
+  - {fileID: 21300000, guid: 55d9aa664784285468050c2498167591, type: 3}
+  - {fileID: 21300000, guid: 40e6ac7b245160e4eb91c58ffab97936, type: 3}
+  - {fileID: 21300000, guid: 77962845a1e6f4044ba413ec52cbe1b0, type: 3}
+  - {fileID: 21300000, guid: 7ba56a37dc8c4ac4e96d4f898a035914, type: 3}
+  - {fileID: 21300000, guid: 223f6460b0865b840b1c0f786885034b, type: 3}
   onEndStory:
     m_PersistentCalls:
       m_Calls:

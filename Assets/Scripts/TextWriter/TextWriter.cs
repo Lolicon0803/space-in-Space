@@ -15,11 +15,13 @@ public class TextWriter : MonoBehaviour
     public AudioSource beepSound;
     public Text text;
     public Text speakerName;
+    public SpriteRenderer speaker;
+    public SpriteRenderer dialogBox;
+    public Sprite[] speakerFrames;
     public UnityEvent onEndStory;
     private int wordIndex;
     private int paragraphIndex;
     private Story story;
-    private bool keyDown;
     private bool enterKeyDown;
     private bool isEndOfParagraph;
     private bool isPrintingStory;
@@ -78,7 +80,30 @@ public class TextWriter : MonoBehaviour
 
 
     }
-
+    Sprite SpeakerNameToSpeakerFrame(string speakerName)
+    {
+        switch (speakerName)
+        {
+            case "夸克戴爾":
+                return speakerFrames[1];
+            case "安傑斯":
+                return speakerFrames[2];
+            case "鮑伯":
+                return speakerFrames[3];
+            case "莎夏":
+                return speakerFrames[4];
+            case "丹":
+                return speakerFrames[5];
+            case "艾克":
+                return speakerFrames[6];
+            case "奇爾星長老":
+                return speakerFrames[7];
+            case "奇爾星通訊兵":
+                return speakerFrames[8];
+            default:
+                return speakerFrames[0];
+        }
+    }
     void ClearText()
     {
         currentText = "";
@@ -89,18 +114,14 @@ public class TextWriter : MonoBehaviour
     }
     void ClearSprite()
     {
-        currentText = "";
-        foreach (var sprite in this.GetComponentsInChildren<SpriteRenderer>())
-        {
-            sprite.enabled = false;
-        }
+        speaker.enabled = false;
+        dialogBox.enabled = false;
     }
     void ShowSprite()
     {
-        foreach (var sprite in this.GetComponentsInChildren<SpriteRenderer>())
-        {
-            sprite.enabled = true;
-        }
+        speaker.enabled = true;
+        speaker.sprite = SpeakerNameToSpeakerFrame(story[paragraphIndex].speaker);
+        dialogBox.enabled = true;
     }
     IEnumerator PrintWord()
     {
