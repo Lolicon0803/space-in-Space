@@ -12,7 +12,7 @@ public class HittingController : MonoBehaviour
     public AudioClip[] clips;
     public Sprite[] sprites;
 
-    private bool isStop;
+    private bool isStopNow;
     private bool isRunning;
 
     // Start is called before the first frame update
@@ -20,27 +20,32 @@ public class HittingController : MonoBehaviour
     {
         audioEngine.ResetAdjustArgs();
         isRunning = false;
-        isStop = false;
+        isStopNow = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isStop)
+        if (!isStopNow)
         {
             TouchStates touchState = audioEngine.touchState;
             changeBtnSprite(touchState);
         }
     }
 
-    public void Pause()
+    public void Stop()
     {
-        isStop = !isStop;
+        isStopNow = true;
     }
 
-    public bool isPause()
+    public void Restart()
     {
-        return isStop;
+        isStopNow = false;
+    }
+
+    public bool isStop()
+    {
+        return isStopNow;
     }
 
     void changeBtnSprite(TouchStates touchState)
