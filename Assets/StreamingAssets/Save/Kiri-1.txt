@@ -1,0 +1,11 @@
+[
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"站住，你是誰？從哪裡來的？"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"（向大長老詳細解釋情況）"},
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"原來如此…我非常遺憾。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這不是任何人的錯，但我想盡快知道我同伴的下落。"},
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"我想你的同伴們應該散落在我們其他的衛星上了。"},
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"但是很遺憾，如你所見，我們光是要抵禦太空魷魚就已經分不出人手了，沒辦法派遣飛船幫助你。"},
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"不過，如果你能蒐集到一些零件，我們可以幫助你聯絡你的指揮中心。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"沒問題，馬上帶回來！"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【任務目標:找到5名夥伴，聯絡指揮中心、返回母星】"},
+]

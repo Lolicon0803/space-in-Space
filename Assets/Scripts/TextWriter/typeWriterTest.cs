@@ -10,7 +10,7 @@ public class TypeWriterTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -19,7 +19,7 @@ public class TypeWriterTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             textWriter.GetComponent<TextWriter>().Init();
-            textWriter.GetComponent<TextWriter>().LoadStory(fileName);
+            textWriter.GetComponent<TextWriter>().LoadStory(fileName + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
         }
 

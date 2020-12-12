@@ -1,0 +1,7 @@
+[
+{"textBoxIndex":0,"speaker":"研究日誌C","text":"第二階段的研究，我們成功將火箭背包使用的燃料替換為Psi。"},
+{"textBoxIndex":0,"speaker":"研究日誌C","text":"只要利用Epsilon號上的暗能量波動感測器，在正確的波動上操作背包，就能有無限的動力。"},
+{"textBoxIndex":0,"speaker":"研究日誌C","text":"鮑伯已經親自進行過測試了，看起來沒有任何問題。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這就是火箭背包嗎…？要想正確使用它好像還需要暗能量波動感測器。再找找吧。"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【獲得火箭背包】"},
+]

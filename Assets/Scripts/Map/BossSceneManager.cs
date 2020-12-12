@@ -36,10 +36,10 @@ public class BossSceneManager : MonoBehaviour
     private void Start()
     {
         // 播過劇情表示第二次進來
-        if (DataBase.Singleton.readStories.ContainsKey(npc.storyName) && DataBase.Singleton.readStories[npc.storyName])
+      //  if (DataBase.Singleton.readStories.ContainsKey(npc.storyName) && DataBase.Singleton.readStories[npc.storyName])
             StartBoss();
         // 劇情，強制移動玩家
-        else
+      //  else
             StartCoroutine(ForceMovePlayer());
     }
 

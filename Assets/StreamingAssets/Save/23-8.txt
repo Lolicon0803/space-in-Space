@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看看我發現了什麼，這一定是感測器，有了這個就能使用火箭背包了。"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【獲得暗能量波動感測器】"},
+]
