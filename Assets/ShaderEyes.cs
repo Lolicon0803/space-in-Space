@@ -20,7 +20,7 @@ public class ShaderEyes : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.F10))
         {
             can = true;
         }
@@ -55,7 +55,16 @@ public class ShaderEyes : MonoBehaviour
             }
             else
             {
-                Destroy(this.gameObject);
+                float uvX = m_Material.GetVector("_Param").x;
+
+                uvX += Time.deltaTime * 0.5f;
+                m_Material.SetVector("_Param", new Vector4(uvX, 2f, 0.0f, 0.0f));
+
+                if (uvX > 1)
+                {
+                    Destroy(this.gameObject);
+                }
+               
             }
         }
     }
