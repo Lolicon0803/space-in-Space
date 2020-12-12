@@ -58,7 +58,11 @@ public class PlayerLifeSystem : MonoBehaviour
     void Start()
     {
         startSceneIndex = -1;
-        startPosition = new Vector2(-16.537f, -8.552f);
+        startPosition = new Vector2(-16.5f, -8.5f);
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Floor(pos.x) + 0.5f;
+        pos.y = Mathf.Floor(pos.y) + 0.5f;
+        transform.position = pos;
         isDie = false;
         isInvincible = false;
         invincibleCount = 0;
@@ -243,10 +247,10 @@ public class PlayerLifeSystem : MonoBehaviour
     private IEnumerator ShowBlackEffect()
     {
         // 黑圈縮小聚焦到玩家上
+        blackCircleImage.rectTransform.sizeDelta = new Vector2(2048, 2048);
         blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
-        blackCircleImage.rectTransform.sizeDelta = new Vector2(1536, 1536);
         dieCanvas.alpha = 1;
-        yield return ShowBlackCircle(new Vector2(80, 80));
+        yield return ShowBlackCircle(new Vector2(256, 256));
         // 播玩家死亡動畫
         yield return new WaitForSeconds(1.0f);
         // 黑圈縮到底
@@ -268,14 +272,16 @@ public class PlayerLifeSystem : MonoBehaviour
                 yield return null;
             }
         }
-
+        yield return null;
+        Debug.Log(transform.position);
+        Debug.Log(Camera.main.WorldToScreenPoint(transform.position));
         blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
         // 黑圈打開
-        yield return ShowBlackCircle(new Vector2(80, 80));
+        yield return ShowBlackCircle(new Vector2(256, 256));
         // 看有沒有復活動畫
         yield return new WaitForSeconds(1.0f);
         // 黑圈全開
-        yield return ShowBlackCircle(new Vector2(1536, 1536));
+        yield return ShowBlackCircle(new Vector2(2048, 2048));
         dieCanvas.alpha = 0;
         playerMovement.ResetStatus();
         isDie = false;
