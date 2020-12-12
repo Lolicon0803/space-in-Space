@@ -12,14 +12,16 @@ enum TextWriterState {
 public class TextWriter : MonoBehaviour
 {
     SaveAndLoad SL;
-    public GameObject[] textBoxs;
     public AudioSource beepSound;
+    public Text text;
+    public Text speakerName;
     public UnityEvent onEndStory;
     private int wordIndex;
-    private int paragraghIndex;
+    private int paragraphIndex;
     private Story story;
     private bool keyDown;
-    private bool isEndOfStory;
+    private bool enterKeyDown;
+    private bool isEndOfParagraph;
     private bool isPrintingStory;
     private string currentText;
     private string twinkleText;
@@ -37,8 +39,7 @@ public class TextWriter : MonoBehaviour
     {
         if (isPrintingStory) {  return ; }
         currentFileName = "";
-        isEndOfStory = false;
-        paragraghIndex = 0;
+        paragraphIndex = 0;
         wordIndex = 0;
         ClearText();
         ClearSprite();
@@ -62,11 +63,9 @@ public class TextWriter : MonoBehaviour
             {
                 ShowSprite();
                 yield return StartCoroutine(PrintWord());
-                float intervalTime = 3.0f;
-                float twinkleTime = 0.3f;
-                if (paragraghIndex + 1 >= story.Count) { isEndOfStory = true; isPrintingStory = false; }
-                yield return StartCoroutine(WaitSignal(intervalTime, twinkleTime));
-                paragraghIndex++;
+                if (paragraphIndex + 1 >= story.Count) {isPrintingStory = false; }
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                paragraphIndex++;
                 ClearText();
                 ClearSprite();
                 if (!isPrintingStory)
@@ -83,28 +82,22 @@ public class TextWriter : MonoBehaviour
     void ClearText()
     {
         currentText = "";
-        foreach (var textBox in textBoxs)
+        foreach (var text in this.GetComponentsInChildren<Text>())
         {
-            foreach (var text in textBox.GetComponentsInChildren<Text>())
-            {
-                text.text = "";
-            }
+            text.text = "";
         }
     }
     void ClearSprite()
     {
         currentText = "";
-        foreach (var textBox in textBoxs)
+        foreach (var sprite in this.GetComponentsInChildren<SpriteRenderer>())
         {
-            foreach (var sprite in textBox.GetComponentsInChildren<SpriteRenderer>())
-            {
-                sprite.enabled = false;
-            }
+            sprite.enabled = false;
         }
     }
     void ShowSprite()
     {
-        foreach (var sprite in textBoxs[story[paragraghIndex].textBoxIndex].GetComponentsInChildren<SpriteRenderer>())
+        foreach (var sprite in this.GetComponentsInChildren<SpriteRenderer>())
         {
             sprite.enabled = true;
         }
@@ -112,28 +105,30 @@ public class TextWriter : MonoBehaviour
     IEnumerator PrintWord()
     {
         wordIndex = 0;
-        
+        isEndOfParagraph = false;
         while (true)
         {
-            currentText += story[paragraghIndex].text[wordIndex];
-            wordIndex++;
+            if (enterKeyDown)
+            {
+                enterKeyDown = false;
+                wordIndex = story[paragraphIndex].text.Length;
+                currentText = story[paragraphIndex].text;
+                yield return new WaitForSeconds(0.1f);
+            }
+            else
+            {
+                currentText += story[paragraphIndex].text[wordIndex];
+                wordIndex++;
+                yield return new WaitForSeconds(0.1f);
+            }
             beepSound.Play();
-            if (wordIndex >= story[paragraghIndex].text.Length)
+            if (wordIndex >= story[paragraphIndex].text.Length)
             {
                 break;
             }
-            yield return new WaitForSeconds(0.1f);
+
         }
-    }
-    IEnumerator WaitSignal(float intervalTime, float flickerTime)
-    {
-        int textBoxIndex = story[paragraghIndex].textBoxIndex;
-        while ((intervalTime >= 0 || isEndOfStory) && !keyDown )
-        {
-            if (keyDown) { break; }
-            intervalTime -= flickerTime;
-            yield return new WaitForSeconds(flickerTime);
-        }
+        isEndOfParagraph = true;
     }
     IEnumerator TwinkleString(float flickerTime)
     {
@@ -148,18 +143,19 @@ public class TextWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentFileName == "" || paragraghIndex >= story.Count )
+        if (currentFileName == "" || paragraphIndex >= story.Count )
         {
         }
         else
         {
-            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(0).GetComponent<Text>().text = story[paragraghIndex].speaker;
-            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(1).GetComponent<Text>().text = currentText + twinkleText;
+            // 展示當前講者及內容
+            speakerName.text = story[paragraphIndex].speaker;
+            text.text = currentText + twinkleText;
+        }
+        if (!isEndOfParagraph && Input.GetKeyDown(KeyCode.Return))
+        {
+            enterKeyDown = true;
         }
 
-        if (isEndOfStory && Input.anyKeyDown)
-        {
-            keyDown = true;
-        }
     }
 }

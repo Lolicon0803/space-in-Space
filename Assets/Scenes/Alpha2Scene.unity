@@ -1242,12 +1242,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &175633588 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6869953513166744090, guid: f8098db1a24e73f46b4321bd7d6d362b,
-    type: 3}
-  m_PrefabInstance: {fileID: 447880223}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &251797047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2060,75 +2054,15 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985038, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985038, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
         type: 3}
       propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1255884989}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivatePlayerInput
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: textBoxs.Array.data[0]
-      value: 
-      objectReference: {fileID: 175633588}
-    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: textBoxs.Array.data[1]
-      value: 
-      objectReference: {fileID: 175633588}
     - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
         type: 3}
       propertyPath: m_Name
       value: TextWriter
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8098db1a24e73f46b4321bd7d6d362b, type: 3}
@@ -2713,9 +2647,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705961742}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: -0.024, y: 0.042, z: 100}
-  m_LocalScale: {x: 2.590894, y: 1, z: 1.315527}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: -0.024, y: 0.042000003, z: 100}
+  m_LocalScale: {x: 2.5908954, y: 1, z: 1.3155273}
   m_Children: []
   m_Father: {fileID: 1451843238}
   m_RootOrder: 1
@@ -9339,7 +9273,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00015258789, y: 0.00021362305}
+  m_AnchoredPosition: {x: 0.00012207031, y: 0.00021362305}
   m_SizeDelta: {x: -0.00024414062, y: 0.00039672852}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2056387592
