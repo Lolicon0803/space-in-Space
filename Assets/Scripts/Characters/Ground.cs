@@ -41,6 +41,7 @@ public class Ground : MonoBehaviour
     void Awake()
     {
         col = GetComponent<Collider2D>();
+        col.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Ground");
     }
 
@@ -62,7 +63,7 @@ public class Ground : MonoBehaviour
                     Player.Singleton.movement.ZeroMoveDirection();
                     break;
                 case GroundBehavior.Standable:
-                    if (groundEvents[index].hasGravity)
+                    if (groundEvents[index].hasGravity && ! Player.Singleton.lifeSystem.IsDie)
                         Player.Singleton.transform.parent = transform;
                     Player.Singleton.movement.StandOnGround(groundEvents[index].standDirection);
                     break;
@@ -92,7 +93,7 @@ public class Ground : MonoBehaviour
             if (angle < 0)
                 angle += 360;
             // 玩家角度
-            float targetAngle = Vector2.SignedAngle(ge.inDirectionRight, -Player.Singleton.movement.MoveDirection);
+            float targetAngle = Vector2.SignedAngle(ge.inDirectionRight, target);
             if (targetAngle < 0)
                 targetAngle += 360;
             // 小於表示在中間
@@ -103,7 +104,7 @@ public class Ground : MonoBehaviour
         return -1;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         
         if (collision.CompareTag("Player"))

@@ -1,0 +1,5 @@
+[
+{"textBoxIndex":0,"speaker":"研究日誌B","text":"研究順利進行，我們發現Psi這種微生物具有接收暗物質波動的能力。"},
+{"textBoxIndex":0,"speaker":"研究日誌B","text":"如果能在波動上給予刺激，Psi便會產生定量的能量。"},
+{"textBoxIndex":0,"speaker":"研究日誌B","text":"但是如果不在波動上，Psi則會快速失去活力，甚至死亡。"},
+]
