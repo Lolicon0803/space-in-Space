@@ -43,7 +43,7 @@ public class NoteObject : MonoBehaviour
             timeElapsed += Time.deltaTime;
 
             yield return null;
-            if (hittingController.isPause())
+            if (hittingController.isStop())
             {
                 Destroy(gameObject);
             }

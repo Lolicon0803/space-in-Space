@@ -65,7 +65,7 @@ public class NoteController : MonoBehaviour
 
             correctGenerateSpeed();
 
-            yield return new WaitUntil(() => !hittingController.isPause());
+            yield return new WaitUntil(() => !hittingController.isStop());
             yield return new WaitForSeconds(notesGenerationInterval);
         }
 

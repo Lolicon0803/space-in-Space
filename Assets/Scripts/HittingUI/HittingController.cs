@@ -11,16 +11,19 @@ public class HittingController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip[] clips;
     public Sprite[] sprites;
+    public Animator hitAnim;
+    public Canvas canvas;
+    public GameObject missPrefab;
 
     private bool isStopNow;
-    private bool isRunning;
+    private bool isReset;
 
     // Start is called before the first frame update
     void Start()
     {
         audioEngine.ResetAdjustArgs();
-        isRunning = false;
         isStopNow = false;
+        isReset = false;
     }
 
     // Update is called once per frame
@@ -50,29 +53,29 @@ public class HittingController : MonoBehaviour
 
     void changeBtnSprite(TouchStates touchState)
     {
-        if (touchState == TouchStates.Touched && !isRunning)
+        if (touchState == TouchStates.Touched)
         {
-            audioSource.PlayOneShot(clips[0], 0.2f);
-            StartCoroutine(playHitAnim());
+            // audioSource.PlayOneShot(clips[0], 0.2f);
+            if (hitAnim != null && isReset)
+            {
+                hitAnim.SetTrigger("Hit");
+            }
+            isReset = false;
         }
         else if (touchState == TouchStates.TouchFailed || touchState == TouchStates.TimeOutFailed || touchState == TouchStates.TimeOut)
         {
-            // 改為文字
             // audioSource.PlayOneShot(clips[1], 0.03f);
+            if (isReset)
+            {
+                GameObject newText = Instantiate(missPrefab, canvas.transform);
+                newText.transform.position = transform.position;
+                newText.transform.Translate(new Vector3(0, 0.9f, 0));
+            }
+            isReset = false;
         }
-    }
-
-    IEnumerator playHitAnim()
-    {
-        isRunning = true;
-        hittingArea.sprite = sprites[0];
-        yield return new WaitForSeconds(0.08f);
-        hittingArea.sprite = sprites[2];
-        yield return new WaitForSeconds(0.08f);
-        hittingArea.sprite = sprites[1];
-        yield return new WaitForSeconds(0.08f);
-        hittingArea.sprite = sprites[0];
-        yield return new WaitForSeconds(0.1f);
-        isRunning = false;
+        else if (touchState == TouchStates.Reset)
+        {
+            isReset = true;
+        }
     }
 }
