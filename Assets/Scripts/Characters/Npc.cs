@@ -34,7 +34,7 @@ public class Npc : MonoBehaviour
             textWriter.GetComponent<TextWriter>().Init();
             textWriter.GetComponent<TextWriter>().LoadStory(storyName + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
-            Player.Singleton.movement.StopMove();
+            Player.Singleton.movement.StopMove(false);
             Player.Singleton.movement.canInput = false;
 
             if (isdestroy)

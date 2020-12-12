@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 static class Constants
 {
@@ -79,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
         ResetStatus();
-        StartCoroutine(ProcessOperation());
         ObjectTempoControl.Singleton.AddToBeatAction(() =>
         {
             if (canInput && !isDie)
@@ -90,6 +90,30 @@ public class PlayerMovement : MonoBehaviour
                 Punish();
             }
         }, TempoActionType.TimeOut);
+        // 根據bpm改變移動速度
+        if (TempoManager.Singleton.beatPerMinute > 60)
+        {
+            moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+            slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+        }
+        // 切場景後，重新註冊節拍事件
+        SceneManager.sceneLoaded += RegisterTempo;
+        StartCoroutine(ProcessOperation());
+    }
+
+    private void RegisterTempo(Scene arg0, LoadSceneMode arg1)
+    {
+        ObjectTempoControl.Singleton.AddToBeatAction(() =>
+        {
+            if (canInput && !isDie)
+            {
+                if (firstTimeMiss == false)
+                    OnError?.Invoke();
+                firstTimeMiss = false;
+                Punish();
+            }
+        }, TempoActionType.TimeOut);
+        // 根據bpm改變移動速度
         if (TempoManager.Singleton.beatPerMinute > 60)
         {
             moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
@@ -99,8 +123,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResetStatus()
     {
-        StopMove();
-        canInput = true;
+        StopMove(true);
         isBlackHole = false;
         firstTimeMiss = true;
         isDie = false;
@@ -109,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
         movePoint = transform.position;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
+        GetComponent<Rigidbody2D>().simulated = true;
     }
 
     private IEnumerator ProcessOperation()
@@ -156,8 +180,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void HandleInput()
     {
-        // 先終止移動，避免跑兩個IEnumerator
-        StopMove();
+        StopCoroutine(coroutineShoot);
         transform.parent = null;
         DontDestroyOnLoad(gameObject);
         coroutineShoot = Shoot();
@@ -194,7 +217,8 @@ public class PlayerMovement : MonoBehaviour
             nowSpeed = speed;
         Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
         // 取得移動終點
-        movePoint += MoveDirection * totalDistance;
+        Debug.Log(MoveDirection);
+        movePoint = (Vector2)transform.position + MoveDirection * totalDistance;
         // 校正回格子上
         movePoint.x = Mathf.Floor(movePoint.x) + 0.5f;
         movePoint.y = Mathf.Floor(movePoint.y) + 0.5f;
@@ -239,9 +263,9 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">方向，給0表示往玩家的反方向</param>
     public void Knock(Vector2 direction, bool enableInput = false)
     {
-        if (isDie)
+        if (isDie || isBlackHole)
             return;
-        StopMove(false);
+        StopCoroutine(coroutineShoot);
         transform.parent = null;
         DontDestroyOnLoad(gameObject);
         float distance = 0;
@@ -266,9 +290,9 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="knockSpeed">推動或吸動速度.</param>
     public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false)
     {
-        if (isDie)
+        if (isDie || isBlackHole)
             return;
-        StopMove(false);
+        StopCoroutine(coroutineShoot);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
@@ -292,7 +316,7 @@ public class PlayerMovement : MonoBehaviour
         if (isBlackHole)
             return;
         // Stop all movement.
-        StopMove();
+        StopMove(false);
         isBlackHole = true;
         canInput = false;
         StartCoroutine(DisplayFallIntoBlackHole(entrance));
@@ -381,7 +405,9 @@ public class PlayerMovement : MonoBehaviour
     {
         StopMove();
         MoveDirection = Vector2.zero;
+        Debug.Log("Stand: " + direction);
         Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
+        Debug.Log(q.eulerAngles);
         q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
         transform.rotation = q;
         animationManager.PlayLie();
@@ -398,20 +424,21 @@ public class PlayerMovement : MonoBehaviour
     public void StopMove(bool enableInput = true)
     {
         StopCoroutine(coroutineShoot);
-        //StopCoroutine(coroutineSlide);
         OnStop?.Invoke();
-        //MoveDirection = Vector2.zero;
+        MoveDirection = Vector2.zero;
         canInput = enableInput;
-        //nowSpeed = 0;
+        nowSpeed = 0;
         movePoint = transform.position;
     }
 
     public void Die()
     {
+        GetComponent<Rigidbody2D>().simulated = false;
         isDie = true;
         transform.parent = null;
         DontDestroyOnLoad(gameObject);
         StopMove(false);
+        StopCoroutine(coroutineShoot);
         isBlackHole = false;
     }
 

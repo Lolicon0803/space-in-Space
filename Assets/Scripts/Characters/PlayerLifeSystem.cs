@@ -49,10 +49,10 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
-    private bool isInvincible;
+    public bool IsInvincible { get; private set; }
     private int invincibleCount;
     private int recoverCount;
-    private bool isDie;
+    public bool IsDie { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -63,8 +63,8 @@ public class PlayerLifeSystem : MonoBehaviour
         pos.x = Mathf.Floor(pos.x) + 0.5f;
         pos.y = Mathf.Floor(pos.y) + 0.5f;
         transform.position = pos;
-        isDie = false;
-        isInvincible = false;
+        IsDie = false;
+        IsInvincible = false;
         invincibleCount = 0;
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
@@ -115,7 +115,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-        if (!isDie)
+        if (!IsDie)
         {
             //isInvincible = true;
             //ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
@@ -129,12 +129,12 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void Hurt(int number = 1)
     {
-        Debug.Log(isInvincible);
-        if (!isDie && !isInvincible)
+        Debug.Log(IsInvincible);
+        if (!IsDie && !IsInvincible)
         {
-            isInvincible = true;
+            IsInvincible = true;
             ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
-            for (int i = 0; i < number && !isDie; i++)
+            for (int i = 0; i < number && !IsDie; i++)
                 BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
@@ -145,7 +145,7 @@ public class PlayerLifeSystem : MonoBehaviour
         invincibleCount++;
         if (invincibleCount == invincibleTempo)
         {
-            isInvincible = false;
+            IsInvincible = false;
             invincibleCount = 0;
             ObjectTempoControl.Singleton.RemoveToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
         }
@@ -235,7 +235,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void GameOver()
     {
         playerMovement.Die();
-        isDie = true;
+        IsDie = true;
         //transform.localScale = Vector3.zero;
         StartCoroutine(ShowBlackEffect());
     }
@@ -261,6 +261,8 @@ public class PlayerLifeSystem : MonoBehaviour
         // 玩家回到起始點。
         playerMovement.movePoint = startPosition;
         transform.position = startPosition;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
         // 同場景不轉
         // 等轉場景的程式碼完整再接過去
         if (startSceneIndex != -1 && startSceneIndex != SceneManager.GetActiveScene().buildIndex)
@@ -273,8 +275,6 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         yield return null;
-        Debug.Log(transform.position);
-        Debug.Log(Camera.main.WorldToScreenPoint(transform.position));
         blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
         // 黑圈打開
         yield return ShowBlackCircle(new Vector2(256, 256));
@@ -284,7 +284,7 @@ public class PlayerLifeSystem : MonoBehaviour
         yield return ShowBlackCircle(new Vector2(2048, 2048));
         dieCanvas.alpha = 0;
         playerMovement.ResetStatus();
-        isDie = false;
+        IsDie = false;
     }
 
     private IEnumerator ShowBlackCircle(Vector2 destination)
