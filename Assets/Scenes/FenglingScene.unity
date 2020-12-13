@@ -161,7 +161,7 @@ PrefabInstance:
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.5
+      value: 15.5
       objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355864, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
@@ -212,6 +212,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355867, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 2271420064051648701, guid: e51fc6883592f4b43ba0f6a950ed4c66,
+        type: 3}
+    - target: {fileID: 4222905995013355871, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1436d5db8a52c84e8ebb608e4c5535c, type: 3}
@@ -459,7 +470,7 @@ PrefabInstance:
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
       propertyPath: beatPerMinute
-      value: 112
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 4782803993227169765, guid: 53e8feb810ae8a4498c0a842b5e6aaad,
         type: 3}
@@ -2762,7 +2773,7 @@ MonoBehaviour:
   groundEvents:
   - inDirectionLeft: {x: -16, y: 0}
     inDirectionRight: {x: 16, y: 0}
-    behavior: 0
+    behavior: 1
     standDirection: {x: 0, y: -1}
     hasGravity: 0
     reboundDirection: {x: 0, y: 0}
@@ -2964,6 +2975,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7bd15a819b4159408bb28eee18a7302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originSize: 5
 --- !u!81 &1201272679
 AudioListener:
   m_ObjectHideFlags: 0

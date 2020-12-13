@@ -8,16 +8,16 @@ using UnityEngine.Events;
 /// <summary>
 /// 第一隻大型魷魚BOSS
 /// 攻擊模式:
-///     1. 3 <= HP <= 10
-///         * 每  2 拍召喚魷魚炸彈 1 顆，最多 7 顆
-///         * 每  5 拍召喚小魷魚 1 隻，最多 3 隻
-///         * 每 15 拍休息 2 拍，突刺觸手 2 下。
-///     2. 0 <= HP <= 2
-///         * 每 2 拍召喚魷魚炸彈 2 顆，最多 7 顆
-///         * 每 5 拍召喚小魷魚 2 隻，最多 5 隻
-///         * 每 15 拍休息 1 拍，突刺觸手 2 下。
-///     3. HP == 6 || HP == 3
-///         * 舉手 2 拍後大揮手 1 次。
+///     1. 5 <= HP <= MAXHP
+///        * 每 1 拍在玩家周圍召喚 1 顆炸彈，最多 7 顆。
+///        * 每 6 拍在自己前方召喚 1 隻小魷魚，最多 2 隻，
+///        * 每 3 拍連續直線攻擊 2 次。
+///        * 每 10 拍扇形攻擊 1 次。
+///     2. HP <= 4
+///        * 每 2 拍在玩家周圍召喚 1 顆炸彈，最多 9 顆。
+///        * 每 6 拍在自己前方召喚 1 隻小魷魚，最多 3 隻，
+///        * 每 3 拍連續直線攻擊 3 次。
+///        * 每 10 拍扇形攻擊 1 次。
 /// </summary>
 public class BigSquid : MonoBehaviour
 {
@@ -27,17 +27,18 @@ public class BigSquid : MonoBehaviour
     public Bomb bomb;
     public Anemy smallSquid;
 
+    public Canvas hpCanvas;
     public Image hpBar;
 
+    // 召喚界線
+    public Vector2 bombSummonBoundX = new Vector2(-7, 7);
+    public Vector2 bombSummonBoundY = new Vector2(-7, 7);
     // 炸彈要召喚的範圍
-    public float bombCircleInterRadius;
-    public float bombCircleOuterRadius;
+    private int bombSummonDistance = 5;
     // 小魷魚要召喚的範圍
-    public float squidCircleInterRadius;
-    public float squidCircleOuterRadius;
+    private float squidSummonX = 1.5f;
+    private Vector2 squidSummonY = new Vector2(-6.5f, 6.5f);
 
-    // 半拍節奏計數
-    private int halfCount;
     // 一拍節奏計數
     private int wholeCount;
     // 觸手攻擊計數
@@ -58,24 +59,20 @@ public class BigSquid : MonoBehaviour
     // 魷魚一次召喚數量
     private int summonSquidNumber;
 
-    private BigSquidHand[] hands;
+    // 是否正在觸手直線攻擊
+    private bool isAttackingStraight;
+    // 攻擊次數
+    private int attackStraightNumber;
+    // 一次打幾次
+    private int maxStraightNumber;
+    // 是否正在扇形攻擊
+    private bool isAttackingSector;
 
-    // 休息中
-    private bool isResting;
-    // 使用觸手
-    private bool usingHand;
-    // 每幾拍觸手攻擊
-    private int handAfterTempo;
-    // 觸手前休息時間
-    private int restTimeBeforeHand;
-    // 大揮手
-    private bool useBigHand;
+    [HideInInspector]
+    public BigSquidHand hand;
+
     // 死亡時呼叫，讓所有召喚物消失。
     public UnityAction OnDie;
-
-    // 召喚界線
-    public Vector2 summonBoundX = new Vector2(-7, 7);
-    public Vector2 summonBoundY = new Vector2(-7, 7);
 
     private Animator animator;
     private AudioSource audioSource;
@@ -85,8 +82,6 @@ public class BigSquid : MonoBehaviour
     private readonly int animeAttackHand = Animator.StringToHash("AttackHand");
 
     // 音效檔
-    public AudioClip audioSummonBomb;
-    public AudioClip audioSummonSquid;
     public AudioClip audioTouchPlayer;
     public AudioClip audioHurt;
     public AudioClip audioDie;
@@ -96,135 +91,91 @@ public class BigSquid : MonoBehaviour
     {
         // 數據初始化--------
         nowHP = maxHP;
-        halfCount = 0;
         wholeCount = 0;
         attackCount = 0;
-        bigHandCount = 8;
+        bigHandCount = 0;
 
         maxBombNumber = 7;
         nowBombNumber = 0;
         summonBombNumber = 1;
 
-        maxSquidNumber = 3;
+        maxSquidNumber = 2;
         nowSquidNumber = 0;
         summonSquidNumber = 1;
 
-        isResting = false;
-        usingHand = false;
-        useBigHand = false;
-        handAfterTempo = 15;
-        restTimeBeforeHand = 2;
+        isAttackingStraight = false;
+        attackStraightNumber = 0;
+        maxStraightNumber = 2;
+
+        isAttackingSector = false;
         //--------------------
 
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        hands = GetComponentsInChildren<BigSquidHand>();
+        hand = GetComponentInChildren<BigSquidHand>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         OnDie = new UnityAction(() => { });
-        animator.SetFloat(animeIdleSpeed, TempoManager.Singleton.beatPerMinute / 60.0f);
-        SetActive();
     }
 
     public void SetActive()
     {
-        // 註冊半拍節奏
-        ObjectTempoControl.Singleton.AddToBeatAction(CountHalfTempo, TempoActionType.Half);
-        // 註冊一拍節奏
+        //// 註冊半拍節奏
+        //ObjectTempoControl.Singleton.AddToBeatAction(CountHalfTempo, TempoActionType.Half);
+        //// 註冊一拍節奏
         ObjectTempoControl.Singleton.AddToBeatAction(CountWholeTempo, TempoActionType.Whole);
-    }
-
-    /// <summary>
-    /// 半拍計數。
-    /// </summary>
-    private void CountHalfTempo()
-    {
-        if (isResting)
-            return;
-
-        // 半拍計數
-        halfCount++;
     }
 
     private void CountWholeTempo()
     {
-        if (useBigHand && !isResting)
-        {
-            bigHandCount++;
-            animator.SetInteger(animeAttackHand, bigHandCount);
-            if (bigHandCount == 12)
-            {
-                bigHandCount = 8;
-                useBigHand = false;
-                foreach (BigSquidHand hand in hands)
-                    hand.EndAttack();
-            }
-        }
-        else if (!isResting)
+        if (!isAttackingStraight && !isAttackingSector)
         {
             // 一拍計數
             wholeCount++;
-            // 每兩拍且炸彈數量未達上限
-            if (wholeCount % 2 == 0 && nowBombNumber < maxBombNumber)
-                SummonBomb(summonBombNumber);
-
-            // 每三拍且小魷魚數量未達上限
-            if (wholeCount % 3 == 0 && nowSquidNumber < maxSquidNumber)
+            // 每 6 拍，可以放魷魚的話會先放魷魚
+            if (wholeCount % 6 == 0 && nowSquidNumber < maxSquidNumber)
                 SummonSquid(summonSquidNumber);
-
-            // 抵達開始使用觸手拍點
-            if (wholeCount % handAfterTempo == 0)
-                isResting = true;
+            // 扇形
+            else if (wholeCount % 10 == 0)
+                isAttackingSector = true;
+            // 直線
+            else if (wholeCount % 3 == 0)
+                isAttackingStraight = true;
+            // 炸彈
+            if (nowBombNumber < maxBombNumber)
+                SummonBomb(summonBombNumber);
         }
-        // 休息中
-        else
+        else if (isAttackingStraight)
         {
-            // 計數增加
-            attackCount++;
-            // 達休息時間，下一拍結束後發射雷射
-            if (attackCount == restTimeBeforeHand + 1 || usingHand)
+            attackCount = (attackCount + 1) % 3;
+            hand.RaiseForStraight(attackCount);
+            if (attackCount == 0)
             {
-                foreach (BigSquidHand hand in hands)
-                    hand.StartAttack();
-                usingHand = true;
-                int count = animator.GetInteger(animeAttackHand) + 1;
-                animator.SetInteger(animeAttackHand, count);
-                if (count == 7)
+                attackStraightNumber++;
+                if (attackStraightNumber == maxStraightNumber)
                 {
-                    usingHand = false;
-                    attackCount = 0;
-                    animator.SetInteger(animeAttackHand, 0);
-                    isResting = false;
-                    foreach (BigSquidHand hand in hands)
-                        hand.EndAttack();
+                    attackStraightNumber = 0;
+                    isAttackingStraight = false;
                 }
             }
         }
-    }
-
-    public void SetHandKnockDirection(GameData.Direction direction)
-    {
-        Vector2 d = Vector2.zero;
-        switch (direction)
+        else if (isAttackingSector)
         {
-            case GameData.Direction.UP:
-                d = Vector2.up;
-                break;
-            case GameData.Direction.DOWN:
-                d = Vector2.down;
-                break;
-            case GameData.Direction.LEFT:
-                d = Vector2.left;
-                break;
-            case GameData.Direction.RIGHT:
-                d = Vector2.right;
-                break;
+            bigHandCount++;
+            if (bigHandCount == 1)
+                hand.RaiseForSetor(1);
+            else if (bigHandCount == 5)
+                hand.RaiseForSetor(2);
+            else if (bigHandCount >= 7)
+            {
+                hand.RaiseForSetor(0);
+                bigHandCount = 0;
+                isAttackingSector = false;
+            }
         }
-        foreach (BigSquidHand hand in hands)
-            hand.SetKnockDirection(d);
     }
 
     /// <summary>
@@ -235,18 +186,9 @@ public class BigSquid : MonoBehaviour
         for (int i = 0; i < number; i++)
         {
             nowSquidNumber++;
-            // 計算外圓
-            Vector2 position = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-            // 排除內圓
-            position = position.normalized * (squidCircleInterRadius + position.magnitude);
-            // 切掉地圖下限
-            while (position.x <= summonBoundX.x || position.x >= summonBoundX.y || position.y <= summonBoundY.x || position.y >= summonBoundY.y)
-            {
-                position = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-                position = position.normalized * (squidCircleInterRadius + position.magnitude);
-            }
+            // 取得召喚位置並確保在格子內
+            Vector2 position = new Vector2(Mathf.Floor(squidSummonX) + 0.5f, Mathf.Floor(Random.Range(squidSummonY.x, squidSummonY.y)) + 0.5f);
             Anemy newSquid = Instantiate(smallSquid, transform.position, Quaternion.identity);
-            newSquid.bulletData.direction = (GameData.Direction)Random.Range(3, 5);
             newSquid.OnDisappear += () => nowSquidNumber--;
             // 死亡時，刪除這隻小魷魚
             OnDie += () =>
@@ -258,8 +200,6 @@ public class BigSquid : MonoBehaviour
                 }
             };
             newSquid.gameObject.SetActive(true);
-            if (audioSummonSquid != null)
-                audioSource.PlayOneShot(audioSummonSquid);
             newSquid.SetDestination(position, 25);
         }
     }
@@ -273,17 +213,22 @@ public class BigSquid : MonoBehaviour
         for (int i = 0; i < number; i++)
         {
             nowBombNumber++;
-            // 計算外圓
-            Vector2 position = Random.insideUnitCircle * (bombCircleOuterRadius - bombCircleInterRadius);
-            // 排除內圓
-            position = position.normalized * (bombCircleInterRadius + position.magnitude);
-            // 切掉地圖下限
-            while (position.x <= summonBoundX.x || position.x >= summonBoundX.y || position.y <= summonBoundY.x || position.y >= summonBoundY.y)
-            {
-                position = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-                position = position.normalized * (squidCircleInterRadius + position.magnitude);
-            }
-            Debug.DrawLine(transform.position, position, Color.blue, 2);
+            // 取得召喚位置並確保在格子內
+            Vector2 position = Player.Singleton.transform.position;
+            float leftX = position.x - bombSummonDistance;
+            float rightX = position.x + bombSummonDistance;
+            float downY = position.y - bombSummonDistance;
+            float upY = position.y + bombSummonDistance;
+            if (leftX < bombSummonBoundX.x)
+                leftX = bombSummonBoundX.x;
+            if (rightX > bombSummonBoundX.y)
+                rightX = bombSummonBoundX.y;
+            if (downY < bombSummonBoundY.x)
+                downY = bombSummonBoundY.x;
+            if (upY > bombSummonBoundY.y)
+                upY = bombSummonBoundY.y;
+            position.x = Mathf.Floor(Random.Range(leftX, rightX)) + 0.5f;
+            position.y = Mathf.Floor(Random.Range(downY, upY)) + 0.5f;
             Bomb newBomb = Instantiate(bomb, transform.position, Quaternion.identity);
             // 炸彈爆炸時減少炸彈數量。
             newBomb.OnBomb += () => nowBombNumber--;
@@ -296,8 +241,6 @@ public class BigSquid : MonoBehaviour
                     nowBombNumber--;
                 }
             };
-            if (audioSummonBomb != null)
-                audioSource.PlayOneShot(audioSummonBomb);
             newBomb.gameObject.SetActive(true);
             newBomb.SetDestination(position, 20);
         }
@@ -310,27 +253,20 @@ public class BigSquid : MonoBehaviour
         nowHP -= number;
         if (hpBar != null)
             hpBar.fillAmount = (float)nowHP / maxHP;
-        if (nowHP == 6 || nowHP == 3)
-        {
-            useBigHand = true;
-            foreach (BigSquidHand hand in hands)
-                hand.StartAttack();
-        }
         if (nowHP < 4)
         {
             summonBombNumber = 2;
-            maxSquidNumber = 5;
-            summonSquidNumber = 2;
-            handAfterTempo = 10;
-            restTimeBeforeHand = 1;
+            maxBombNumber = 9;
+            maxSquidNumber = 3;
+            maxStraightNumber = 3;
         }
         if (nowHP <= 0)
         {
-            ObjectTempoControl.Singleton.RemoveToBeatAction(CountHalfTempo, TempoActionType.Half);
             ObjectTempoControl.Singleton.RemoveToBeatAction(CountWholeTempo, TempoActionType.Whole);
             if (audioDie != null)
                 audioSource.PlayOneShot(audioDie);
             OnDie?.Invoke();
+            Destroy(hpCanvas.gameObject);
             Destroy(gameObject);
         }
     }
@@ -348,25 +284,38 @@ public class BigSquid : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        //Gizmos.color = Color.red;
+        //for (int i = 0; i < 5000; i++)
+        //{
+        //    Vector2 p = Random.insideUnitCircle * (bombCircleOuterRadius - bombCircleInterRadius);
+        //    p = p.normalized * (bombCircleInterRadius + p.magnitude);
+        //    p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
+        //    p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
+        //    Gizmos.DrawSphere(p, 0.1f);
+        //}
+
+        Vector2 luc = new Vector2(bombSummonBoundX.x, bombSummonBoundY.y);
+        Vector2 ruc = new Vector2(bombSummonBoundX.y, bombSummonBoundY.y);
+        Vector2 rdc = new Vector2(bombSummonBoundX.y, bombSummonBoundY.x);
+        Vector2 ldc = new Vector2(bombSummonBoundX.x, bombSummonBoundY.x);
+
         Gizmos.color = Color.red;
-        for (int i = 0; i < 2000; i++)
-        {
-            Vector2 p = Random.insideUnitCircle * (bombCircleOuterRadius - bombCircleInterRadius);
-            p = p.normalized * (bombCircleInterRadius + p.magnitude);
-            p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
-            p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
-            Gizmos.DrawSphere(p, 0.1f);
-        }
-
+        Gizmos.DrawLine(luc, ruc);
         Gizmos.color = Color.green;
-        for (int i = 0; i < 2000; i++)
-        {
-            Vector2 p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
-            p = p.normalized * (squidCircleInterRadius + p.magnitude);
-            p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
-            p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
-            Gizmos.DrawSphere(p, 0.1f);
-        }
-    }
+        Gizmos.DrawLine(ruc, rdc);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(rdc, ldc);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(ldc, luc);
 
+        //Gizmos.color = Color.green;
+        //for (int i = 0; i < 2000; i++)
+        //{
+        //    Vector2 p = Random.insideUnitCircle * (squidCircleOuterRadius - squidCircleInterRadius);
+        //    p = p.normalized * (squidCircleInterRadius + p.magnitude);
+        //    p.x = Mathf.Clamp(p.x, summonBoundX.x, summonBoundX.y);
+        //    p.y = Mathf.Clamp(p.y, summonBoundY.x, summonBoundY.y);
+        //    Gizmos.DrawSphere(p, 0.1f);
+        //}
+    }
 }
