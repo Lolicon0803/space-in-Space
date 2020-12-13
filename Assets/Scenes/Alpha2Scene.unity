@@ -2072,6 +2072,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextWriter
       objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8098db1a24e73f46b4321bd7d6d362b, type: 3}
 --- !u!224 &447880224 stripped
@@ -2595,6 +2600,17 @@ PrefabInstance:
       propertyPath: hitAnim
       value: 
       objectReference: {fileID: 1641067048}
+    - target: {fileID: 6725986165025078029, guid: 88b8b5d552c0dd843bd08cdce8da8101,
+        type: 3}
+      propertyPath: missPrefab
+      value: 
+      objectReference: {fileID: 4653363848281858402, guid: 1cce183eb44afe74f8d4500fdfa7c3b7,
+        type: 3}
+    - target: {fileID: 6725986165025078029, guid: 88b8b5d552c0dd843bd08cdce8da8101,
+        type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 510781565}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 88b8b5d552c0dd843bd08cdce8da8101, type: 3}
 --- !u!4 &663262799 stripped
