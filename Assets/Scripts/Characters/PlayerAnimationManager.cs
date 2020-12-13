@@ -52,14 +52,6 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         // Left or right foot.
         walkParameter = !walkParameter;
-        if (direction.x == 1)
-            transform.rotation = Quaternion.identity;
-        else if (direction.x == -1)
-            transform.rotation = Quaternion.Euler(180, 0, 180);
-        else if (direction.y == 1)
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-        else if (direction.y == -1)
-            transform.rotation = Quaternion.Euler(0, 0, 270);
         if (walkParameter)
             animator.SetBool(walkL, true);
         else
