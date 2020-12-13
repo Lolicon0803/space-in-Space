@@ -28,6 +28,11 @@ public class TextWriter : MonoBehaviour
     private string currentText;
     private string twinkleText;
     private string currentFileName;
+
+    public UnityAction textAction;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -178,5 +183,11 @@ public class TextWriter : MonoBehaviour
             enterKeyDown = true;
         }
 
+    }
+
+
+    public void resolveLimit()
+    {
+        textAction();
     }
 }

@@ -23,9 +23,19 @@ public class Npc : MonoBehaviour
     public bool isdestroy;
     private int count = 0;
 
+    private bool isSpace = false;
+    public void canSpace()
+    {
+        isSpace = false;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        textWriter.GetComponent<TextWriter>().textAction += canSpace;
+
+
+
         DataBase.Singleton.readStories["false"] = false;
         DataBase.Singleton.readStories["true"] = true;
 
@@ -68,7 +78,11 @@ public class Npc : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    PlayStory();
+                    Debug.Log(isSpace);
+                    if (!isSpace)
+                    {
+                        PlayStory();
+                    }
                 }
             }
             else
@@ -99,6 +113,8 @@ public class Npc : MonoBehaviour
 
     public void PlayStory()
     {
+      
+
         //如果完成了前置且沒讀過劇情，放劇情
         if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
         {
@@ -108,7 +124,7 @@ public class Npc : MonoBehaviour
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove();
             Player.Singleton.movement.canInput = false;
-
+            isSpace = true;
         }
         //如果沒達成前置
         else if (!DataBase.Singleton.readStories[postConditionStoryName[count]])
@@ -121,6 +137,7 @@ public class Npc : MonoBehaviour
                 textWriter.GetComponent<TextWriter>().NextStory();
                 Player.Singleton.movement.StopMove();
                 Player.Singleton.movement.canInput = false;
+                isSpace = true;
             }
         }
     }

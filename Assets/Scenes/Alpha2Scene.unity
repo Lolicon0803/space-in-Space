@@ -1509,6 +1509,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 447880223}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &348590067 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+    type: 3}
+  m_PrefabInstance: {fileID: 447880223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348590066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40290795f89b0df4d983077e849f819a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &366416822
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2064,9 +2076,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
         type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
       propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1255884989}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 348590067}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: resolveLimit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869953512081985039, guid: f8098db1a24e73f46b4321bd7d6d362b,
+        type: 3}
+      propertyPath: onEndStory.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
         type: 3}
       propertyPath: m_Name
@@ -2748,6 +2790,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a1d8fbf8382544ca5efd8053780d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isHorital: 0
 --- !u!64 &705961745
 MeshCollider:
   m_ObjectHideFlags: 0
