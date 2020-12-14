@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     // 移動速度係數
     public float moveSpeed = 5f;
 
+
     // 滑行速度系數
     public float slideSpeed = 1f;
 
@@ -35,6 +36,13 @@ public class PlayerMovement : MonoBehaviour
         get { return nowSpeed * speedChangeCoefficient; }
         private set { nowSpeed = value; }
     }
+
+    [Header("偵測地板的射線起點(星球用)")]
+    public Transform groundCheck;
+    public float distance = 0f;
+
+    // 是否在有重力的星球上
+    public bool isOnPlanet = false;
 
     // 現在位置
     public Vector2 movePoint;
@@ -100,6 +108,29 @@ public class PlayerMovement : MonoBehaviour
         SceneManager.sceneLoaded += RegisterTempo;
         StartCoroutine(ProcessOperation());
     }
+    public bool IsGroundOnPlanet
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - distance);
+
+            //Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
+    public bool IsGroundOnPlanetForFalling
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - 0.01f);
+            //Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
 
     private void RegisterTempo(Scene arg0, LoadSceneMode arg1)
     {
@@ -139,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-            if (canInput && !isDie)
+            if (!isOnPlanet && canInput && !isDie)
             {
                 float x = 0;
                 float y = 0;
