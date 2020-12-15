@@ -48,12 +48,15 @@ public class Bomb : MonoBehaviour
     private bool isMoving;
     private bool isExplosion;
 
+    private bool explosed;
+
     private void Awake()
     {
         tempoCount = 0;
         spriteRenderer = GetComponent<SpriteRenderer>();
         collider2d = GetComponent<CircleCollider2D>();
         hint.localScale = new Vector3(hint.localScale.x / transform.localScale.x * radius * 2, hint.localScale.y / transform.localScale.y * radius * 2, 1);
+        explosed = false;
     }
 
     // Start is called before the first frame update
@@ -143,6 +146,9 @@ public class Bomb : MonoBehaviour
 
     private void Explosion()
     {
+        if (explosed)
+            return;
+        explosed = true;
         isExplosion = true;
         ObjectTempoControl.Singleton.RemoveToBeatAction(Count, actionType);
         gameObject.layer = LayerMask.GetMask("IgnoreRaycast");
@@ -180,6 +186,7 @@ public class Bomb : MonoBehaviour
             }
         }
         OnBomb?.Invoke();
+        StopCoroutine(enumeratorMove);
     }
 
     /// <summary>
