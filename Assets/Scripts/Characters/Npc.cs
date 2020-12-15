@@ -66,6 +66,7 @@ public class Npc : MonoBehaviour
             {
                 if (dist < 1.5f)
                 {
+                    gameObject.GetComponent<AudioSource>().Play();
                     StartCoroutine("Move1");
                 }
             }
@@ -169,6 +170,8 @@ public class Npc : MonoBehaviour
     {
         while (Vector2.Distance(transform.position, obj1.transform.position) > 0)
         {
+           
+
             Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
             // 移動
             transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
