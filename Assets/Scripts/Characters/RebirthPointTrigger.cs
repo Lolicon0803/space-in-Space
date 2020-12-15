@@ -12,7 +12,7 @@ public class RebirthPointTrigger : MonoBehaviour
     {
         if (rebirthPoint == new Vector2(0, 0))
         {
-            rebirthPoint = Player.Singleton.transform.position;
+            rebirthPoint = transform.position;
         }
     }
 

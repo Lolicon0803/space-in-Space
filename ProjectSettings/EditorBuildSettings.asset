@@ -18,9 +18,12 @@ EditorBuildSettings:
     path: Assets/Scenes/PrimaryPlanetPrototype.unity
     guid: b7aa0c51bcd98954ea502649943805a0
   - enabled: 1
-    path: Assets/Scenes/Alpha2Scene.unity
-    guid: 05d35c4135320c842a488d05c2de36e2
-  - enabled: 1
     path: Assets/Scenes/BossScene1.unity
     guid: deed7b8de02c75f4e9a2c815e96c0794
+  - enabled: 1
+    path: Assets/Scenes/Alpha.unity
+    guid: b5d5052151e560641bf2cd599747bbcd
+  - enabled: 1
+    path: Assets/Scenes/Beta.unity
+    guid: fad618328162a7644a31121f09648510
   m_configObjects: {}

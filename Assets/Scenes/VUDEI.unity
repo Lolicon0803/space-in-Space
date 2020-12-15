@@ -333,7 +333,7 @@ PrefabInstance:
     - target: {fileID: 7606234009245405541, guid: 2a54fc864381df34aae4bf7e2cac90fa,
         type: 3}
       propertyPath: targetIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a54fc864381df34aae4bf7e2cac90fa, type: 3}
@@ -7093,6 +7093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHorital: 1
+  isFollowPlayer: 0
 --- !u!64 &1298275452
 MeshCollider:
   m_ObjectHideFlags: 0

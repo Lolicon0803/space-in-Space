@@ -68,9 +68,11 @@ public class Npc : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
 
+           
 
             //提示任務
             float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
+
 
             if (dist < 1.5f)
             {

@@ -1,0 +1,3 @@
+[
+{"textBoxIndex":0,"speaker":"告示牌","text":"前方可遙望到奇爾星"},
+]
