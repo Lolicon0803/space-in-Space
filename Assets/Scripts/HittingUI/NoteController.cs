@@ -14,7 +14,7 @@ public class NoteController : MonoBehaviour
     private float SPB;
     private double delay;
     private int counter;
-    const float noteInitPositionX = 3f - 0.1f;
+    const float noteInitPositionX = 7f - 0.1f;
 
     // Start is called before the first frame update
     void Start()
