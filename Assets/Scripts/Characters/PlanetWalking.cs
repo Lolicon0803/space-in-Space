@@ -1,18 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlanetWalking : MonoBehaviour
 {
     public float rotateSpeed;
     // 跳躍速度初速
-    public float initJumpSpeed= 10f;
+    public float initJumpSpeed = 10f;
     // 目前垂直速度
     public float speedY;
     // 重力加速度
     public float accelerationOfGravity = 0.1f;
     public PlayerMovement player;
     public new Camera camera;
+    public int nextScene;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,11 +38,15 @@ public class PlanetWalking : MonoBehaviour
         }
         UpdateYPosition();
         UpdateCameraSize();
+        if (player.transform.position.y >= 28)
+        {
+            SceneManager.LoadScene(nextScene);
+        }
     }
     private void TryJump()
     {
 
-        if (player.IsGroundOnPlanet  && Input.GetKeyDown(KeyCode.Space))
+        if (player.IsGroundOnPlanet && Input.GetKeyDown(KeyCode.Space))
         {
             speedY = initJumpSpeed;
         }
@@ -148,7 +154,7 @@ public class PlanetWalking : MonoBehaviour
         }
         else
         {
-            camera.orthographicSize = Mathf.Pow( (player.transform.position.y / 14.4f), 1.8f) * 5;
+            camera.orthographicSize = Mathf.Pow((player.transform.position.y / 14.4f), 1.8f) * 5;
         }
     }
 }

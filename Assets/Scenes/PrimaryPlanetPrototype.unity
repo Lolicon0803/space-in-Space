@@ -6566,21 +6566,21 @@ Tilemap:
   - m_RefCount: 0
     m_Data:
       e00: NaN
-      e01: -2.6696722e+33
-      e02: -2.6696722e+33
+      e01: -1.0392017e+12
+      e02: -1.0392017e+12
       e03: NaN
       e10: NaN
-      e11: 5.34e-43
-      e12: 5.34e-43
+      e11: 8e-43
+      e12: 8e-43
       e13: NaN
       e20: 55994.918
-      e21: -3.1611245e+33
-      e22: 3.672264e+10
-      e23: -2.8718624e+33
+      e21: -6.779424e-32
+      e22: 280604160
+      e23: -9.1032335e+11
       e30: 4.5904e-41
-      e31: 5.34e-43
+      e31: 8e-43
       e32: 4.5916e-41
-      e33: 5.34e-43
+      e33: 8e-43
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: -9.9652405, g: -9.9652405, b: -9.9652405, a: -9.9652405}
@@ -6815,6 +6815,7 @@ MonoBehaviour:
   accelerationOfGravity: 10
   player: {fileID: 1515410194}
   camera: {fileID: 1887805806}
+  nextScene: 0
 --- !u!1 &1768829506
 GameObject:
   m_ObjectHideFlags: 0
