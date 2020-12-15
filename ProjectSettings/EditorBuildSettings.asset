@@ -9,12 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: b8e3347270149b5459e5f61f12d409db
   - enabled: 1
+    path: Assets/Scenes/VUDEI.unity
+    guid: c91f6247bf9a70b408ed7b49cd2dc0af
+  - enabled: 1
+    path: Assets/Scenes/No23PlanetPrototype.unity
+    guid: faa4a08ca2ceea041924152f0257d72a
+  - enabled: 1
+    path: Assets/Scenes/PrimaryPlanetPrototype.unity
+    guid: b7aa0c51bcd98954ea502649943805a0
+  - enabled: 1
     path: Assets/Scenes/Alpha2Scene.unity
     guid: 05d35c4135320c842a488d05c2de36e2
   - enabled: 1
     path: Assets/Scenes/BossScene1.unity
     guid: deed7b8de02c75f4e9a2c815e96c0794
-  - enabled: 1
-    path: Assets/Scenes/VUDEI.unity
-    guid: c91f6247bf9a70b408ed7b49cd2dc0af
   m_configObjects: {}
