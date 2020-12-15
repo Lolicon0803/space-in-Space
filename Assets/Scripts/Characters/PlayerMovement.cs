@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     // 移動速度係數
     public float moveSpeed = 5f;
 
+
     // 滑行速度系數
     public float slideSpeed = 1f;
 
@@ -35,6 +36,13 @@ public class PlayerMovement : MonoBehaviour
         get { return nowSpeed * speedChangeCoefficient; }
         private set { nowSpeed = value; }
     }
+
+    [Header("偵測地板的射線起點(星球用)")]
+    public Transform groundCheck;
+    public float distance = 0f;
+
+    // 是否在有重力的星球上
+    public bool isOnPlanet = false;
 
     // 現在位置
     public Vector2 movePoint;
@@ -100,6 +108,29 @@ public class PlayerMovement : MonoBehaviour
         SceneManager.sceneLoaded += RegisterTempo;
         StartCoroutine(ProcessOperation());
     }
+    public bool IsGroundOnPlanet
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - distance);
+
+            //Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
+    public bool IsGroundOnPlanetForFalling
+    {
+        get
+        {
+            Vector2 start = groundCheck.position;
+            Vector2 end = new Vector2(start.x, start.y - 0.01f);
+            //Debug.DrawLine(start, end, Color.blue);
+            bool grounded = Physics2D.Linecast(start, end, groundLayer);
+            return grounded;
+        }
+    }
 
     private void RegisterTempo(Scene arg0, LoadSceneMode arg1)
     {
@@ -139,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
-            if (canInput && !isDie)
+            if (!isOnPlanet && canInput && !isDie)
             {
                 float x = 0;
                 float y = 0;
@@ -183,10 +214,18 @@ public class PlayerMovement : MonoBehaviour
         StopCoroutine(coroutineShoot);
         transform.parent = null;
         DontDestroyOnLoad(gameObject);
-        coroutineShoot = Shoot();
-        StartCoroutine(coroutineShoot);
         // 噴射事件
         OnFireBag?.Invoke(MoveDirection);
+        if (MoveDirection.x == 1)
+            transform.rotation = Quaternion.identity;
+        else if (MoveDirection.x == -1)
+            transform.rotation = Quaternion.Euler(180, 0, 180);
+        else if (MoveDirection.y == 1)
+            transform.rotation = Quaternion.Euler(0, 0, 90);
+        else if (MoveDirection.y == -1)
+            transform.rotation = Quaternion.Euler(0, 0, 270);
+        coroutineShoot = Shoot();
+        StartCoroutine(coroutineShoot);
     }
 
     private bool IsOnGround()
@@ -207,6 +246,7 @@ public class PlayerMovement : MonoBehaviour
     /// <returns></returns>
     private IEnumerator Shoot(bool enableInput = false, float speed = -1, float distance = -1)
     {
+        yield return null;
         // 移動中，不可操作
         canInput = enableInput;
         // 取得移動距離
@@ -215,18 +255,33 @@ public class PlayerMovement : MonoBehaviour
             nowSpeed = moveSpeed;
         else
             nowSpeed = speed;
-        Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
-        // 取得移動終點
-        Debug.Log(MoveDirection);
-        movePoint = (Vector2)transform.position + MoveDirection * totalDistance;
-        // 校正回格子上
-        movePoint.x = Mathf.Floor(movePoint.x) + 0.5f;
-        movePoint.y = Mathf.Floor(movePoint.y) + 0.5f;
+        //Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, MoveDirection, totalDistance, groundLayer);
+        // 撞牆情況
+        if (hit.collider != null)
+        {
+            RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, 5, LayerMask.GetMask("Player"));
+            float d = Vector2.Distance(hit.point, hit1.point);
+            Debug.Log(d);
+            Debug.DrawLine(hit.point, hit1.point, Color.blue, 3);
+            Debug.Log("移動點前 = " + movePoint);
+            movePoint = (Vector2)transform.position + MoveDirection * (d + Time.deltaTime);
+            Debug.Log("移動點後 = " + movePoint);
+        }
+        // 一般情況
+        else
+        {
+            movePoint = (Vector2)transform.position + MoveDirection * totalDistance;
+            // 校正回格子上
+            movePoint.x = Mathf.Floor(movePoint.x) + 0.5f;
+            movePoint.y = Mathf.Floor(movePoint.y) + 0.5f;
+        }
+        Debug.DrawLine(movePoint, movePoint + Vector2.up * 10, Color.yellow, 3);
         // 直到抵達movePoint
         while (Vector2.Distance(transform.position, movePoint) > nowSpeed * speedChangeCoefficient * Time.deltaTime)
         {
             // 移動
-            transform.position = (Vector3)Vector2.MoveTowards(transform.position, movePoint, nowSpeed * speedChangeCoefficient * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, movePoint, nowSpeed * speedChangeCoefficient * Time.deltaTime);
             yield return null;
         }
         // 移動結束
@@ -405,9 +460,7 @@ public class PlayerMovement : MonoBehaviour
     {
         StopMove();
         MoveDirection = Vector2.zero;
-        Debug.Log("Stand: " + direction);
         Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
-        Debug.Log(q.eulerAngles);
         q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
         transform.rotation = q;
         animationManager.PlayLie();

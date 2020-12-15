@@ -130,7 +130,6 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void Hurt(int number = 1)
     {
-        Debug.Log(IsInvincible);
         if (!IsDie && !IsInvincible)
         {
             IsInvincible = true;

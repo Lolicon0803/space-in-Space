@@ -19,6 +19,7 @@ public class BlackHole : MonoBehaviour
     private LayerMask layerMask;
 
     private readonly int activateTrigger = Animator.StringToHash("Activate");
+    private readonly int animSpeed = Animator.StringToHash("Speed");
 
     private void Awake()
     {
@@ -30,11 +31,13 @@ public class BlackHole : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         ObjectTempoControl.Singleton.AddToBeatAction(Activate, tempoType);
+        if (TempoManager.Singleton.beatPerMinute > 60.0f)
+            animator.SetFloat(animSpeed, TempoManager.Singleton.beatPerMinute / 60.0f);
     }
 
     private void Update()
     {
-        transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
+        //transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
         if (isActive)
         {
             if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
