@@ -64,13 +64,13 @@ public class PlayerLifeSystem : MonoBehaviour
         pos.y = Mathf.Floor(pos.y) + 0.5f;
         transform.position = pos;
         IsDie = false;
-        //IsInvincible = false;
-        IsInvincible = true;
+        IsInvincible = false;
+       // IsInvincible = true;
         invincibleCount = 0;
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
-        playerMovement.OnError += LossLife;
+      //  playerMovement.OnError += LossLife;
         InitializeHHeart();
     }
 
