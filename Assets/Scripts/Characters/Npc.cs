@@ -76,7 +76,7 @@ public class Npc : MonoBehaviour
             {
                 gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
 
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.F))
                 {
                     Debug.Log(isSpace);
                     if (!isSpace)
@@ -114,7 +114,7 @@ public class Npc : MonoBehaviour
     public void PlayStory()
     {
       
-
+        
         //如果完成了前置且沒讀過劇情，放劇情
         if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
         {

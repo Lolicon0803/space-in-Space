@@ -24,18 +24,8 @@ public class PlanetWalking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.canInput)
-        {
-            if (PlayerControlOnPlanet())
-            {
-                player.GetComponent<Animator>().SetBool("S", true);
-            }
-            else
-            {
-                player.GetComponent<Animator>().SetBool("S", false);
-            }
-            TryJump();
-        }
+        player.GetComponent<Animator>().SetBool("S", PlayerControlOnPlanet());
+        TryJump();
         UpdateYPosition();
         UpdateCameraSize();
         if (player.transform.position.y >= 28)
@@ -46,7 +36,7 @@ public class PlanetWalking : MonoBehaviour
     private void TryJump()
     {
 
-        if (player.IsGroundOnPlanet && Input.GetKeyDown(KeyCode.Space))
+        if (player.canInput && player.IsGroundOnPlanet && Input.GetKeyDown(KeyCode.Space))
         {
             speedY = initJumpSpeed;
         }
@@ -76,62 +66,10 @@ public class PlanetWalking : MonoBehaviour
             speedY = 0;
         }
         player.transform.Translate(Vector3.up * Time.deltaTime * speedY);
-
-
-
-        //// 自然掉落
-        //if (!player.IsGroundOnPlanetForFalling)
-        //{
-        //speedY -= accelerationOfGravity * Time.deltaTime;
-        //}
-        //if (player.IsGroundOnPlanetForFalling &&
-        //    player.transform.position.y < 15)
-        //{
-        //    Vector3 prePosition = player.transform.position;
-        //    // 卡進地底，推到地面
-        //    while (player.IsGroundOnPlanetForFalling)
-        //    {
-        //        player.transform.Translate(Vector3.up * 0.001f);
-        //    }
-        //    player.transform.Translate(Vector3.down * 0.001f);
-        //    Vector3 postPosition = player.transform.position;
-        //    // 推到異常表面，回復原位置
-        //    if (postPosition.y > 15)
-        //    {
-        //        player.transform.position = prePosition;
-        //    }
-        //    speedY = 0;
-
-        //}
-        //if (player.IsGroundOnPlanetForFalling && speedY < 0)
-        //{
-        //    if (player.transform.position.y > 15)
-        //    {
-        //        Vector3 prePosition = player.transform.position;
-        //        float upliftDistance = 0;
-        //        float upliftMax = 0.1f;
-        //        while (player.IsGroundOnPlanetForFalling)
-        //        {
-        //            player.transform.Translate(Vector3.up * 0.001f);
-        //            upliftDistance += 0.001f;
-        //        }
-
-        //        if (upliftDistance >= upliftMax)
-        //        {
-        //            player.transform.position = prePosition;
-        //            speedY = 0;
-        //        }
-        //        else
-        //        {
-        //            player.transform.Translate(Vector3.down * 0.001f);
-        //            upliftDistance -= 0.001f;
-        //        }
-        //    }
-        //}
-        //player.transform.Translate(Vector3.up * Time.deltaTime * speedY);
     }
     private bool PlayerControlOnPlanet()
     {
+        if (!player.canInput) return false;
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Rotate(new Vector3(0, 0, -1) * Time.deltaTime * rotateSpeed);
