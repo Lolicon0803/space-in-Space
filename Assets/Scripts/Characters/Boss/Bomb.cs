@@ -147,6 +147,7 @@ public class Bomb : MonoBehaviour
         ObjectTempoControl.Singleton.RemoveToBeatAction(Count, actionType);
         gameObject.layer = LayerMask.GetMask("IgnoreRaycast");
         tempoCount = 0;
+        GetComponent<Animator>().SetTrigger("Explosion");
         // 取得爆炸範圍內的物件
         RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, radius, Vector2.zero, 0, layerMask);
         if (hits.Length > 0)
@@ -179,7 +180,6 @@ public class Bomb : MonoBehaviour
             }
         }
         OnBomb?.Invoke();
-        Destroy(gameObject);
     }
 
     /// <summary>
