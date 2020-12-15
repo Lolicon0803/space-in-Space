@@ -9,28 +9,37 @@ public class AccelerationZone : MonoBehaviour
 
     private Vector2 direction;
 
+    private float d;
+
     private void Start()
     {
+
         direction = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z) * Vector2.right;
+        d = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
+        {
             Player.Singleton.movement.SpeedUp(scaleCoefficient);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            Player.Singleton.movement.Knock(direction, 1, Player.Singleton.movement.NowSpeed / scaleCoefficient, true);
+                Player.Singleton.movement.Knock(direction, 1, Player.Singleton.movement.NowSpeed / scaleCoefficient, true);
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
+        {
             Player.Singleton.movement.SpeedDown(scaleCoefficient);
+            d = 0;
+        }
     }
 }

@@ -65,13 +65,14 @@ public class PlayerLifeSystem : MonoBehaviour
         transform.position = pos;
         IsDie = false;
         IsInvincible = false;
-       // IsInvincible = true;
+        // IsInvincible = true;
         invincibleCount = 0;
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
-      //  playerMovement.OnError += LossLife;
-        InitializeHHeart();
+        playerMovement.OnError += LossLife;
+        if (dieCanvas != null && lifeCanvas != null)
+            InitializeHHeart();
     }
 
     private void InitializeHHeart()

@@ -23,7 +23,8 @@ public class PlayerAnimationManager : MonoBehaviour
         movement.OnStop += PlayIdleAnimation;
         walkParameter = false;
         idleParameter = false;
-        ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
+        if (ObjectTempoControl.Singleton != null)
+            ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
     }
 
     public void PlayIdleAnimation()

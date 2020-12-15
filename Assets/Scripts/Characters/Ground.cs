@@ -75,6 +75,10 @@ public class Ground : MonoBehaviour
                     break;
             }
         }
+        else
+        {
+            Player.Singleton.movement.Knock(Vector2.zero);
+        }
     }
 
     /// <summary>
@@ -96,6 +100,7 @@ public class Ground : MonoBehaviour
             float targetAngle = Vector2.SignedAngle(ge.inDirectionRight, target);
             if (targetAngle < 0)
                 targetAngle += 360;
+            Debug.Log(targetAngle);
             // 小於表示在中間
             if (targetAngle < angle)
                 return index;
