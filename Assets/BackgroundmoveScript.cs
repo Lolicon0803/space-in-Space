@@ -25,14 +25,14 @@ public class BackgroundmoveScript : MonoBehaviour
 
         if (isFollowPlayer)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x + speed * 10, 0));
-            }
-
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x - speed * 10, 0));
+                GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x + speed * 2, 0));
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(new_x - speed * 2, 0));
             }
         }
         else
