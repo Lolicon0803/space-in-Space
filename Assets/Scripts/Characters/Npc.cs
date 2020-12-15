@@ -32,22 +32,26 @@ public class Npc : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        textWriter.GetComponent<TextWriter>().textAction += canSpace;
 
-
-
-        DataBase.Singleton.readStories["false"] = false;
-        DataBase.Singleton.readStories["true"] = true;
-
-        // 資料庫不包含劇情，把所有劇情新增到資料庫
-        if (!DataBase.Singleton.readStories.ContainsKey(storyName[0]))
+        if (storyName[0] != "SpaceBoat")
         {
-            foreach (string element in storyName)
-            {
-                // Debug.Log(element);
-                DataBase.Singleton.readStories[element] = false;
-            }
 
+
+            textWriter.GetComponent<TextWriter>().textAction += canSpace;
+
+            DataBase.Singleton.readStories["false"] = false;
+            DataBase.Singleton.readStories["true"] = true;
+
+            // 資料庫不包含劇情，把所有劇情新增到資料庫
+            if (!DataBase.Singleton.readStories.ContainsKey(storyName[0]))
+            {
+                foreach (string element in storyName)
+                {
+                   
+                    DataBase.Singleton.readStories[element] = false;
+                }
+
+            }
         }
     }
 
@@ -55,9 +59,24 @@ public class Npc : MonoBehaviour
     void Update()
     {
 
-        if (count < storyName.Length)
+        if (storyName[0] == "SpaceBoat")
         {
-           
+            float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                if (dist < 1.5f)
+                {
+                    StartCoroutine("Move1");
+                }
+            }
+        }
+
+
+
+
+
+        else if (count < storyName.Length && storyName[0] != "SpaceBoat" && storyName[0] != "SpaceBoats")
+        {
 
             if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
             {
@@ -68,7 +87,7 @@ public class Npc : MonoBehaviour
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
 
-           
+
 
             //提示任務
             float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
@@ -115,8 +134,8 @@ public class Npc : MonoBehaviour
 
     public void PlayStory()
     {
-      
-        
+
+
         //如果完成了前置且沒讀過劇情，放劇情
         if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
         {
@@ -144,5 +163,17 @@ public class Npc : MonoBehaviour
         }
     }
 
+
+    public GameObject obj1 = null;
+    private IEnumerator Move1()
+    {
+        while (Vector2.Distance(transform.position, obj1.transform.position) > 0)
+        {
+            Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
+            // 移動
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
+            yield return null;
+        }
+    }
 
 }
