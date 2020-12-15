@@ -190,4 +190,5 @@ public class TextWriter : MonoBehaviour
     {
         textAction();
     }
+
 }

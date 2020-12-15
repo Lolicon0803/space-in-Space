@@ -28,7 +28,7 @@ public class PlanetWalking : MonoBehaviour
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
-        if (player.transform.position.y >= 28)
+        if (player.transform.position.y >= 28 && nextScene !=0)
         {
             SceneManager.LoadScene(nextScene);
         }
