@@ -109,7 +109,10 @@ public class PlayerLifeSystem : MonoBehaviour
     public void SetStartPosition(int index, Vector2 position)
     {
         startPosition = position;
-        startSceneIndex = index;
+        if (index == -1)
+            startSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        else
+            startSceneIndex = index;
     }
 
     /// <summary>

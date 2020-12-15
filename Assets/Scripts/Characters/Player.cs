@@ -28,6 +28,9 @@ public class Player : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
+            DontDestroyOnLoad(lifeSystem.lifeCanvas.gameObject);
+            DontDestroyOnLoad(lifeSystem.dieCanvas.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {

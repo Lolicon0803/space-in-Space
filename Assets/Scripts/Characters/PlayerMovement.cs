@@ -106,10 +106,10 @@ public class PlayerMovement : MonoBehaviour
         // 根據bpm改變移動速度
         if (TempoManager.Singleton != null)
         {
-            if (TempoManager.Singleton.beatPerMinute > 60)
+            if (TempoManager.Singleton.beatPerMinute > 80)
             {
-                moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
-                slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 80.0f;
+                slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 80.0f;
             }
         }
         TextWriter tw = FindObjectOfType<TextWriter>();
@@ -166,6 +166,11 @@ public class PlayerMovement : MonoBehaviour
         TextWriter tw = FindObjectOfType<TextWriter>();
         if (tw != null)
             tw.onEndStory.AddListener(() => { ResetStatus(); });
+    }
+
+    private void Update()
+    {
+        Debug.Log(moveSpeed);
     }
 
     public void ResetStatus()
