@@ -53,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
     // 是否第一次空拍
     public bool firstTimeMiss;
 
+    public bool notMoveYet;
+
     // 黑洞中，優先度最高
     public bool isBlackHole = false;
 
@@ -88,25 +90,35 @@ public class PlayerMovement : MonoBehaviour
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
         ResetStatus();
-        ObjectTempoControl.Singleton.AddToBeatAction(() =>
+        if (ObjectTempoControl.Singleton != null)
         {
-            if (canInput && !isDie)
+            ObjectTempoControl.Singleton.AddToBeatAction(() =>
             {
-                if (firstTimeMiss == false)
-                    OnError?.Invoke();
-                firstTimeMiss = false;
-                Punish();
-            }
-        }, TempoActionType.TimeOut);
-        // 根據bpm改變移動速度
-        if (TempoManager.Singleton.beatPerMinute > 60)
-        {
-            moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
-            slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                if (canInput && !isDie && !notMoveYet)
+                {
+                    if (firstTimeMiss == false)
+                        OnError?.Invoke();
+                    firstTimeMiss = false;
+                    Punish();
+                }
+            }, TempoActionType.TimeOut);
         }
+        // 根據bpm改變移動速度
+        if (TempoManager.Singleton != null)
+        {
+            if (TempoManager.Singleton.beatPerMinute > 60)
+            {
+                moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+            }
+        }
+        TextWriter tw = FindObjectOfType<TextWriter>();
+        if (tw != null)
+            tw.onEndStory.AddListener(() => { ResetStatus(); });
         // 切場景後，重新註冊節拍事件
         SceneManager.sceneLoaded += RegisterTempo;
-        StartCoroutine(ProcessOperation());
+        if (ObjectTempoControl.Singleton != null)
+            StartCoroutine(ProcessOperation());
     }
     public bool IsGroundOnPlanet
     {
@@ -136,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ObjectTempoControl.Singleton.AddToBeatAction(() =>
         {
-            if (canInput && !isDie)
+            if (canInput && !isDie && !notMoveYet)
             {
                 if (firstTimeMiss == false)
                     OnError?.Invoke();
@@ -150,6 +162,10 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
             slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
         }
+        // 對話完後重置移動狀態
+        TextWriter tw = FindObjectOfType<TextWriter>();
+        if (tw != null)
+            tw.onEndStory.AddListener(() => { ResetStatus(); });
     }
 
     public void ResetStatus()
@@ -157,6 +173,7 @@ public class PlayerMovement : MonoBehaviour
         StopMove(true);
         isBlackHole = false;
         firstTimeMiss = true;
+        notMoveYet = true;
         isDie = false;
         nowSpeed = 0;
         MoveDirection = Vector2.zero;
@@ -185,6 +202,7 @@ public class PlayerMovement : MonoBehaviour
                 // 有移動
                 if (x != 0 || y != 0)
                 {
+                    notMoveYet = false;
                     // 打在節拍上
                     if (TempoManager.Singleton.KeyDown())
                     {
@@ -213,7 +231,6 @@ public class PlayerMovement : MonoBehaviour
     {
         StopCoroutine(coroutineShoot);
         transform.parent = null;
-        DontDestroyOnLoad(gameObject);
         // 噴射事件
         OnFireBag?.Invoke(MoveDirection);
         if (MoveDirection.x == 1)
@@ -255,18 +272,13 @@ public class PlayerMovement : MonoBehaviour
             nowSpeed = moveSpeed;
         else
             nowSpeed = speed;
-        //Debug.DrawLine(transform.position, (Vector2)transform.position + MoveDirection * totalDistance, Color.red, 3);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, MoveDirection, totalDistance, groundLayer);
-        // 撞牆情況
+        //撞牆情況
         if (hit.collider != null)
         {
             RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, 5, LayerMask.GetMask("Player"));
             float d = Vector2.Distance(hit.point, hit1.point);
-            Debug.Log(d);
-            Debug.DrawLine(hit.point, hit1.point, Color.blue, 3);
-            Debug.Log("移動點前 = " + movePoint);
-            movePoint = (Vector2)transform.position + MoveDirection * (d + Time.deltaTime);
-            Debug.Log("移動點後 = " + movePoint);
+            movePoint = (Vector2)transform.position + MoveDirection * (d + 0.05f);
         }
         // 一般情況
         else
@@ -276,14 +288,15 @@ public class PlayerMovement : MonoBehaviour
             movePoint.x = Mathf.Floor(movePoint.x) + 0.5f;
             movePoint.y = Mathf.Floor(movePoint.y) + 0.5f;
         }
-        Debug.DrawLine(movePoint, movePoint + Vector2.up * 10, Color.yellow, 3);
         // 直到抵達movePoint
         while (Vector2.Distance(transform.position, movePoint) > nowSpeed * speedChangeCoefficient * Time.deltaTime)
         {
+            Debug.Log("移動中");
             // 移動
             transform.position = Vector2.MoveTowards(transform.position, movePoint, nowSpeed * speedChangeCoefficient * Time.deltaTime);
             yield return null;
         }
+        Debug.Log("移動結束");
         // 移動結束
         transform.position = movePoint;
         canInput = true;
@@ -321,8 +334,8 @@ public class PlayerMovement : MonoBehaviour
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
+        //StopMove(enableInput);
         transform.parent = null;
-        DontDestroyOnLoad(gameObject);
         float distance = 0;
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
@@ -348,6 +361,7 @@ public class PlayerMovement : MonoBehaviour
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
+        //StopMove(enableInput);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
             MoveDirection = -MoveDirection;
@@ -489,7 +503,6 @@ public class PlayerMovement : MonoBehaviour
         GetComponent<Rigidbody2D>().simulated = false;
         isDie = true;
         transform.parent = null;
-        DontDestroyOnLoad(gameObject);
         StopMove(false);
         StopCoroutine(coroutineShoot);
         isBlackHole = false;

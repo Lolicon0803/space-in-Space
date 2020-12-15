@@ -28,14 +28,13 @@ public class Player : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
-            DontDestroyOnLoad(lifeSystem.lifeCanvas);
-            DontDestroyOnLoad(lifeSystem.dieCanvas);
-            DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {
-            Destroy(lifeSystem.lifeCanvas.gameObject);
-            Destroy(lifeSystem.dieCanvas.gameObject);
+            if (lifeSystem.lifeCanvas != null)
+                Destroy(lifeSystem.lifeCanvas.gameObject);
+            if (lifeSystem.dieCanvas != null)
+                Destroy(lifeSystem.dieCanvas.gameObject);
             Destroy(gameObject);
         }
     }
@@ -43,7 +42,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
