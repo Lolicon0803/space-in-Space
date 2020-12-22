@@ -71,6 +71,7 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 MoveDirection { get; private set; }
 
     private LayerMask groundLayer;
+    private Vector2 standDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -115,6 +116,15 @@ public class PlayerMovement : MonoBehaviour
         SceneManager.sceneLoaded += RegisterTempo;
         if (ObjectTempoControl.Singleton != null)
             StartCoroutine(ProcessOperation());
+    }
+
+    private void Update()
+    {
+        if (transform.parent != null)
+        {
+            if (transform.parent.GetComponent<Ground>() != null)
+                transform.localPosition = -standDirection;
+        }
     }
 
     public bool IsGroundOnPlanet
@@ -455,15 +465,17 @@ public class PlayerMovement : MonoBehaviour
         Quaternion q = Quaternion.FromToRotation(-transform.up, direction);
         q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
         transform.rotation = q;
+        standDirection = direction;
+        transform.localPosition = -standDirection;
         animationManager.PlayLie();
     }
 
     public void BackToGrid()
     {
-        Vector2 now = transform.position;
-        now.x = Mathf.Floor(now.x) + 0.5f;
-        now.y = Mathf.Floor(now.y) + 0.5f;
-        transform.position = now;
+        //Vector2 now = transform.position;
+        //now.x = Mathf.Floor(now.x) + 0.5f;
+        //now.y = Mathf.Floor(now.y) + 0.5f;
+        //transform.position = now;
     }
 
     public void StopMove(bool enableInput = true)

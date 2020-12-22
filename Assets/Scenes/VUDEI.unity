@@ -693,6 +693,18 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 2
   m_TargetDisplay: 0
+--- !u!114 &497391543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3098514003643900721, guid: f5983f4b40ca38d44904ea078fc7c87b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1181901702}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0db7bc02ab9652244bca4ee294bf935e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &501374848
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7759,6 +7771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textWriter: {fileID: 1887996587}
+  eyes: {fileID: 497391543}
   obj1: {fileID: 100602160}
   obj2: {fileID: 1443242068}
   obj3: {fileID: 1475851001}

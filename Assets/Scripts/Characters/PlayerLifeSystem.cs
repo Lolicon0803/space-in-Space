@@ -254,7 +254,7 @@ public class PlayerLifeSystem : MonoBehaviour
     private IEnumerator ShowBlackEffect()
     {
         // 黑圈縮小聚焦到玩家上
-        blackCircleImage.rectTransform.sizeDelta = new Vector2(2048, 2048);
+        blackCircleImage.rectTransform.sizeDelta = new Vector2(4096, 4096);
         blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
         dieCanvas.alpha = 1;
         yield return ShowBlackCircle(new Vector2(256, 256));
@@ -288,7 +288,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 看有沒有復活動畫
         yield return new WaitForSeconds(1.0f);
         // 黑圈全開
-        yield return ShowBlackCircle(new Vector2(2048, 2048));
+        yield return ShowBlackCircle(new Vector2(4096, 4096));
         dieCanvas.alpha = 0;
         playerMovement.ResetStatus();
         IsDie = false;
@@ -298,7 +298,7 @@ public class PlayerLifeSystem : MonoBehaviour
     {
         while (Vector2.Distance(blackCircleImage.rectTransform.sizeDelta, destination) > Mathf.Epsilon)
         {
-            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 15);
+            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 4000 * Time.deltaTime);
             yield return null;
         }
         blackCircleImage.rectTransform.sizeDelta = destination;
