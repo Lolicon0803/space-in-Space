@@ -24,12 +24,14 @@ public class PlanetWalking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(gameObject.name);
         player.GetComponent<Animator>().SetBool("S", PlayerControlOnPlanet());
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
         if (player.transform.position.y >= 28 && nextScene !=0)
         {
+            Destroy(player.gameObject);
             SceneManager.LoadScene(nextScene);
         }
     }

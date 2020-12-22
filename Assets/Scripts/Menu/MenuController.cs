@@ -283,7 +283,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                ScenesManager.goToScene(1);
+                SceneController.GoToScene(1);
             }
 
             if (ButtonType == "No")

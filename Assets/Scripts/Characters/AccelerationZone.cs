@@ -5,32 +5,28 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 public class AccelerationZone : MonoBehaviour
 {
-    public float scaleCoefficient;
+    public float power;
+    public int distance;
 
     private Vector2 direction;
 
-    private float d;
+    private bool hasWorked;
 
     private void Start()
     {
-
+        hasWorked = false;
         direction = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z) * Vector2.right;
-        d = 0;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            Player.Singleton.movement.SpeedUp(scaleCoefficient);
-        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !hasWorked)
         {
-                Player.Singleton.movement.Knock(direction, 1, Player.Singleton.movement.NowSpeed / scaleCoefficient, true);
+            if (Vector2.Distance(Player.Singleton.movement.transform.position, transform.position) < Player.Singleton.movement.NowSpeed * Time.deltaTime)
+            {
+                Player.Singleton.movement.Knock(direction, distance, power, true);
+                hasWorked = true;
+            }
         }
     }
 
@@ -38,8 +34,7 @@ public class AccelerationZone : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            Player.Singleton.movement.SpeedDown(scaleCoefficient);
-            d = 0;
+            hasWorked = false;
         }
     }
 }

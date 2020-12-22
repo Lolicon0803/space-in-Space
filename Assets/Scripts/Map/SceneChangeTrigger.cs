@@ -12,51 +12,60 @@ public class SceneChangeTrigger : MonoBehaviour
     [Header("是否要與前一個場景相同x或相同y")]
     public bool sameX;
     public bool sameY;
-    [Header("切畫面用")]
-    [Tooltip("進入第二個畫面時相機位置")]
-    public Vector3 cameraPositionIn;
-    [Tooltip("回到第一個畫面時相機位置")]
-    public Vector3 cameraPositionOut;
-    [Header("切畫面後要觸發什麼事件")]
-    [Tooltip("進入第二個畫面時的事件")]
-    public UnityEvent eventInToHappen;
-    [Tooltip("回到第一個畫面時的事件")]
-    public UnityEvent eventOutToHappen;
+    [Header("要不要用淡入淡出")]
+    public bool useFadeInOut;
+    [Header("是否砍玩家")]
+    public bool isDestroyPlayer;
+
+    //[Header("切畫面用")]
+    //[Tooltip("進入第二個畫面時相機位置")]
+    //public Vector3 cameraPositionIn;
+    //[Tooltip("回到第一個畫面時相機位置")]
+    //public Vector3 cameraPositionOut;
+    //[Header("切畫面後要觸發什麼事件")]
+    //[Tooltip("進入第二個畫面時的事件")]
+    //public UnityEvent eventInToHappen;
+    //[Tooltip("回到第一個畫面時的事件")]
+    //public UnityEvent eventOutToHappen;
 
     private bool inOut = true;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("S");
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("I");
             if (targetIndex != -1)
             {
-                if (sameX)
-                    targetPosition.x = Player.Singleton.transform.position.x;
-                if (sameY)
-                    targetPosition.y = Player.Singleton.transform.position.y;
-                Player.Singleton.transform.position = targetPosition;
-                ScenesManager.goToScene(targetIndex);
-            }
-            else
-            {
-                // 1 -> 2
-                if (inOut)
+                if (Player.Singleton != null)
                 {
-                    Camera.main.transform.position = cameraPositionOut;
-                    inOut = !inOut;
-                    eventOutToHappen.Invoke();
+                    if (sameX)
+                        targetPosition.x = Player.Singleton.transform.position.x;
+                    if (sameY)
+                        targetPosition.y = Player.Singleton.transform.position.y;
+                    Player.Singleton.transform.position = targetPosition;
+                    Debug.Log("Scene Trigger");
+                    if (isDestroyPlayer)
+                        Player.Singleton.transform.parent = transform;
                 }
-                // 2 -> 1
-                else
-                {
-                    Camera.main.transform.position = cameraPositionIn;
-                    inOut = !inOut;
-                    eventInToHappen.Invoke();
-                }
+                SceneController.Singleton.LoadSceneAsync(targetIndex, useFadeInOut);
             }
+            //else
+            //{
+            //    // 1 -> 2
+            //    if (inOut)
+            //    {
+            //        Camera.main.transform.position = cameraPositionOut;
+            //        inOut = !inOut;
+            //        eventOutToHappen.Invoke();
+            //    }
+            //    // 2 -> 1
+            //    else
+            //    {
+            //        Camera.main.transform.position = cameraPositionIn;
+            //        inOut = !inOut;
+            //        eventInToHappen.Invoke();
+            //    }
+            //}
         }
     }
 }

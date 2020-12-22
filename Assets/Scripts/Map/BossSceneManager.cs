@@ -69,6 +69,7 @@ public class BossSceneManager : MonoBehaviour
     private IEnumerator StartStory()
     {
         Player.Singleton.movement.StopMove(false);
+        Player.Singleton.movement.notMoveYet = true;
         Player.Singleton.transform.rotation = Quaternion.identity;
         Player.Singleton.transform.position = new Vector3(-17.5f, -3.5f, 0);
         yield return new WaitForSeconds(0.5f);
