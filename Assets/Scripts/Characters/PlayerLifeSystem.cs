@@ -39,6 +39,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public Sprite fullHeart;
     public Sprite breakHeart;
     public Sprite BlackHear;
+    public Animator recoverHeart;
 
     private Image[] heartImages;
 
@@ -192,6 +193,8 @@ public class PlayerLifeSystem : MonoBehaviour
             recoverCount++;
             if (recoverCount == recoverAfterShoot)
             {
+                recoverHeart.Play("Move");
+
                 recoverCount = 0;
                 nowHp++;
                 // 換圖片用
