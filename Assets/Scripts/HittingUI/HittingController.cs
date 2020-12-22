@@ -55,16 +55,24 @@ public class HittingController : MonoBehaviour
     {
         if (touchState == TouchStates.Touched)
         {
-            // audioSource.PlayOneShot(clips[0], 0.2f);
-            if (hitAnim != null && isReset)
+            if (isReset)
             {
-                hitAnim.SetTrigger("Hit");
+                deleteHitNode();
+
+                GameObject newText = Instantiate(missPrefab, canvas.transform);
+                newText.GetComponent<Text>().text = "HIT!";
+                newText.transform.position = transform.position;
+                newText.transform.Translate(new Vector3(0, 0.9f, 0));
+
+                if (hitAnim != null)
+                {
+                    hitAnim.SetTrigger("Hit");
+                }
             }
             isReset = false;
         }
         else if (touchState == TouchStates.TouchFailed || touchState == TouchStates.TimeOutFailed || touchState == TouchStates.TimeOut)
         {
-            // audioSource.PlayOneShot(clips[1], 0.03f);
             if (isReset)
             {
                 GameObject newText = Instantiate(missPrefab, canvas.transform);
@@ -77,5 +85,11 @@ public class HittingController : MonoBehaviour
         {
             isReset = true;
         }
+    }
+
+    void deleteHitNode()
+    {
+        gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().hit();
+        gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<NoteObject>().hit();
     }
 }

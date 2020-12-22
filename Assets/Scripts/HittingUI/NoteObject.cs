@@ -11,8 +11,14 @@ public class NoteObject : MonoBehaviour
     private Vector3 startPos;
     private Vector3 endPos;
     private NoteController noteController;
+    private IEnumerator coroutine;
 
-    // Start is called before the first frame update
+    public void hit()
+    {
+        StopCoroutine(coroutine);
+        StartCoroutine(Disappear());
+    }
+
     void Start()
     {
         hittingController = GameObject.Find("HittingUI").GetComponent<HittingController>();
@@ -30,7 +36,8 @@ public class NoteObject : MonoBehaviour
             endPos = new Vector3(-0.1f, transform.localPosition.y, transform.localPosition.z);
         }
 
-        StartCoroutine(Move());
+        coroutine = Move();
+        StartCoroutine(coroutine);
     }
 
     IEnumerator Move()
@@ -40,6 +47,9 @@ public class NoteObject : MonoBehaviour
         while (timeElapsed < moveTime)
         {
             transform.localPosition = Vector3.Lerp(startPos, endPos, timeElapsed / moveTime);
+
+            disappearIfArrived();
+
             timeElapsed += Time.deltaTime;
 
             yield return null;
@@ -50,5 +60,27 @@ public class NoteObject : MonoBehaviour
         }
         noteController.setLastDelay((float)(hittingController.audioEngine.getTime() % (1000 / BPS)));
         Destroy(gameObject);
+    }
+
+    IEnumerator Disappear()
+    {
+        float time = 0;
+
+        while (time < .5f)
+        {
+            time += Time.deltaTime;
+            GetComponent<Renderer>().material.color = new Color(1, 1, 1, 1 - time);
+            yield return null;
+        }
+
+        Destroy(gameObject);
+    }
+
+    void disappearIfArrived()
+    {
+        if (endPos.x > 0 && transform.localPosition.x > 0 || endPos.x < 0 && transform.localPosition.x < 0)
+        {
+            gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0);
+        }
     }
 }
