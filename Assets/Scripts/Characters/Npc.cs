@@ -170,11 +170,9 @@ public class Npc : MonoBehaviour
     {
         while (Vector2.Distance(transform.position, obj1.transform.position) > 0)
         {
-           
-
-            Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
+            Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.75f * Time.deltaTime);
             // 移動
-            transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.015f);
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.75f * Time.deltaTime);
             yield return null;
         }
     }

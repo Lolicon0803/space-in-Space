@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class SceneChangeTrigger : MonoBehaviour
@@ -45,7 +46,7 @@ public class SceneChangeTrigger : MonoBehaviour
                     Player.Singleton.transform.position = targetPosition;
                     Debug.Log("Scene Trigger");
                     if (isDestroyPlayer)
-                        Player.Singleton.transform.parent = transform;
+                        Player.Singleton.DestroyPlayer();
                 }
                 SceneController.Singleton.LoadSceneAsync(targetIndex, useFadeInOut);
             }

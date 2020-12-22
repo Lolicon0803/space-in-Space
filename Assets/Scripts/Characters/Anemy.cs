@@ -158,8 +158,8 @@ public class Anemy : MonoBehaviour, IObjectBehavier
     {
         ObjectTempoControl.Singleton.RemoveToBeatAction(CanMove, tempoType);
         OnDisappear?.Invoke();
-        gameObject.SetActive(false);
         StartCoroutine(DelayDisappear());
+        gameObject.SetActive(false);
     }
 
     private IEnumerator DelayDisappear()
