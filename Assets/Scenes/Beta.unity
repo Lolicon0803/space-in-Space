@@ -879,6 +879,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4e542ea9471ea48baab9befa4ffa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  datas:
+    playerData:
+      position: {x: 0, y: 0}
+      rotation: {x: 0, y: 0}
+      scale: {x: 0, y: 0}
+      nowHp: 0
+      rebirthSceneIndex: 0
+      rebirthPosition: {x: 0, y: 0}
 --- !u!4 &167151465
 Transform:
   m_ObjectHideFlags: 0

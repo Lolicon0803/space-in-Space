@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.IO;
 
 namespace SpeedTutorMainMenuSystem
 {
@@ -181,7 +182,7 @@ namespace SpeedTutorMainMenuSystem
             {
                 mainMenuFirstBtn = GameObject.Find("Load Game UI Btn");
                 menuDefaultCanvas.SetActive(false);
-                loadGameMenu.SetActive(true);
+                loadGameDialog.SetActive(true);
                 menuNumber = 8;
 
                 EventSystem.current.SetSelectedGameObject(null);
@@ -296,15 +297,18 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                if (PlayerPrefs.HasKey("SavedLevel"))
+                string filePath = Application.dataPath + "/StreamingAssets" + "/Save/PlaySave/save.json";
+                //if (PlayerPrefs.HasKey("SavedLevel"))
+                bool result = false;
+                if (File.Exists(filePath))
                 {
                     Debug.Log("I WANT TO LOAD THE SAVED GAME");
                     //LOAD LAST SAVED SCENE
-                    levelToLoad = PlayerPrefs.GetString("SavedLevel");
-                    SceneManager.LoadScene(levelToLoad);
+                    //levelToLoad = PlayerPrefs.GetString("SavedLevel");
+                    //SceneManager.LoadScene(levelToLoad);
+                    result = DataBase.Singleton.Load();
                 }
-
-                else
+                if (!result)
                 {
                     Debug.Log("Load Game Dialog");
                     menuDefaultCanvas.SetActive(false);

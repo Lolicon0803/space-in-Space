@@ -28,7 +28,6 @@ public class PlanetWalking : MonoBehaviour
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
-        Debug.Log(player.transform.position.y);
         if (player.transform.position.y >= 28 && nextScene !=0)
         {
             
