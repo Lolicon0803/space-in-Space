@@ -4070,7 +4070,6 @@ GameObject:
   m_Component:
   - component: {fileID: 662364507}
   - component: {fileID: 662364506}
-  - component: {fileID: 662364508}
   m_Layer: 0
   m_Name: DataBase
   m_TagString: Untagged
@@ -4090,6 +4089,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4e542ea9471ea48baab9befa4ffa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  datas:
+    playerData:
+      position: {x: 0, y: 0}
+      rotation: {x: 0, y: 0}
+      scale: {x: 0, y: 0}
+      nowHp: 0
+      rebirthSceneIndex: 0
+      rebirthPosition: {x: 0, y: 0}
 --- !u!4 &662364507
 Transform:
   m_ObjectHideFlags: 0
@@ -4104,20 +4111,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &662364508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 662364505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ac381f3edb285d4c99b5beb27c4ddcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SL: {fileID: 0}
-  loadDataWhenSceneLoad: 0
 --- !u!1 &671598238
 GameObject:
   m_ObjectHideFlags: 0

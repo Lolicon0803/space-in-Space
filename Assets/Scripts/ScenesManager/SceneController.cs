@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
@@ -30,6 +31,8 @@ public class SceneController : MonoBehaviour
     public UnityAction OnFadeOutStart;
     public UnityAction OnFadeOutEnd;
 
+    private List<int> storyScene = new List<int>() { 1, 2, 3 };
+
     void Awake()
     {
         if (singleton == null)
@@ -43,14 +46,30 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        // 退出遊戲時如果在劇情場景則存檔
+        if (storyScene.FindIndex(index => index == SceneManager.GetActiveScene().buildIndex) >= 0)
+        {
+            Debug.Log("退出並存檔");
+            DataBase.Singleton.Save();
+        }
+    }
+
     static public void GoToScene(int index)
     {
         SceneManager.LoadScene(index);
     }
 
-    static public void BackToMainMenu()
+    public void BackToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        // 回主選單時若在故事場景則存檔
+        if (storyScene.FindIndex(index => index == SceneManager.GetActiveScene().buildIndex) >= 0)
+        {
+            Debug.Log("返回主選單並存檔");
+            DataBase.Singleton.Save();
+        }
+        LoadSceneAsync(0, false);
     }
 
     /// <summary>

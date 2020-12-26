@@ -14,7 +14,7 @@ public enum HeartStatus
 public class PlayerLifeSystem : MonoBehaviour
 {
     public int maxHp;
-    private int nowHp;
+    public int NowHp { get; set; }
 
     // 受傷後無敵時間
     public int invincibleTempo;
@@ -50,7 +50,7 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
-    public bool IsInvincible { get; private set; }
+    public bool IsInvincible { get; set; }
     private int invincibleCount;
     private int recoverCount;
     public bool IsDie { get; private set; }
@@ -72,14 +72,15 @@ public class PlayerLifeSystem : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
         playerMovement.OnError += LossLife;
-        if (dieCanvas != null && lifeCanvas != null)
-            InitializeHHeart();
+        NowHp = maxHp;
+        InitializeHHeart();
     }
 
-    private void InitializeHHeart()
+    public void InitializeHHeart()
     {
-        nowHp = maxHp;
-        int total = nowHp / 2 + nowHp % 2;
+        if (dieCanvas == null || lifeCanvas == null)
+            return;
+        int total = NowHp / 2 + NowHp % 2;
         if (heartImages == null)
         {
             heartImages = new Image[total];
@@ -91,16 +92,20 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         foreach (Image image in heartImages)
-            image.sprite = fullHeart;
-
-        lastHeartIndex = total - 1;
-        if (nowHp % 2 != 0)
+            image.sprite = BlackHear;
+        lastHeartIndex = -1;
+        for (int i = 0; i < NowHp - 1; i += 2)
         {
+            lastHeartIndex++;
+            heartImages[lastHeartIndex].sprite = fullHeart;
+        }
+        lastHeartState = HeartStatus.Full;
+        if (NowHp % 2 != 0)
+        {
+            lastHeartIndex++;
             heartImages[lastHeartIndex].sprite = breakHeart;
             lastHeartState = HeartStatus.Break;
         }
-        else
-            lastHeartState = HeartStatus.Full;
     }
 
     /// <summary>
@@ -161,7 +166,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     private void BreakHeart()
     {
-        nowHp--;
+        NowHp--;
         recoverCount = 0;
         if (lastHeartIndex >= 0)
         {
@@ -182,13 +187,13 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         // Gameover.
-        if (nowHp <= 0)
+        if (NowHp <= 0)
             GameOver();
     }
 
     private void Recover(Vector2 direction)
     {
-        if (nowHp != maxHp)
+        if (NowHp != maxHp)
         {
             recoverCount++;
             if (recoverCount == recoverAfterShoot)
@@ -196,7 +201,7 @@ public class PlayerLifeSystem : MonoBehaviour
                 recoverHeart.Play("Move");
 
                 recoverCount = 0;
-                nowHp++;
+                NowHp++;
                 // 換圖片用
                 switch (lastHeartState)
                 {
@@ -263,6 +268,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 黑圈縮到底
         yield return ShowBlackCircle(Vector2.zero);
 
+        NowHp = maxHp;
         InitializeHHeart();
 
         // 玩家回到起始點。

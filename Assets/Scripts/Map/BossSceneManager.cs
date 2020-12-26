@@ -40,7 +40,7 @@ public class BossSceneManager : MonoBehaviour
     private void Start()
     {
         // 播過劇情表示第二次進來
-        if (DataBase.Singleton.readStories.ContainsKey(storyName[0]) && DataBase.Singleton.readStories[storyName[0]])
+        if (DataBase.Singleton.datas.readStories.ContainsKey(storyName[0]) && DataBase.Singleton.datas.readStories[storyName[0]])
         {
             StartCoroutine(WaitStartBoss());
         }
@@ -84,7 +84,7 @@ public class BossSceneManager : MonoBehaviour
         Player.Singleton.animationManager.BackWalkToIdle();
         Player.Singleton.transform.position = destination;
 
-        DataBase.Singleton.readStories[storyName[0]] = true;
+        DataBase.Singleton.datas.readStories[storyName[0]] = true;
         action = new UnityAction(() => StartCoroutine(ZoomOutCamera()));
         textWriter.onEndStory.AddListener(action);
         textWriter.Init();

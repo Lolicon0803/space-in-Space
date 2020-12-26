@@ -39,16 +39,16 @@ public class Npc : MonoBehaviour
 
             textWriter.GetComponent<TextWriter>().textAction += canSpace;
 
-            DataBase.Singleton.readStories["false"] = false;
-            DataBase.Singleton.readStories["true"] = true;
+            DataBase.Singleton.datas.readStories["false"] = false;
+            DataBase.Singleton.datas.readStories["true"] = true;
 
             // 資料庫不包含劇情，把所有劇情新增到資料庫
-            if (!DataBase.Singleton.readStories.ContainsKey(storyName[0]))
+            if (!DataBase.Singleton.datas.readStories.ContainsKey(storyName[0]))
             {
                 foreach (string element in storyName)
                 {
                    
-                    DataBase.Singleton.readStories[element] = false;
+                    DataBase.Singleton.datas.readStories[element] = false;
                 }
 
             }
@@ -79,7 +79,7 @@ public class Npc : MonoBehaviour
         else if (count < storyName.Length && storyName[0] != "SpaceBoat" && storyName[0] != "SpaceBoats")
         {
 
-            if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
+            if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
             {
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);
             }
@@ -112,7 +112,7 @@ public class Npc : MonoBehaviour
                 gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.white;
             }
 
-            if (DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
+            if (DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
             {
                 count++;
             }
@@ -138,9 +138,9 @@ public class Npc : MonoBehaviour
 
 
         //如果完成了前置且沒讀過劇情，放劇情
-        if (!DataBase.Singleton.readStories[storyName[count]] && DataBase.Singleton.readStories[postConditionStoryName[count]])
+        if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
-            DataBase.Singleton.readStories[storyName[count]] = true;
+            DataBase.Singleton.datas.readStories[storyName[count]] = true;
             textWriter.GetComponent<TextWriter>().Init();
             textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
@@ -149,7 +149,7 @@ public class Npc : MonoBehaviour
             isSpace = true;
         }
         //如果沒達成前置
-        else if (!DataBase.Singleton.readStories[postConditionStoryName[count]])
+        else if (!DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
             //如果需要重複對話
             if (needReapeat[count])
