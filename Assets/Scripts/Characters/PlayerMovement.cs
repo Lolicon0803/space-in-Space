@@ -261,7 +261,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!isMoving)
         {
-            Debug.Log("懲罰 + " + MoveDirection);
             Knock(MoveDirection, 1, slideSpeed);
         }
     }
@@ -331,7 +330,6 @@ public class PlayerMovement : MonoBehaviour
             MoveDirection = direction;
             distance = 1;
         }
-        Debug.Log("推: " + MoveDirection);
         nowSpeed = slideSpeed;
         coroutineShoot = Shoot(enableInput, slideSpeed, distance);
         StartCoroutine(coroutineShoot);
@@ -354,7 +352,6 @@ public class PlayerMovement : MonoBehaviour
             MoveDirection = -MoveDirection;
         else
             MoveDirection = direction;
-        Debug.Log("推: " + MoveDirection);
         coroutineShoot = Shoot(enableInput, knockSpeed, knockDistance);
         StartCoroutine(coroutineShoot);
     }

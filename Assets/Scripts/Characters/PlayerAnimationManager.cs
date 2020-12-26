@@ -6,6 +6,7 @@ public class PlayerAnimationManager : MonoBehaviour
 {
     private Animator animator;
     private PlayerMovement movement;
+    public ParticleSystem bagJet;
 
     private bool walkParameter;
     private bool idleParameter;
@@ -19,6 +20,7 @@ public class PlayerAnimationManager : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         movement = GetComponent<PlayerMovement>();
+
         movement.OnFireBag += PlayWalkAnimation;
         movement.OnStop += PlayIdleAnimation;
         walkParameter = false;
@@ -51,6 +53,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private void PlayWalkAnimation(Vector2 direction)
     {
+        bagJet.Play();
         // Left or right foot.
         walkParameter = !walkParameter;
         if (walkParameter)
@@ -62,7 +65,9 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private IEnumerator WaitPlayerStop()
     {
-        while (Vector2.Distance(transform.position, movement.movePoint) >= movement.NowSpeed * Time.deltaTime)
+        //while (Vector2.Distance(transform.position, movement.movePoint) >= movement.NowSpeed * Time.deltaTime)
+        yield return null;
+        while (movement.isMoving)
             yield return null;
         animator.SetBool(walkL, false);
         animator.SetBool(walkR, false);
