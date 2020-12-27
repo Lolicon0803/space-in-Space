@@ -463,7 +463,8 @@ public class PlayerMovement : MonoBehaviour
         q.eulerAngles = new Vector3(0, 0, (transform.rotation.eulerAngles.z + q.eulerAngles.z) % 360);
         transform.rotation = q;
         standDirection = direction;
-        transform.localPosition = -standDirection;
+        if (transform.parent != null)
+            transform.localPosition = -standDirection;
         animationManager.PlayLie();
     }
 

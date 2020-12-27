@@ -90,7 +90,11 @@ public class TextWriter : MonoBehaviour
         switch (speakerName)
         {
             case "夸克戴爾":
-                return speakerFrames[1];
+                if (DataBase.Singleton.datas.collectItems.ContainsKey("bag") &&
+                    DataBase.Singleton.datas.collectItems["bag"])
+                    return speakerFrames[1];
+                else
+                    return speakerFrames[9];
             case "安傑斯":
                 return speakerFrames[2];
             case "鮑伯":

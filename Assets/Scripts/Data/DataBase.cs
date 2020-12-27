@@ -12,6 +12,8 @@ public class Datas
 
     public Dictionary<string, bool> collectItems;
 
+    public float planetZ;
+
     public PlayerData playerData;
 }
 
@@ -71,6 +73,7 @@ public class DataBase : MonoBehaviour
     public void Save()
     {
         SavePlayerData();
+        SaveStorySceneData();
         sl.SaveData(datas, "PlaySave/save.json", true);
     }
 
@@ -88,6 +91,15 @@ public class DataBase : MonoBehaviour
                 datas.playerData.rebirthPosition = Player.Singleton.transform.position;
                 datas.playerData.nowHp = Player.Singleton.lifeSystem.NowHp;
             }
+        }
+    }
+
+    private void SaveStorySceneData()
+    {
+        if (SceneController.Singleton.storyScene.FindIndex(index => index == SceneManager.GetActiveScene().buildIndex) >= 0)
+        {
+            datas.playerData.position.x = 0;
+            datas.planetZ = FindObjectOfType<PlanetWalking>().transform.rotation.eulerAngles.z;
         }
     }
 
@@ -122,6 +134,10 @@ public class DataBase : MonoBehaviour
             }
             Player.Singleton.movement.canInput = true;
             Player.Singleton.lifeSystem.IsInvincible = false;
+        }
+        if (SceneController.Singleton.storyScene.FindIndex(index => index == SceneManager.GetActiveScene().buildIndex) >= 0)
+        {
+            FindObjectOfType<PlanetWalking>().transform.rotation = Quaternion.Euler(0, 0, datas.planetZ);
         }
         yield return null;
     }

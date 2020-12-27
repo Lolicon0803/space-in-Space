@@ -110,7 +110,7 @@ SpriteRenderer:
   m_SortingLayerID: -1262500749
   m_SortingLayer: 2
   m_SortingOrder: 5
-  m_Sprite: {fileID: 1140132963800525788, guid: e51fc6883592f4b43ba0f6a950ed4c66,
+  m_Sprite: {fileID: -6287787046888575383, guid: 7348f765c73e6e248a722cad9bca0ac9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -255,7 +255,9 @@ MonoBehaviour:
   movePoint: {x: 0, y: 0}
   canInput: 1
   firstTimeMiss: 0
+  notMoveYet: 0
   isBlackHole: 0
+  isMoving: 0
 --- !u!114 &4222905995013355870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +273,7 @@ MonoBehaviour:
   fireBag: {fileID: 8300000, guid: 43b496d2a1e26044586cf76868f389d4, type: 3}
   fallIntoBlackHole: {fileID: 8300000, guid: 0bbb52cdde75cbb408bfb09b34b4df1a, type: 3}
   error: {fileID: 8300000, guid: 6094c40f1c73ff841a33af567a2fa87d, type: 3}
+  gameOver: {fileID: 0}
 --- !u!114 &4222905995013355841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,6 +299,7 @@ MonoBehaviour:
   fullHeart: {fileID: 21300000, guid: 8e8d954dad1de2d49bdda0f6ae8571ee, type: 3}
   breakHeart: {fileID: 21300000, guid: 9d39fc4e4f4d77a4598258d11e511d97, type: 3}
   BlackHear: {fileID: 21300000, guid: 4c04ce7439295a24eb7053dcf78824ac, type: 3}
+  recoverHeart: {fileID: 0}
 --- !u!114 &4222905995013355840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,6 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273aeb1b836c4c543ac2fc1c06bdd05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bagJet: {fileID: 0}
 --- !u!70 &4222905995013355843
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

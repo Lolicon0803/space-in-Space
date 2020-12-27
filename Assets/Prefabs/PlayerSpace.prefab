@@ -4694,7 +4694,7 @@ SpriteRenderer:
   m_SortingLayerID: -1262500749
   m_SortingLayer: 2
   m_SortingOrder: 5
-  m_Sprite: {fileID: 1140132963800525788, guid: e51fc6883592f4b43ba0f6a950ed4c66,
+  m_Sprite: {fileID: -6287787046888575383, guid: 7348f765c73e6e248a722cad9bca0ac9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4857,6 +4857,7 @@ MonoBehaviour:
   fireBag: {fileID: 8300000, guid: 7bbfb4b06fd70654590b68776dd91af6, type: 3}
   fallIntoBlackHole: {fileID: 8300000, guid: 0bbb52cdde75cbb408bfb09b34b4df1a, type: 3}
   error: {fileID: 8300000, guid: 6094c40f1c73ff841a33af567a2fa87d, type: 3}
+  gameOver: {fileID: 8300000, guid: c200a026e57d7d54b8ede0db743e127b, type: 3}
 --- !u!114 &7364721129078129979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4869,7 +4870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc215eabd581fc74dacb9b025bdf91d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 20
+  maxHp: 10
   invincibleTempo: 1
   recoverAfterShoot: 5
   lifeCanvas: {fileID: 0}
