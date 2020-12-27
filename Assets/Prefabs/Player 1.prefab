@@ -128,7 +128,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 1140132963800525788, guid: e51fc6883592f4b43ba0f6a950ed4c66,
+  m_Sprite: {fileID: -4245738604243887485, guid: 7348f765c73e6e248a722cad9bca0ac9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -267,9 +267,15 @@ MonoBehaviour:
   moveSpeed: 20
   slideSpeed: 2
   slowDownSpeed: 15
+  groundCheck: {fileID: 0}
+  distance: 0
+  isOnPlanet: 0
   movePoint: {x: 0, y: 0}
   canInput: 1
+  firstTimeMiss: 0
+  notMoveYet: 0
   isBlackHole: 0
+  isMoving: 0
 --- !u!114 &4222905995013355870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +291,7 @@ MonoBehaviour:
   fireBag: {fileID: 8300000, guid: 43b496d2a1e26044586cf76868f389d4, type: 3}
   fallIntoBlackHole: {fileID: 8300000, guid: 0bbb52cdde75cbb408bfb09b34b4df1a, type: 3}
   error: {fileID: 8300000, guid: 6094c40f1c73ff841a33af567a2fa87d, type: 3}
+  gameOver: {fileID: 0}
 --- !u!114 &4222905995013355841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,17 +307,20 @@ MonoBehaviour:
   maxHp: 20
   invincibleTempo: 1
   recoverAfterShoot: 5
-  canvas: {fileID: 0}
+  lifeCanvas: {fileID: 0}
+  dieCanvas: {fileID: 0}
   redEffectImage: {fileID: 0}
   heartImagePrefab: {fileID: 9147603659539169249, guid: d4a714a16961a3449a23925138acf679,
     type: 3}
-  blackImage: {fileID: 0}
+  blackCircleImage: {fileID: 0}
+  blackBgImage: {fileID: 0}
   fullHeart: {fileID: 4606908045521496030, guid: 6733aaa2c93d89e40a6eee27362e5e47,
     type: 3}
   breakHeart: {fileID: -4195582761621981391, guid: 6733aaa2c93d89e40a6eee27362e5e47,
     type: 3}
   BlackHear: {fileID: 516283494600122218, guid: 6733aaa2c93d89e40a6eee27362e5e47,
     type: 3}
+  recoverHeart: {fileID: 0}
 --- !u!114 &4222905995013355840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273aeb1b836c4c543ac2fc1c06bdd05f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bagJet: {fileID: 0}
 --- !u!70 &4222905995013355843
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
