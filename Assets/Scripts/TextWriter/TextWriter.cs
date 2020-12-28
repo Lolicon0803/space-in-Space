@@ -26,6 +26,7 @@ public class TextWriter : MonoBehaviour
     private bool enterKeyDown;
     private bool isEndOfParagraph;
     private bool isPrintingStory;
+    private bool isPause;
     private string currentText;
     private string twinkleText;
     private string currentFileName;
@@ -40,6 +41,7 @@ public class TextWriter : MonoBehaviour
         SL = new SaveAndLoad();
         StartCoroutine(TwinkleString(0.3f));
         isPrintingStory = false;
+        isPause = false;
         Init();
     }
 
@@ -142,6 +144,10 @@ public class TextWriter : MonoBehaviour
         isEndOfParagraph = false;
         while (true)
         {
+            while (isPause)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
             if (enterKeyDown)
             {
                 enterKeyDown = false;
@@ -186,7 +192,11 @@ public class TextWriter : MonoBehaviour
             speakerName.text = story[paragraphIndex].speaker;
             text.text = currentText + twinkleText;
         }
-        if (!isEndOfParagraph && Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPause = !isPause;
+        }
+        if (!isEndOfParagraph && !isPause && Input.GetKeyDown(KeyCode.Return))
         {
             enterKeyDown = true;
         }
