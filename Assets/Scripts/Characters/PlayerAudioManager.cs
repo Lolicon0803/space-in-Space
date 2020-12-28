@@ -14,11 +14,15 @@ public class PlayerAudioManager : MonoBehaviour
     private PlayerMovement movement;
     private PlayerLifeSystem lifeSystem;
 
+    private AudioSource bgm;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         movement = GetComponent<PlayerMovement>();
         lifeSystem = GetComponent<PlayerLifeSystem>();
+
+        bgm = TempoManager.Singleton.transform.GetChild(0).GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update
@@ -27,6 +31,19 @@ public class PlayerAudioManager : MonoBehaviour
         movement.OnFireBag += (Vector2 direction) => audioSource.PlayOneShot(fireBag);
         movement.OnFallIntoBlackHole += () => audioSource.PlayOneShot(fallIntoBlackHole);
         movement.OnError += () => audioSource.PlayOneShot(error);
-        lifeSystem.OnDie += () => audioSource.PlayOneShot(gameOver);
+        lifeSystem.OnDie += () =>
+        {
+            audioSource.PlayOneShot(gameOver);
+            bgm.volume /= 3.0f;
+            StartCoroutine(RecoverBgmVolume());
+        };
     }
+
+    private IEnumerator RecoverBgmVolume()
+    {
+        yield return null;
+        yield return new WaitWhile(() => audioSource.isPlaying);
+        bgm.volume *= 3.0f;
+    }
+
 }
