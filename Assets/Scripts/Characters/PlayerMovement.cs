@@ -78,12 +78,15 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask groundLayer;
     private Vector2 standDirection;
 
+    private new CapsuleCollider2D collider;
+
     // Start is called before the first frame update
     void Start()
     {
         originMoveSpeed = moveSpeed;
         originSlideSpeed = slideSpeed;
         animationManager = GetComponent<PlayerAnimationManager>();
+        collider = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
         ResetStatus();
@@ -292,7 +295,6 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, MoveDirection, totalDistance, groundLayer);
         Debug.DrawLine(transform.position, transform.position + (Vector3)MoveDirection * totalDistance, Color.red, 5);
         //撞牆情況
-        Debug.Log(hit.collider);
         if (hit.collider != null)
         {
             RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, totalDistance, LayerMask.GetMask("Player"));
@@ -319,18 +321,31 @@ public class PlayerMovement : MonoBehaviour
         canInput = true;
         isMoving = false;
         isTeleporting = false;
+        CheckNPC();
+    }
+
+    private void CheckNPC()
+    {
+        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.right, Time.deltaTime, LayerMask.GetMask("NPC"));
+        if (hit2D.collider != null)
+        {
+            StopMove(true);
+            notMoveYet = true;
+            firstTimeMiss = false;
+        }
     }
 
     /// <summary>
     /// 玩家往指定方向動，速度剩滑行速度。
     /// </summary>
     /// <param name="direction">方向，給0表示往玩家的反方向</param>
-    public void Knock(Vector2 direction, bool enableInput = false)
+    public void Knock(Vector2 direction, bool enableInput = false, bool backToGrid = false)
     {
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
-        BackToGrid();
+        if (backToGrid)
+            BackToGrid();
         //StopMove(enableInput);
         transform.parent = null;
         float distance = 0;
@@ -353,12 +368,13 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">推或吸的方向.零向量表示玩家反方向</param>
     /// <param name="knockDistance">推動或吸動幾個單位.</param>
     /// <param name="knockSpeed">推動或吸動速度.</param>
-    public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false)
+    public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false, bool backToGrid = false)
     {
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
-        BackToGrid();
+        if (backToGrid)
+            BackToGrid();
         //StopMove(enableInput);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
@@ -366,6 +382,7 @@ public class PlayerMovement : MonoBehaviour
         else
             MoveDirection = direction;
         coroutineShoot = Shoot(enableInput, knockSpeed, knockDistance);
+
         StartCoroutine(coroutineShoot);
     }
 
