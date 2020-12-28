@@ -37,9 +37,7 @@ namespace SpeedTutorMainMenuSystem
         #region Slider Linking
         [Header("Menu Sliders")]
         [SerializeField] private Text volumeText;
-        [SerializeField] private Text BGMvolumeText;
         [SerializeField] private Slider volumeSlider;
-        [SerializeField] private Slider BGMvolumeSlider;
         [Space(10)]
         #endregion
 
@@ -74,16 +72,12 @@ namespace SpeedTutorMainMenuSystem
 
         private void LoadGameSetting()
         {
-            float volume = PlayerPrefs.GetFloat("masterVolume", defaultVolume);
-            float bgmVolume = PlayerPrefs.GetFloat("BGM", defaultVolume);
+            float volume = PlayerPrefs.GetFloat("masterVolume", defaultVolume) * 100;
 
-            AudioListener.volume = volume;
-            BGM.volume = bgmVolume;
+            AudioListener.volume = volume / 100;
 
-            volumeSlider.value = volume;
-            volumeText.text = volume.ToString("0.0");
-            BGMvolumeSlider.value = bgmVolume;
-            BGMvolumeText.text = bgmVolume.ToString("0.0");
+            volumeText.text = volume.ToString("0");
+            volumeSlider.value = volume * 100;
         }
 
         private void ClickSound()
@@ -166,21 +160,14 @@ namespace SpeedTutorMainMenuSystem
 
         public void VolumeSlider(float volume)
         {
-            AudioListener.volume = volume;
-            volumeText.text = volume.ToString("0.0");
-        }
-
-        public void BGMVolumeSlider(float volume)
-        {
-            BGM.volume = volume;
-            BGMvolumeText.text = volume.ToString("0.0");
+            AudioListener.volume = volume / 100f;
+            volumeText.text = volume.ToString("0");
         }
 
         public void VolumeApply()
         {
             PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
             Debug.Log(PlayerPrefs.GetFloat("masterVolume"));
-            PlayerPrefs.SetFloat("BGM", BGM.volume);
         }
 
         #region ResetButton
@@ -190,7 +177,7 @@ namespace SpeedTutorMainMenuSystem
             {
                 AudioListener.volume = defaultVolume;
                 volumeSlider.value = defaultVolume;
-                volumeText.text = defaultVolume.ToString("0.0");
+                volumeText.text = (defaultVolume * 100).ToString("0");
                 VolumeApply();
             }
         }
