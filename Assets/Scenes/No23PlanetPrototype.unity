@@ -369,32 +369,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TextWriter
       objectReference: {fileID: 0}
-    - target: {fileID: 6869953512081985041, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953513040645754, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 130
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953513040645754, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 130
-      objectReference: {fileID: 0}
-    - target: {fileID: 6869953513040645755, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -2311659948842064771, guid: 7348f765c73e6e248a722cad9bca0ac9,
-        type: 3}
-    - target: {fileID: 6869953513166744091, guid: f8098db1a24e73f46b4321bd7d6d362b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -221
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8098db1a24e73f46b4321bd7d6d362b, type: 3}
 --- !u!4 &168701067 stripped
@@ -733,6 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInOutImage: {fileID: 1264836059}
+  storyScene: 010000000200000003000000
 --- !u!4 &357325555
 Transform:
   m_ObjectHideFlags: 0
@@ -1215,6 +1190,12 @@ PrefabInstance:
       propertyPath: storyName.Array.data[0]
       value: 23-4
       objectReference: {fileID: 0}
+    - target: {fileID: 9206449971215940031, guid: 5373b5425eacfc448b404d795e81d45f,
+        type: 3}
+      propertyPath: bigFrame
+      value: 
+      objectReference: {fileID: 21300000, guid: 3b144a694acaa8640bd410475559ed2f,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5373b5425eacfc448b404d795e81d45f, type: 3}
 --- !u!4 &585268650 stripped
@@ -2072,6 +2053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   datas:
+    planetZ: 0
     playerData:
       position: {x: 0, y: 0}
       rotation: {x: 0, y: 0}
@@ -8623,6 +8605,7 @@ MonoBehaviour:
   reapeatStory: []
   isdestroy: 1
   item: bag
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1931440481
 BoxCollider2D:

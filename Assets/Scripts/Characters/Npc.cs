@@ -24,6 +24,8 @@ public class Npc : MonoBehaviour
     public bool isdestroy;
     // 暫，對話完可以拿到的物品
     public string item;
+
+    public Sprite bigFrame;
     private int count = 0;
 
     private bool isSpace = false;
@@ -152,7 +154,7 @@ public class Npc : MonoBehaviour
         if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
             textWriter.GetComponent<TextWriter>().Init();
-            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt");
+            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt", bigFrame);
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove(false);
             Player.Singleton.movement.canInput = false;
@@ -166,7 +168,7 @@ public class Npc : MonoBehaviour
             if (needReapeat[count])
             {
                 textWriter.GetComponent<TextWriter>().Init();
-                textWriter.GetComponent<TextWriter>().LoadStory(reapeatStory[count] + ".txt");
+                textWriter.GetComponent<TextWriter>().LoadStory(reapeatStory[count] + ".txt", bigFrame);
                 textWriter.GetComponent<TextWriter>().NextStory();
                 Player.Singleton.movement.StopMove();
                 Player.Singleton.movement.canInput = false;

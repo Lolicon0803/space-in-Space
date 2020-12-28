@@ -17,6 +17,7 @@ public class TextWriter : MonoBehaviour
     public Text speakerName;
     public SpriteRenderer speaker;
     public SpriteRenderer dialogBox;
+    public SpriteRenderer bigItemFrame;
     public Sprite[] speakerFrames;
     public UnityEvent onEndStory;
     private int wordIndex;
@@ -48,12 +49,14 @@ public class TextWriter : MonoBehaviour
         currentFileName = "";
         paragraphIndex = 0;
         wordIndex = 0;
+        bigItemFrame.sprite = null;
         ClearText();
         ClearSprite();
     }
-    public void LoadStory(string fileName)
+    public void LoadStory(string fileName, Sprite npcBigFrame = null)
     {
         Init();
+        bigItemFrame.sprite = npcBigFrame;
         currentFileName = fileName;
         story = (Story)SL.LoadData(typeof(Story), fileName);
     }
@@ -77,6 +80,7 @@ public class TextWriter : MonoBehaviour
                 ClearSprite();
                 if (!isPrintingStory)
                 {
+                    bigItemFrame.sprite = null;
                     onEndStory.Invoke();
                     break;
                 }
