@@ -12,13 +12,10 @@ namespace SpeedTutorMainMenuSystem
     {
         #region Default Values
         [Header("Default Menu Values")]
-        [SerializeField] private float defaultBrightness;
         [SerializeField] private float defaultVolume;
-        [SerializeField] private int defaultSen;
-        [SerializeField] private bool defaultInvertY;
 
         [Header("Levels To Load")]
-        public string _newGameButtonLevel;
+        public int newGameIndex;
         private string levelToLoad;
 
         private int menuNumber;
@@ -28,11 +25,8 @@ namespace SpeedTutorMainMenuSystem
         [Header("Main Menu Components")]
         [SerializeField] private GameObject menuDefaultCanvas;
         [SerializeField] private GameObject GeneralSettingsCanvas;
-        [SerializeField] private GameObject graphicsMenu;
+        [SerializeField] private GameObject controlMenu;
         [SerializeField] private GameObject soundMenu;
-        [SerializeField] private GameObject gameplayMenu;
-        [SerializeField] private GameObject confirmationMenu;
-        [SerializeField] private GameObject loadGameMenu;
         [Space(10)]
         [Header("Menu Popout Dialogs")]
         [SerializeField] private GameObject noSaveDialog;
@@ -42,14 +36,6 @@ namespace SpeedTutorMainMenuSystem
 
         #region Slider Linking
         [Header("Menu Sliders")]
-        [SerializeField] private Text controllerSenText;
-        [SerializeField] private Slider controllerSenSlider;
-        public float controlSenFloat = 2f;
-        [Space(10)]
-        [SerializeField] private Brightness brightnessEffect;
-        [SerializeField] private Slider brightnessSlider;
-        [SerializeField] private Text brightnessText;
-        [Space(10)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Text BGMvolumeText;
         [SerializeField] private Slider volumeSlider;
@@ -59,20 +45,14 @@ namespace SpeedTutorMainMenuSystem
 
         public AudioSource BGM;
 
-        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameMenuFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
-        public GameObject graphicsMenuFirstBtn, soundMenuFirstBtn, gameplayMenuFirstBtn;
-
-        //MAIN SECTION
-        public IEnumerator ConfirmationBox()
-        {
-            confirmationMenu.SetActive(true);
-            yield return new WaitForSeconds(2);
-            confirmationMenu.SetActive(false);
-        }
+        public GameObject mainMenuFirstBtn, newGameDialogFirstBtn, loadGameDialogFirstBtn, noSaveGameDialogFirstBtn, settingsMenuFirstBtn;
+        public GameObject controlMenuFirstBtn, soundMenuFirstBtn;
 
         private void Start()
         {
             LoadGameSetting();
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(mainMenuFirstBtn);
         }
 
         private void Update()
@@ -84,16 +64,9 @@ namespace SpeedTutorMainMenuSystem
                     GoBackToMainMenu();
                     ClickSound();
                 }
-
                 else if (menuNumber == 3 || menuNumber == 4 || menuNumber == 5)
                 {
                     GoBackToOptionsMenu();
-                    ClickSound();
-                }
-
-                else if (menuNumber == 6) //CONTROLS MENU
-                {
-                    GoBackToGameplayMenu();
                     ClickSound();
                 }
             }
@@ -128,15 +101,15 @@ namespace SpeedTutorMainMenuSystem
         #region Menu Mouse Clicks
         public void MouseClick(string buttonType)
         {
-            if (buttonType == "Graphics")
+            if (buttonType == "Control")
             {
-                settingsMenuFirstBtn = GameObject.Find("Graphics Btn");
+                settingsMenuFirstBtn = GameObject.Find("Control Btn");
                 GeneralSettingsCanvas.SetActive(false);
-                graphicsMenu.SetActive(true);
+                controlMenu.SetActive(true);
                 menuNumber = 3;
 
                 EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(graphicsMenuFirstBtn);
+                EventSystem.current.SetSelectedGameObject(controlMenuFirstBtn);
             }
 
             if (buttonType == "Sound")
@@ -148,17 +121,6 @@ namespace SpeedTutorMainMenuSystem
 
                 EventSystem.current.SetSelectedGameObject(null);
                 EventSystem.current.SetSelectedGameObject(soundMenuFirstBtn);
-            }
-
-            if (buttonType == "Gameplay")
-            {
-                settingsMenuFirstBtn = GameObject.Find("Gameplay Btn");
-                GeneralSettingsCanvas.SetActive(false);
-                gameplayMenu.SetActive(true);
-                menuNumber = 5;
-
-                EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(gameplayMenuFirstBtn);
             }
 
             if (buttonType == "Exit")
@@ -186,7 +148,7 @@ namespace SpeedTutorMainMenuSystem
                 menuNumber = 8;
 
                 EventSystem.current.SetSelectedGameObject(null);
-                EventSystem.current.SetSelectedGameObject(loadGameMenuFirstBtn);
+                EventSystem.current.SetSelectedGameObject(loadGameDialogFirstBtn);
             }
 
             if (buttonType == "NewGame")
@@ -219,62 +181,17 @@ namespace SpeedTutorMainMenuSystem
             PlayerPrefs.SetFloat("masterVolume", AudioListener.volume);
             Debug.Log(PlayerPrefs.GetFloat("masterVolume"));
             PlayerPrefs.SetFloat("BGM", BGM.volume);
-            StartCoroutine(ConfirmationBox());
-        }
-
-        public void BrightnessSlider(float brightness)
-        {
-            brightnessEffect.brightness = brightness;
-            brightnessText.text = brightness.ToString("0.0");
-        }
-
-        public void BrightnessApply()
-        {
-            PlayerPrefs.SetFloat("masterBrightness", brightnessEffect.brightness);
-            Debug.Log(PlayerPrefs.GetFloat("masterBrightness"));
-            StartCoroutine(ConfirmationBox());
-        }
-
-        public void ControllerSen()
-        {
-            controllerSenText.text = controllerSenSlider.value.ToString("0");
-            controlSenFloat = controllerSenSlider.value;
-        }
-
-        public void GameplayApply()
-        {
-            PlayerPrefs.SetFloat("masterSen", controlSenFloat);
-            Debug.Log("Sensitivity" + " " + PlayerPrefs.GetFloat("masterSen"));
-
-            StartCoroutine(ConfirmationBox());
         }
 
         #region ResetButton
         public void ResetButton(string GraphicsMenu)
         {
-            if (GraphicsMenu == "Brightness")
-            {
-                brightnessEffect.brightness = defaultBrightness;
-                brightnessSlider.value = defaultBrightness;
-                brightnessText.text = defaultBrightness.ToString("0.0");
-                BrightnessApply();
-            }
-
             if (GraphicsMenu == "Audio")
             {
                 AudioListener.volume = defaultVolume;
                 volumeSlider.value = defaultVolume;
                 volumeText.text = defaultVolume.ToString("0.0");
                 VolumeApply();
-            }
-
-            if (GraphicsMenu == "Graphics")
-            {
-                controllerSenText.text = defaultSen.ToString("0");
-                controllerSenSlider.value = defaultSen;
-                controlSenFloat = defaultSen;
-
-                GameplayApply();
             }
         }
         #endregion
@@ -284,7 +201,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                SceneController.GoToScene(1);
+                SceneController.GoToScene(newGameIndex);
             }
 
             if (ButtonType == "No")
@@ -298,25 +215,22 @@ namespace SpeedTutorMainMenuSystem
             if (ButtonType == "Yes")
             {
                 string filePath = Application.dataPath + "/StreamingAssets" + "/Save/PlaySave/save.json";
-                //if (PlayerPrefs.HasKey("SavedLevel"))
-                bool result = false;
                 if (File.Exists(filePath))
                 {
-                    Debug.Log("I WANT TO LOAD THE SAVED GAME");
                     //LOAD LAST SAVED SCENE
-                    //levelToLoad = PlayerPrefs.GetString("SavedLevel");
-                    //SceneManager.LoadScene(levelToLoad);
-                    result = DataBase.Singleton.Load();
-                }
-                if (!result)
-                {
-                    Debug.Log("Load Game Dialog");
-                    menuDefaultCanvas.SetActive(false);
-                    loadGameDialog.SetActive(false);
-                    noSaveDialog.SetActive(true);
+                    try
+                    {
+                        DataBase.Singleton.Load();
+                    }
+                    catch (System.Exception)
+                    {
+                        menuDefaultCanvas.SetActive(false);
+                        loadGameDialog.SetActive(false);
+                        noSaveDialog.SetActive(true);
 
-                    EventSystem.current.SetSelectedGameObject(null);
-                    EventSystem.current.SetSelectedGameObject(noSaveGameDialogFirstBtn);
+                        EventSystem.current.SetSelectedGameObject(null);
+                        EventSystem.current.SetSelectedGameObject(noSaveGameDialogFirstBtn);
+                    }
                 }
             }
 
@@ -331,15 +245,12 @@ namespace SpeedTutorMainMenuSystem
         public void GoBackToOptionsMenu()
         {
             GeneralSettingsCanvas.SetActive(true);
-            graphicsMenu.SetActive(false);
+            controlMenu.SetActive(false);
             soundMenu.SetActive(false);
-            gameplayMenu.SetActive(false);
 
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(settingsMenuFirstBtn);
 
-            GameplayApply();
-            BrightnessApply();
             VolumeApply();
 
             PlayerPrefs.Save();
@@ -349,30 +260,19 @@ namespace SpeedTutorMainMenuSystem
 
         public void GoBackToMainMenu()
         {
-            if (GameObject.Find("Graphics Btn"))
-                settingsMenuFirstBtn = GameObject.Find("Graphics Btn");
+            if (GameObject.Find("Control Btn"))
+                settingsMenuFirstBtn = GameObject.Find("Control Btn");
             menuDefaultCanvas.SetActive(true);
             newGameDialog.SetActive(false);
             loadGameDialog.SetActive(false);
-            loadGameMenu.SetActive(false);
             noSaveDialog.SetActive(false);
             GeneralSettingsCanvas.SetActive(false);
-            graphicsMenu.SetActive(false);
+            controlMenu.SetActive(false);
             soundMenu.SetActive(false);
-            gameplayMenu.SetActive(false);
             menuNumber = 1;
 
             EventSystem.current.SetSelectedGameObject(null);
             EventSystem.current.SetSelectedGameObject(mainMenuFirstBtn);
-        }
-
-        public void GoBackToGameplayMenu()
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(gameplayMenuFirstBtn);
-
-            gameplayMenu.SetActive(true);
-            menuNumber = 5;
         }
 
         public void ClickQuitOptions()

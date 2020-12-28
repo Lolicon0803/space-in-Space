@@ -8,25 +8,11 @@ namespace SpeedTutorMainMenuSystem
     public class Init_LoadPreferences : MonoBehaviour
     {
         #region Variables
-        //BRIGHTNESS
-        [Space(20)]
-        [SerializeField] private Brightness brightnessEffect;
-        [SerializeField] private Text brightnessText;
-        [SerializeField] private Slider brightnessSlider;
 
         //VOLUME
         [Space(20)]
         [SerializeField] private Text volumeText;
         [SerializeField] private Slider volumeSlider;
-
-        //SENSITIVITY
-        [Space(20)]
-        [SerializeField] private Text controllerText;
-        [SerializeField] private Slider controllerSlider;
-
-        //INVERT Y
-        [Space(20)]
-        [SerializeField] private Toggle invertYToggle;
 
         [Space(20)]
         [SerializeField] private bool canUse = false;
@@ -39,24 +25,6 @@ namespace SpeedTutorMainMenuSystem
 
             if (canUse)
             {
-                //BRIGHTNESS
-                if (brightnessEffect != null)
-                {
-                    if (PlayerPrefs.HasKey("masterBrightness"))
-                    {
-                        float localBrightness = PlayerPrefs.GetFloat("masterBrightness");
-
-                        brightnessText.text = localBrightness.ToString("0.0");
-                        brightnessSlider.value = localBrightness;
-                        brightnessEffect.brightness = localBrightness;
-                    }
-
-                    else
-                    {
-                        menuController.ResetButton("Brightness");
-                    }
-                }
-
                 //VOLUME
                 if (PlayerPrefs.HasKey("masterVolume"))
                 {
@@ -69,20 +37,6 @@ namespace SpeedTutorMainMenuSystem
                 else
                 {
                     menuController.ResetButton("Audio");
-                }
-
-                //CONTROLLER SENSITIVITY
-                if (PlayerPrefs.HasKey("masterSen"))
-                {
-                    float localSensitivity = PlayerPrefs.GetFloat("masterSen");
-
-                    controllerText.text = localSensitivity.ToString("0");
-                    controllerSlider.value = localSensitivity;
-                    menuController.controlSenFloat = localSensitivity;
-                }
-                else
-                {
-                    menuController.ResetButton("Graphics");
                 }
             }
         }
