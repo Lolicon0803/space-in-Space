@@ -28,7 +28,8 @@ public class PlanetWalking : MonoBehaviour
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
-        if (player.transform.position.y >= 28 && nextScene !=0)
+        RotateAllNPCMark();
+        if (player.transform.position.y >= 28 && nextScene != 0)
         {
             SceneManager.LoadScene(nextScene);
         }
@@ -93,6 +94,14 @@ public class PlanetWalking : MonoBehaviour
         else
         {
             camera.orthographicSize = Mathf.Pow((player.transform.position.y / 14.4f), 1.8f) * 5;
+        }
+    }
+
+    private void RotateAllNPCMark()
+    {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Mark"))
+        {
+            obj.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.z);
         }
     }
 }
