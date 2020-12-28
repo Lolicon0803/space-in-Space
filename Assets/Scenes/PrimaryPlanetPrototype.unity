@@ -1024,6 +1024,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b4e542ea9471ea48baab9befa4ffa26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  datas:
+    planetZ: 0
+    playerData:
+      position: {x: 0, y: 0}
+      rotation: {x: 0, y: 0}
+      scale: {x: 0, y: 0}
+      nowHp: 0
+      rebirthSceneIndex: 0
+      rebirthPosition: {x: 0, y: 0}
 --- !u!4 &1022560483
 Transform:
   m_ObjectHideFlags: 0
@@ -6948,7 +6957,7 @@ MonoBehaviour:
   accelerationOfGravity: 10
   player: {fileID: 1515410194}
   camera: {fileID: 1887805806}
-  nextScene: 6
+  nextScene: 06000000000000000000000000000000
 --- !u!82 &1516021867
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7393,6 +7402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInOutImage: {fileID: 1009682786}
+  storyScene: 010000000200000003000000
 --- !u!4 &1810819516
 Transform:
   m_ObjectHideFlags: 0

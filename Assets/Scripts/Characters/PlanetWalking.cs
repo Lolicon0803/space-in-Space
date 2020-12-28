@@ -14,13 +14,16 @@ public class PlanetWalking : MonoBehaviour
     public float accelerationOfGravity = 0.1f;
     public PlayerMovement player;
     public new Camera camera;
-    public int nextScene;
+    public int[] nextScene;
     // Start is called before the first frame update
     void Start()
     {
         speedY = 0;
     }
-
+    int Mod(int x, int m)
+    {
+        return (x % m + m) % m;
+    }
     // Update is called once per frame
     void Update()
     {
@@ -28,11 +31,17 @@ public class PlanetWalking : MonoBehaviour
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
-        if (player.transform.position.y >= 28 && nextScene !=0)
+        int degree = Mod((int)transform.rotation.eulerAngles.z, 360) - 45;
+        int nextSceneIndex = (degree <= 270 && degree > 180) ? 3 :
+                            (degree <= 180 && degree > 90) ? 2 : 
+                            (degree <= 90 && degree > 0) ? 1 :
+                            0;
+        
+        if (player.transform.position.y >= 28 && nextScene[nextSceneIndex] !=0)
         {
             
             Destroy(player.gameObject);
-            SceneManager.LoadScene(nextScene);
+            SceneManager.LoadScene(nextScene[nextSceneIndex]);
         }
     }
     private void TryJump()
