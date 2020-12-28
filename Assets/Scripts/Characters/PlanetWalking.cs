@@ -20,10 +20,21 @@ public class PlanetWalking : MonoBehaviour
     {
         speedY = 0;
     }
-    int Mod(int x, int m)
+
+    private int GetNextSceneIndex()
     {
-        return (x % m + m) % m;
+        int Mod(int x, int m)
+        {
+            return (x % m + m) % m;
+        }
+        int degree = Mod((int)transform.rotation.eulerAngles.z, 360) - 45;
+        int nextSceneIndex = (degree <= 270 && degree > 180) ? 3 :
+                    (degree <= 180 && degree > 90) ? 2 :
+                    (degree <= 90 && degree > 0) ? 1 :
+                    0;
+        return nextSceneIndex;
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -31,15 +42,10 @@ public class PlanetWalking : MonoBehaviour
         TryJump();
         UpdateYPosition();
         UpdateCameraSize();
-        int degree = Mod((int)transform.rotation.eulerAngles.z, 360) - 45;
-        int nextSceneIndex = (degree <= 270 && degree > 180) ? 3 :
-                            (degree <= 180 && degree > 90) ? 2 : 
-                            (degree <= 90 && degree > 0) ? 1 :
-                            0;
-        
+
+        int nextSceneIndex = GetNextSceneIndex();
         if (player.transform.position.y >= 28 && nextScene[nextSceneIndex] !=0)
         {
-            
             Destroy(player.gameObject);
             SceneManager.LoadScene(nextScene[nextSceneIndex]);
         }
