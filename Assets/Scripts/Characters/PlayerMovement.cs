@@ -22,6 +22,9 @@ public class PlayerMovement : MonoBehaviour
     // 滑行速度系數
     public float slideSpeed = 1f;
 
+    private float originMoveSpeed;
+    private float originSlideSpeed;
+
     // 噴射轉滑行的下降速度
     public float slowDownSpeed = 10.0f;
 
@@ -53,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
     public bool isBlackHole = false;
     // 是否正在移動(移動中無視懲罰)
     public bool isMoving;
+    // 傳送中
+    public bool isTeleporting;
 
     private bool isDie;
 
@@ -76,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originMoveSpeed = moveSpeed;
+        originSlideSpeed = slideSpeed;
         animationManager = GetComponent<PlayerAnimationManager>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
@@ -98,8 +105,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (TempoManager.Singleton.beatPerMinute > 60)
             {
-                moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
-                slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                moveSpeed = originMoveSpeed * (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                slideSpeed = originSlideSpeed * (float)TempoManager.Singleton.beatPerMinute / 60.0f;
             }
         }
         // 對話完後玩家可以輸入
@@ -187,6 +194,7 @@ public class PlayerMovement : MonoBehaviour
         notMoveYet = true;
         isDie = false;
         isMoving = false;
+        isTeleporting = false;
         nowSpeed = 0;
         MoveDirection = Vector2.zero;
         movePoint = transform.position;
@@ -308,6 +316,7 @@ public class PlayerMovement : MonoBehaviour
         transform.position = movePoint;
         canInput = true;
         isMoving = false;
+        isTeleporting = false;
     }
 
     /// <summary>
@@ -409,6 +418,7 @@ public class PlayerMovement : MonoBehaviour
     {
         StopMove();
         canInput = false;
+        isTeleporting = true;
         MoveDirection = Vector2.zero;
         StartCoroutine("DisplayTeleportIn", entrance);
     }
