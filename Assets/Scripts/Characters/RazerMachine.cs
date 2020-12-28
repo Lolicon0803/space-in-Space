@@ -52,7 +52,7 @@ public class RazerMachine : MonoBehaviour
     {
         if (autoRotation)
         {
-            this.transform.Rotate(Vector3.forward, autoRotationSpeed);
+            this.transform.Rotate(Vector3.forward, autoRotationSpeed * Time.deltaTime);
            // razer.transform.Rotate(Vector3.forward, autoRotationSpeed);
         }
         //if (isShooting)

@@ -14,11 +14,25 @@ public class PlanetWalking : MonoBehaviour
     public float accelerationOfGravity = 0.1f;
     public PlayerMovement player;
     public new Camera camera;
-    public int nextScene;
+    public int[] nextScene;
     // Start is called before the first frame update
     void Start()
     {
         speedY = 0;
+    }
+
+    public int GetNextSceneIndex()
+    {
+        int Mod(int x, int m)
+        {
+            return (x % m + m) % m;
+        }
+        int degree = Mod((int)transform.rotation.eulerAngles.z, 360) - 45;
+        int nextSceneIndex = (degree <= 270 && degree > 180) ? 3 :
+                    (degree <= 180 && degree > 90) ? 2 :
+                    (degree <= 90 && degree > 0) ? 1 :
+                    0;
+        return nextSceneIndex;
     }
 
     // Update is called once per frame
@@ -29,9 +43,12 @@ public class PlanetWalking : MonoBehaviour
         UpdateYPosition();
         UpdateCameraSize();
         RotateAllNPCMark();
-        if (player.transform.position.y >= 28 && nextScene != 0)
+
+        int nextSceneIndex = GetNextSceneIndex();
+        if (player.transform.position.y >= 28 && nextScene[nextSceneIndex] != 0)
         {
-            SceneManager.LoadScene(nextScene);
+            Destroy(player.gameObject);
+            SceneManager.LoadScene(nextScene[nextSceneIndex]);
         }
     }
     private void TryJump()

@@ -14,7 +14,7 @@ public enum HeartStatus
 public class PlayerLifeSystem : MonoBehaviour
 {
     public int maxHp;
-    private int nowHp;
+    public int NowHp { get; set; }
 
     // 受傷後無敵時間
     public int invincibleTempo;
@@ -50,14 +50,19 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
-    public bool IsInvincible { get; private set; }
+    public bool IsInvincible { get; set; }
     private int invincibleCount;
     private int recoverCount;
     public bool IsDie { get; private set; }
 
+    public delegate void PlayerStatus();
+    public event PlayerStatus OnDie;
+
     // Start is called before the first frame update
     void Start()
     {
+        blackBgImage.rectTransform.offsetMax = Vector2.zero;
+        blackBgImage.rectTransform.offsetMin = Vector2.zero;
         startSceneIndex = -1;
         startPosition = new Vector2(-16.5f, -8.5f);
         Vector3 pos = transform.position;
@@ -72,14 +77,15 @@ public class PlayerLifeSystem : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
         playerMovement.OnError += LossLife;
-        if (dieCanvas != null && lifeCanvas != null)
-            InitializeHHeart();
+        NowHp = maxHp;
+        InitializeHHeart();
     }
 
-    private void InitializeHHeart()
+    public void InitializeHHeart()
     {
-        nowHp = maxHp;
-        int total = nowHp / 2 + nowHp % 2;
+        if (dieCanvas == null || lifeCanvas == null)
+            return;
+        int total = NowHp / 2 + NowHp % 2;
         if (heartImages == null)
         {
             heartImages = new Image[total];
@@ -91,16 +97,20 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         foreach (Image image in heartImages)
-            image.sprite = fullHeart;
-
-        lastHeartIndex = total - 1;
-        if (nowHp % 2 != 0)
+            image.sprite = BlackHear;
+        lastHeartIndex = -1;
+        for (int i = 0; i < NowHp - 1; i += 2)
         {
+            lastHeartIndex++;
+            heartImages[lastHeartIndex].sprite = fullHeart;
+        }
+        lastHeartState = HeartStatus.Full;
+        if (NowHp % 2 != 0)
+        {
+            lastHeartIndex++;
             heartImages[lastHeartIndex].sprite = breakHeart;
             lastHeartState = HeartStatus.Break;
         }
-        else
-            lastHeartState = HeartStatus.Full;
     }
 
     /// <summary>
@@ -161,7 +171,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     private void BreakHeart()
     {
-        nowHp--;
+        NowHp--;
         recoverCount = 0;
         if (lastHeartIndex >= 0)
         {
@@ -182,13 +192,13 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         // Gameover.
-        if (nowHp <= 0)
+        if (NowHp <= 0)
             GameOver();
     }
 
     private void Recover(Vector2 direction)
     {
-        if (nowHp != maxHp)
+        if (NowHp != maxHp)
         {
             recoverCount++;
             if (recoverCount == recoverAfterShoot)
@@ -196,7 +206,7 @@ public class PlayerLifeSystem : MonoBehaviour
                 recoverHeart.Play("Move");
 
                 recoverCount = 0;
-                nowHp++;
+                NowHp++;
                 // 換圖片用
                 switch (lastHeartState)
                 {
@@ -242,6 +252,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void GameOver()
     {
         playerMovement.Die();
+        OnDie?.Invoke();
         IsDie = true;
         //transform.localScale = Vector3.zero;
         StartCoroutine(ShowBlackEffect());
@@ -254,7 +265,7 @@ public class PlayerLifeSystem : MonoBehaviour
     private IEnumerator ShowBlackEffect()
     {
         // 黑圈縮小聚焦到玩家上
-        blackCircleImage.rectTransform.sizeDelta = new Vector2(2048, 2048);
+        blackCircleImage.rectTransform.sizeDelta = new Vector2(4096, 4096);
         blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
         dieCanvas.alpha = 1;
         yield return ShowBlackCircle(new Vector2(256, 256));
@@ -263,6 +274,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 黑圈縮到底
         yield return ShowBlackCircle(Vector2.zero);
 
+        NowHp = maxHp;
         InitializeHHeart();
 
         // 玩家回到起始點。
@@ -288,7 +300,7 @@ public class PlayerLifeSystem : MonoBehaviour
         // 看有沒有復活動畫
         yield return new WaitForSeconds(1.0f);
         // 黑圈全開
-        yield return ShowBlackCircle(new Vector2(2048, 2048));
+        yield return ShowBlackCircle(new Vector2(4096, 4096));
         dieCanvas.alpha = 0;
         playerMovement.ResetStatus();
         IsDie = false;
@@ -298,7 +310,7 @@ public class PlayerLifeSystem : MonoBehaviour
     {
         while (Vector2.Distance(blackCircleImage.rectTransform.sizeDelta, destination) > Mathf.Epsilon)
         {
-            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 15);
+            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 4000 * Time.deltaTime);
             yield return null;
         }
         blackCircleImage.rectTransform.sizeDelta = destination;

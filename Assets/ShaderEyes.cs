@@ -17,13 +17,20 @@ public class ShaderEyes : MonoBehaviour
         m_Material = GetComponent<SpriteRenderer>().material;
     }
 
+    public void Enable()
+    {
+        can = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F10))
         {
             can = true;
         }
+#endif
         if (can)
         {
             if (count < 3)

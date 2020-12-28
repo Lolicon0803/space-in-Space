@@ -38,11 +38,16 @@ public class Ground : MonoBehaviour
     
     private Collider2D col;
 
+    private float timer;
+    private bool checker;
+
     void Awake()
     {
         col = GetComponent<Collider2D>();
         col.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Ground");
+        timer = 0;
+        checker = false;
     }
 
     /// <summary>
@@ -111,11 +116,13 @@ public class Ground : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        
         if (collision.CompareTag("Player"))
         {
-            Debug.DrawRay(transform.position, -Player.Singleton.movement.MoveDirection, Color.red, 10);
-            ProcessEvent(Player.Singleton.transform.position);
+            if (Time.time - timer >= Time.deltaTime * 5)
+            {
+                ProcessEvent(Player.Singleton.transform.position);
+                timer = Time.time;
+            }
         }
     }
 
