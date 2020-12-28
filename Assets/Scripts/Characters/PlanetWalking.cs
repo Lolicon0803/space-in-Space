@@ -21,7 +21,7 @@ public class PlanetWalking : MonoBehaviour
         speedY = 0;
     }
 
-    private int GetNextSceneIndex()
+    public int GetNextSceneIndex()
     {
         int Mod(int x, int m)
         {
