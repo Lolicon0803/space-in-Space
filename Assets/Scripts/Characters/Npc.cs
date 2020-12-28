@@ -7,6 +7,8 @@ public class Npc : MonoBehaviour
 {
 
     public GameObject textWriter;
+    public bool isOutNpc = false;
+    private float speakRange = 1.5f;
 
     //要播放的故事
     public string[] storyName;
@@ -24,8 +26,6 @@ public class Npc : MonoBehaviour
     public bool isdestroy;
     // 暫，對話完可以拿到的物品
     public string item;
-
-    public Sprite bigFrame;
     private int count = 0;
 
     private bool isSpace = false;
@@ -37,6 +37,11 @@ public class Npc : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (isOutNpc)
+        {
+            speakRange = 0.4f;
+        }
+
         if (item == null)
             item = "";
         // 是道具，玩家已取得，載入後刪掉
@@ -60,7 +65,7 @@ public class Npc : MonoBehaviour
             {
                 foreach (string element in storyName)
                 {
-                   
+
                     DataBase.Singleton.datas.readStories[element] = false;
                 }
 
@@ -77,7 +82,7 @@ public class Npc : MonoBehaviour
             float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
             if (Input.GetKeyDown(KeyCode.F))
             {
-                if (dist < 1.5f)
+                if (dist < speakRange)
                 {
                     gameObject.GetComponent<AudioSource>().Play();
                     StartCoroutine("Move1");
@@ -107,7 +112,7 @@ public class Npc : MonoBehaviour
             float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
 
 
-            if (dist < 1.5f)
+            if (dist < speakRange)
             {
                 gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
 
@@ -154,7 +159,7 @@ public class Npc : MonoBehaviour
         if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
             textWriter.GetComponent<TextWriter>().Init();
-            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt", bigFrame);
+            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove(false);
             Player.Singleton.movement.canInput = false;
@@ -168,7 +173,7 @@ public class Npc : MonoBehaviour
             if (needReapeat[count])
             {
                 textWriter.GetComponent<TextWriter>().Init();
-                textWriter.GetComponent<TextWriter>().LoadStory(reapeatStory[count] + ".txt", bigFrame);
+                textWriter.GetComponent<TextWriter>().LoadStory(reapeatStory[count] + ".txt");
                 textWriter.GetComponent<TextWriter>().NextStory();
                 Player.Singleton.movement.StopMove();
                 Player.Singleton.movement.canInput = false;

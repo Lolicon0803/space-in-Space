@@ -78,12 +78,15 @@ public class PlayerMovement : MonoBehaviour
     private LayerMask groundLayer;
     private Vector2 standDirection;
 
+    private new CapsuleCollider2D collider;
+
     // Start is called before the first frame update
     void Start()
     {
         originMoveSpeed = moveSpeed;
         originSlideSpeed = slideSpeed;
         animationManager = GetComponent<PlayerAnimationManager>();
+        collider = GetComponent<CapsuleCollider2D>();
         groundLayer = LayerMask.GetMask("Ground");
         coroutineShoot = Shoot();
         ResetStatus();
@@ -292,7 +295,6 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, MoveDirection, totalDistance, groundLayer);
         Debug.DrawLine(transform.position, transform.position + (Vector3)MoveDirection * totalDistance, Color.red, 5);
         //撞牆情況
-        Debug.Log(hit.collider);
         if (hit.collider != null)
         {
             RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, totalDistance, LayerMask.GetMask("Player"));
@@ -319,6 +321,18 @@ public class PlayerMovement : MonoBehaviour
         canInput = true;
         isMoving = false;
         isTeleporting = false;
+        CheckNPC();
+    }
+
+    private void CheckNPC()
+    {
+        RaycastHit2D hit2D = Physics2D.Raycast(transform.position, Vector2.right, Time.deltaTime, LayerMask.GetMask("NPC"));
+        if (hit2D.collider != null)
+        {
+            StopMove(true);
+            notMoveYet = true;
+            firstTimeMiss = false;
+        }
     }
 
     /// <summary>
