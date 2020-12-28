@@ -290,10 +290,12 @@ public class PlayerMovement : MonoBehaviour
         else
             nowSpeed = speed;
         RaycastHit2D hit = Physics2D.Raycast(transform.position, MoveDirection, totalDistance, groundLayer);
+        Debug.DrawLine(transform.position, transform.position + (Vector3)MoveDirection * totalDistance, Color.red, 5);
         //撞牆情況
+        Debug.Log(hit.collider);
         if (hit.collider != null)
         {
-            RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, 5, LayerMask.GetMask("Player"));
+            RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, totalDistance, LayerMask.GetMask("Player"));
             float d = Vector2.Distance(hit.point, hit1.point);
             movePoint = (Vector2)transform.position + MoveDirection * (d + 0.05f);
         }
@@ -328,6 +330,7 @@ public class PlayerMovement : MonoBehaviour
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
+        BackToGrid();
         //StopMove(enableInput);
         transform.parent = null;
         float distance = 0;
@@ -355,6 +358,7 @@ public class PlayerMovement : MonoBehaviour
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
+        BackToGrid();
         //StopMove(enableInput);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
@@ -480,10 +484,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void BackToGrid()
     {
-        //Vector2 now = transform.position;
-        //now.x = Mathf.Floor(now.x) + 0.5f;
-        //now.y = Mathf.Floor(now.y) + 0.5f;
-        //transform.position = now;
+        Vector2 now = transform.position;
+        now.x = Mathf.Floor(now.x) + 0.5f;
+        now.y = Mathf.Floor(now.y) + 0.5f;
+        transform.position = now;
     }
 
     public void StopMove(bool enableInput = true)

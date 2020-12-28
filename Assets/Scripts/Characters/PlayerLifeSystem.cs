@@ -61,6 +61,8 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        blackBgImage.rectTransform.offsetMax = Vector2.zero;
+        blackBgImage.rectTransform.offsetMin = Vector2.zero;
         startSceneIndex = -1;
         startPosition = new Vector2(-16.5f, -8.5f);
         Vector3 pos = transform.position;
