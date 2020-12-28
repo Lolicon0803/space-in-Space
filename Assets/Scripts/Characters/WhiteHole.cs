@@ -62,7 +62,7 @@ public class WhiteHole : MonoBehaviour
                         pushIndex = i;
                     }
                 }
-                Player.Singleton.movement.Knock(fourDirections[pushIndex], pushUnit, pushSpeed);
+                Player.Singleton.movement.Knock(fourDirections[pushIndex], pushUnit, pushSpeed, false, true);
                 audioSource.PlayOneShot(pushPlayerAudio);
                 isActive = false;
             }

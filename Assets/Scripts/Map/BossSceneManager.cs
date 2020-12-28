@@ -94,6 +94,8 @@ public class BossSceneManager : MonoBehaviour
 
     private IEnumerator ZoomOutCamera()
     {
+        Player.Singleton.movement.StopMove(false);
+        Player.Singleton.movement.notMoveYet = true;
         while (Camera.main.orthographicSize < 10)
         {
             Camera.main.orthographicSize += Time.deltaTime;
@@ -106,11 +108,12 @@ public class BossSceneManager : MonoBehaviour
         textWriter.Init();
         textWriter.LoadStory(storyName[1] + ".txt");
         textWriter.NextStory();
-
     }
 
     private IEnumerator StartStory2()
     {
+        Player.Singleton.movement.StopMove(false);
+        Player.Singleton.movement.notMoveYet = true;
         boss.hand.GetComponent<Animator>().SetInteger("Sector", 1);
         yield return new WaitForSeconds(1.0f);
         boss.hand.GetComponent<Animator>().SetInteger("Sector", 2);
@@ -136,6 +139,8 @@ public class BossSceneManager : MonoBehaviour
 
     private IEnumerator WaitStartBoss()
     {
+        Player.Singleton.movement.StopMove(false);
+        Player.Singleton.movement.notMoveYet = true;
         Camera.main.GetComponent<CameraAspect>().originSize = 10;
         Camera.main.orthographicSize = 10;
         Camera.main.GetComponent<CameraAspect>().UpdateAspect();
@@ -153,6 +158,8 @@ public class BossSceneManager : MonoBehaviour
 
     public void StartBoss()
     {
+        Player.Singleton.movement.StopMove(false);
+        Player.Singleton.movement.notMoveYet = true;
         StopAllCoroutines();
         boss.SetActive();
         Player.Singleton.movement.canInput = true;

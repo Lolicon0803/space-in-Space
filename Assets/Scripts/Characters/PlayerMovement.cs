@@ -325,12 +325,13 @@ public class PlayerMovement : MonoBehaviour
     /// 玩家往指定方向動，速度剩滑行速度。
     /// </summary>
     /// <param name="direction">方向，給0表示往玩家的反方向</param>
-    public void Knock(Vector2 direction, bool enableInput = false)
+    public void Knock(Vector2 direction, bool enableInput = false, bool backToGrid = false)
     {
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
-        BackToGrid();
+        if (backToGrid)
+            BackToGrid();
         //StopMove(enableInput);
         transform.parent = null;
         float distance = 0;
@@ -353,12 +354,13 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction">推或吸的方向.零向量表示玩家反方向</param>
     /// <param name="knockDistance">推動或吸動幾個單位.</param>
     /// <param name="knockSpeed">推動或吸動速度.</param>
-    public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false)
+    public void Knock(Vector2 direction, float knockDistance, float knockSpeed, bool enableInput = false, bool backToGrid = false)
     {
         if (isDie || isBlackHole)
             return;
         StopCoroutine(coroutineShoot);
-        BackToGrid();
+        if (backToGrid)
+            BackToGrid();
         //StopMove(enableInput);
         // 預設為玩家的反方向
         if (direction == Vector2.zero)
@@ -366,6 +368,7 @@ public class PlayerMovement : MonoBehaviour
         else
             MoveDirection = direction;
         coroutineShoot = Shoot(enableInput, knockSpeed, knockDistance);
+
         StartCoroutine(coroutineShoot);
     }
 
