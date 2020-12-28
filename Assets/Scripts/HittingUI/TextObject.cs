@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TextObject : MonoBehaviour
 {
-    public float endTime = 2f;
+    public float endTime = 1f;
     private double counter;
     // Start is called before the first frame update
     void Start()
@@ -18,10 +18,10 @@ public class TextObject : MonoBehaviour
     {
         counter += Time.deltaTime;
 
-        transform.Translate(0, 0.002f, 0);
+        transform.Translate(0, 0.0025f, 0);
 
         Color oldColor = GetComponent<Text>().color;
-        GetComponent<Text>().color = new Color(oldColor.r, oldColor.g, oldColor.b, oldColor.a - 0.003f);
+        GetComponent<Text>().color = new Color(oldColor.r, oldColor.g, oldColor.b, oldColor.a - 0.00275f);
         if (counter >= endTime)
         {
             Destroy(gameObject);

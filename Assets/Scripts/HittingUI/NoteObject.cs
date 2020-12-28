@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class NoteObject : MonoBehaviour
 {
+    public bool isStop;
     private float movementSpeed;
     private HittingController hittingController;
     private float BPS;
@@ -16,6 +17,7 @@ public class NoteObject : MonoBehaviour
     public void hit()
     {
         StopCoroutine(coroutine);
+        isStop = true;
         StartCoroutine(Disappear());
     }
 
@@ -25,6 +27,7 @@ public class NoteObject : MonoBehaviour
         noteController = GameObject.Find("NoteHolder").GetComponent<NoteController>();
         BPS = (float)(hittingController.audioEngine.BPM / 60);
         moveTime = Mathf.Abs(transform.localPosition.x) / BPS;
+        isStop = false;
 
         startPos = transform.localPosition;
         if (transform.localPosition.x < 0)
@@ -46,6 +49,9 @@ public class NoteObject : MonoBehaviour
 
         while (timeElapsed < moveTime)
         {
+            if (isStop)
+                yield break;
+
             transform.localPosition = Vector3.Lerp(startPos, endPos, timeElapsed / moveTime);
 
             disappearIfArrived();
@@ -66,7 +72,7 @@ public class NoteObject : MonoBehaviour
     {
         float time = 0;
 
-        while (time < .5f)
+        while (time < .9f)
         {
             time += Time.deltaTime;
             GetComponent<Renderer>().material.color = new Color(1, 1, 1, 1 - time);
@@ -78,7 +84,7 @@ public class NoteObject : MonoBehaviour
 
     void disappearIfArrived()
     {
-        if (endPos.x > 0 && transform.localPosition.x > 0 || endPos.x < 0 && transform.localPosition.x < 0)
+        if (!isStop && (endPos.x > 0 && transform.localPosition.x > 0 || endPos.x < 0 && transform.localPosition.x < 0))
         {
             gameObject.GetComponent<Renderer>().material.color = new Color(1, 1, 1, 0);
         }
