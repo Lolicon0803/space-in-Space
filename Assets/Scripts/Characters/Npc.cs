@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Npc : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class Npc : MonoBehaviour
 
     //執行完對話是否需要銷毀?(用途:物品)
     public bool isdestroy;
+    // 暫，對話完可以拿到的物品
+    public string item;
     private int count = 0;
 
     private bool isSpace = false;
@@ -32,6 +35,14 @@ public class Npc : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (item == null)
+            item = "";
+        // 是道具，玩家已取得，載入後刪掉
+        if (DataBase.Singleton.datas.collectItems.ContainsKey(item) && DataBase.Singleton.datas.collectItems[item])
+        {
+            if (isdestroy)
+                Destroy(gameObject);
+        }
 
         if (storyName[0] != "SpaceBoat")
         {
@@ -140,13 +151,13 @@ public class Npc : MonoBehaviour
         //如果完成了前置且沒讀過劇情，放劇情
         if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
-            DataBase.Singleton.datas.readStories[storyName[count]] = true;
             textWriter.GetComponent<TextWriter>().Init();
             textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt");
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove(false);
             Player.Singleton.movement.canInput = false;
             isSpace = true;
+            textWriter.GetComponent<TextWriter>().onEndStory.AddListener(OnEndStory);
         }
         //如果沒達成前置
         else if (!DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
@@ -165,14 +176,32 @@ public class Npc : MonoBehaviour
     }
 
 
+    public void OnEndStory()
+    {
+        DataBase.Singleton.datas.readStories[storyName[count]] = true;
+        if (item != null)
+        {
+            if (!DataBase.Singleton.datas.collectItems.ContainsKey(item) || !DataBase.Singleton.datas.collectItems[item])
+            {
+                DataBase.Singleton.datas.collectItems[item] = true;
+                if (isdestroy)
+                {
+                    textWriter.GetComponent<TextWriter>().onEndStory.RemoveListener(OnEndStory);
+                    Destroy(gameObject);
+                }
+            }
+        }
+        textWriter.GetComponent<TextWriter>().onEndStory.RemoveListener(OnEndStory);
+    }
+
     public GameObject obj1 = null;
     private IEnumerator Move1()
     {
         while (Vector2.Distance(transform.position, obj1.transform.position) > 0)
         {
-            Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.75f * Time.deltaTime);
+            Player.Singleton.transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 1.5f * Time.deltaTime);
             // 移動
-            transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 0.75f * Time.deltaTime);
+            transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj1.transform.position, 1.5f * Time.deltaTime);
             yield return null;
         }
     }

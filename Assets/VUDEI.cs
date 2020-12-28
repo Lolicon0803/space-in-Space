@@ -239,10 +239,6 @@ public class VUDEI : MonoBehaviour
     {
         while (Vector2.Distance(transform.position, obj3.transform.position) > 0)
         {
-            Debug.LogError("出去吧: " + Vector2.Distance(transform.position, obj3.transform.position));
-            Debug.LogError("玩家位置: " + transform.position);
-            Debug.LogError("目標位置: " + obj3.transform.position);
-            Debug.LogError("移動位置: " + (Vector3)Vector2.MoveTowards(transform.position, obj3.transform.position, 0.08f));
             // 移動
             transform.position = (Vector3)Vector2.MoveTowards(transform.position, obj3.transform.position, 0.08f);
             yield return null;

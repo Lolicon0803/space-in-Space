@@ -55,6 +55,9 @@ public class PlayerLifeSystem : MonoBehaviour
     private int recoverCount;
     public bool IsDie { get; private set; }
 
+    public delegate void PlayerStatus();
+    public event PlayerStatus OnDie;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -247,6 +250,7 @@ public class PlayerLifeSystem : MonoBehaviour
     public void GameOver()
     {
         playerMovement.Die();
+        OnDie?.Invoke();
         IsDie = true;
         //transform.localScale = Vector3.zero;
         StartCoroutine(ShowBlackEffect());

@@ -31,7 +31,7 @@ public class SceneController : MonoBehaviour
     public UnityAction OnFadeOutStart;
     public UnityAction OnFadeOutEnd;
 
-    private List<int> storyScene = new List<int>() { 1, 2, 3 };
+    public List<int> storyScene = new List<int>() { 1, 2, 3 };
 
     void Awake()
     {
