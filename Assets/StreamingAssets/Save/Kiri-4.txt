@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"奇爾聯絡員","text":"抱歉，似乎還沒有辦法連絡上。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"沒有關係。"},
+]

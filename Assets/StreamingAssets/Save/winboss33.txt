@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"太空魷魚隊長","text":"怎麼可能…我居然被這種貨色…"},
+{"textBoxIndex":0,"speaker":"太空魷魚隊長","text":"反正你也沒辦法阻止了，你就儘管掙扎吧。"},
+]

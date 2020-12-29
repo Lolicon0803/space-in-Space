@@ -34,6 +34,8 @@ public class PlayerAudioManager : MonoBehaviour
         lifeSystem.OnDie += () =>
         {
             audioSource.PlayOneShot(gameOver);
+            if (bgm == null)
+                bgm = TempoManager.Singleton.transform.GetChild(0).GetComponent<AudioSource>();
             bgm.volume /= 3.0f;
             StartCoroutine(RecoverBgmVolume());
         };

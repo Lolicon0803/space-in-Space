@@ -6972,7 +6972,7 @@ MonoBehaviour:
   accelerationOfGravity: 10
   player: {fileID: 1515410194}
   camera: {fileID: 1887805806}
-  nextScene: 06000000000000000000000000000000
+  nextScene: 06000000070000000800000000000000
 --- !u!82 &1516021867
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7225,7 +7225,7 @@ PrefabInstance:
     - target: {fileID: 9206449971215940031, guid: 5373b5425eacfc448b404d795e81d45f,
         type: 3}
       propertyPath: postConditionStoryName.Array.data[0]
-      value: true
+      value: delta-2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5373b5425eacfc448b404d795e81d45f, type: 3}

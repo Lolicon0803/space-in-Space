@@ -12,6 +12,9 @@ public class BigSquidHand : MonoBehaviour
     public SpriteRenderer hint1;
     public SpriteRenderer hintSector;
 
+    public Sprite dieRaise;
+    public Sprite dieLie;
+
     private Animator animator;
 
     private Vector2 attackGrid1;
@@ -36,15 +39,17 @@ public class BigSquidHand : MonoBehaviour
 
     private void Start()
     {
-        GetComponentInParent<BigSquid>().OnDie += RemoveTempoEvent;
+        //GetComponentInParent<BigSquid>().OnDie += RemoveTempoEvent;
     }
 
-    public void RaiseForStraight(int number)
+    public void RaiseForStraight(int number, bool notCalculateAttackPosition = false)
     {
         animator.SetInteger(animStraight, number);
         // 舉手，計算攻擊位置並顯示提醒
-        if (number == 1)
+        if (number == 1 && !notCalculateAttackPosition)
+        {
             CalculateAttackPosition();
+        }
         else if (number == 2)
             AttackStraight();
         else if (number == 0)
@@ -59,6 +64,13 @@ public class BigSquidHand : MonoBehaviour
         attackGrid1.x = Mathf.Floor(attackGrid1.x) + 0.5f;
         attackGrid1.y = Mathf.Floor(attackGrid1.y) + 0.5f;
         Debug.DrawLine(transform.position, attackGrid1, Color.red, 5);
+        hint1.transform.position = attackGrid1;
+        ObjectTempoControl.Singleton.AddToBeatAction(ShowAttackHint, TempoActionType.Half);
+    }
+
+    public void SetAttackPosition(Vector2 position)
+    {
+        attackGrid1 = position;
         hint1.transform.position = attackGrid1;
         ObjectTempoControl.Singleton.AddToBeatAction(ShowAttackHint, TempoActionType.Half);
     }
@@ -151,10 +163,21 @@ public class BigSquidHand : MonoBehaviour
         }
     }
 
-    private void RemoveTempoEvent()
+    public void RemoveTempoEvent()
     {
         ObjectTempoControl.Singleton.RemoveToBeatAction(ShowSectorHint, TempoActionType.Half);
         ObjectTempoControl.Singleton.RemoveToBeatAction(ShowAttackHint, TempoActionType.Half);
-        gameObject.SetActive(false);
+        StartCoroutine(DelayDie());
+        //gameObject.SetActive(false);
+    }
+
+    private IEnumerator DelayDie()
+    {
+        yield return null;
+        hintSector.color = new Color(1, 1, 1, 0);
+        hint1.color = new Color(1, 1, 1, 0);
+        animator.SetTrigger("Die");
+        transform.localScale = new Vector3(0.5f, 1, 1);
+        GetComponent<SpriteRenderer>().sprite = dieRaise;
     }
 }

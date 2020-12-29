@@ -1,0 +1,5 @@
+[
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"你成功了，小子。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"是啊，這場戰鬥，是我們贏了!"},
+{"textBoxIndex":0,"speaker":"奇爾大長老","text":"小子，你的母星派來接你的宇宙飛船到了。"},
+]
