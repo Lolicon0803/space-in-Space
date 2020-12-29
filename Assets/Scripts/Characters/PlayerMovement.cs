@@ -214,6 +214,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 float x = 0;
                 float y = 0;
+                bool r = false;
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                     x = -1;
                 else if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -222,16 +223,26 @@ public class PlayerMovement : MonoBehaviour
                     y = 1;
                 else if (Input.GetKeyDown(KeyCode.DownArrow))
                     y = -1;
+                else if (Input.GetKeyDown(KeyCode.R))
+                    r = true;
                 // 有移動
-                if (x != 0 || y != 0)
+                if (x != 0 || y != 0 || r)
                 {
                     notMoveYet = false;
                     // 打在節拍上
                     if (TempoManager.Singleton.KeyDown())
                     {
-                        firstTimeMiss = true;
-                        MoveDirection = new Vector2(x, y);
-                        HandleInput();
+                        // 如果自殺
+                        if (r)
+                        {
+                            Player.Singleton.lifeSystem.Hurt(99);
+                        }
+                        else
+                        {
+                            firstTimeMiss = true;
+                            MoveDirection = new Vector2(x, y);
+                            HandleInput();
+                        }
                     }
                     // 打錯拍點
                     else
