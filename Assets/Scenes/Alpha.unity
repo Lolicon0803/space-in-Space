@@ -14246,11 +14246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textWriter: {fileID: 332834284}
-<<<<<<< HEAD
-  isOutNpc: 0
-=======
   isOutNpc: 1
->>>>>>> 46e97c0410a13fc364484459781562ab4dd07223
   storyName:
   - alpha-1
   - alpha-1
