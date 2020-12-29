@@ -39,8 +39,11 @@ public class PlayerLifeSystem : MonoBehaviour
     public Sprite fullHeart;
     public Sprite breakHeart;
     public Sprite BlackHear;
-    public Animator recoverHeart;
+    public GameObject hittingUI;
 
+    private Animator recoverHeartAnimator;
+    private Animator recoverFrameAnimator;
+    private GameObject recoverFrame;
     private Image[] heartImages;
 
     // 最後一顆愛心的索引值
@@ -61,6 +64,9 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        recoverHeartAnimator = hittingUI.transform.GetChild(5).gameObject.GetComponent<Animator>();
+        recoverFrame = hittingUI.transform.GetChild(3).gameObject;
+        recoverFrameAnimator = recoverFrame.GetComponent<Animator>();
         if (blackBgImage != null)
         {
             blackBgImage.rectTransform.offsetMax = Vector2.zero;
@@ -82,6 +88,11 @@ public class PlayerLifeSystem : MonoBehaviour
         playerMovement.OnError += LossLife;
         NowHp = maxHp;
         InitializeHHeart();
+    }
+
+    public int getRecoverCount()
+    {
+        return recoverCount;
     }
 
     public void InitializeHHeart()
@@ -206,7 +217,14 @@ public class PlayerLifeSystem : MonoBehaviour
             recoverCount++;
             if (recoverCount == recoverAfterShoot)
             {
-                recoverHeart.Play("Move");
+                if (recoverHeartAnimator != null)
+                {
+                    recoverHeartAnimator.Play("Move");
+                }
+                if (recoverFrameAnimator != null)
+                {
+                    recoverFrameAnimator.Play("Recover");
+                }
 
                 recoverCount = 0;
                 NowHp++;
