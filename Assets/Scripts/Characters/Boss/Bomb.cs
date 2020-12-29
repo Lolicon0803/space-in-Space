@@ -8,7 +8,7 @@ public class Bomb : MonoBehaviour
 {
     // 節拍單位
     public TempoActionType actionType;
-    // 幾個節拍單位後爆炸
+    // 幾個節拍單位後爆炸(目前會取正負2作隨機)
     public int tempoToExplosion;
     // 爆炸範圍
     public float radius;
@@ -49,6 +49,7 @@ public class Bomb : MonoBehaviour
     private bool isExplosion;
 
     private bool explosed;
+    private float nowSpeed;
 
     private void Awake()
     {
@@ -57,6 +58,7 @@ public class Bomb : MonoBehaviour
         collider2d = GetComponent<CircleCollider2D>();
         hint.localScale = new Vector3(hint.localScale.x / transform.localScale.x * radius * 2, hint.localScale.y / transform.localScale.y * radius * 2, 1);
         explosed = false;
+        tempoToExplosion = Random.Range(tempoToExplosion - 2, tempoToExplosion + 2);
     }
 
     // Start is called before the first frame update
@@ -64,6 +66,7 @@ public class Bomb : MonoBehaviour
     {
         if (countdownText != null)
             countdownText.text = tempoToExplosion.ToString();
+        ObjectTempoControl.Singleton.AddToBeatAction(Count, actionType);
     }
 
     private void Update()
@@ -114,12 +117,14 @@ public class Bomb : MonoBehaviour
     private IEnumerator Move(float speed)
     {
         isMoving = true;
-        while (Vector2.Distance(transform.position, settingDestination) > speed * Time.deltaTime)
+        nowSpeed = speed;
+        while (Vector2.Distance(transform.position, settingDestination) > nowSpeed * Time.deltaTime)
         {
-            transform.position = Vector2.MoveTowards(transform.position, settingDestination, speed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, settingDestination, nowSpeed * Time.deltaTime);
             yield return null;
         }
         isMoving = false;
+        nowSpeed = 0;
         transform.position = settingDestination;
         finishSetting = true;
         ObjectTempoControl.Singleton.AddToBeatAction(Count, actionType);
@@ -148,6 +153,8 @@ public class Bomb : MonoBehaviour
     {
         if (explosed)
             return;
+        //StopCoroutine(enumeratorMove);
+        nowSpeed = 0;
         explosed = true;
         isExplosion = true;
         ObjectTempoControl.Singleton.RemoveToBeatAction(Count, actionType);
@@ -167,12 +174,11 @@ public class Bomb : MonoBehaviour
                         direction.y = 0;
                     else
                         direction.x = 0;
-                    Player.Singleton.movement.Knock(direction, pushDistance, pushPower);
+                    Player.Singleton.movement.Knock(direction, pushDistance, pushPower, false, true);
                     Player.Singleton.lifeSystem.Hurt(damage);
                 }
                 else if (hits[i].collider.CompareTag("Boss"))
                 {
-                    Debug.Log("BOSS");
                     hits[i].collider.GetComponentInParent<BigSquid>().Damaged(damage);
                 }
                 else if (hits[i].collider.CompareTag("Enemy"))
@@ -186,7 +192,7 @@ public class Bomb : MonoBehaviour
             }
         }
         OnBomb?.Invoke();
-        StopCoroutine(enumeratorMove);
+        //StopCoroutine(enumeratorMove);
     }
 
     /// <summary>
@@ -209,6 +215,15 @@ public class Bomb : MonoBehaviour
     public void Disappear()
     {
         ObjectTempoControl.Singleton.RemoveToBeatAction(Count, actionType);
+        
+        StartCoroutine(DelayDisapper());
+    }
+
+    private IEnumerator DelayDisapper()
+    {
+        yield return new WaitForSeconds(0.1f);
+        transform.position = new Vector3(999, 999, 999);
+        yield return new WaitForSeconds(1.0f);
         Destroy(gameObject);
     }
 
@@ -217,7 +232,7 @@ public class Bomb : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             float pushedSpeed = Player.Singleton.movement.NowSpeed;
-            if (pushedSpeed >= Player.Singleton.movement.moveSpeed)
+            if (pushedSpeed >= Player.Singleton.movement.moveSpeed && !bossTouched)
             {
                 Knock(Player.Singleton.movement.MoveDirection, pushedSpeed * 2.0f, 0);
                 Player.Singleton.movement.Knock(Vector2.zero);
