@@ -16,9 +16,12 @@ public class NoteObject : MonoBehaviour
 
     public void hit()
     {
-        StopCoroutine(coroutine);
-        isStop = true;
-        StartCoroutine(Disappear());
+        if (Mathf.Abs(transform.localPosition.x) < 0.5f)
+        {
+            StopCoroutine(coroutine);
+            isStop = true;
+            StartCoroutine(Disappear());
+        }
     }
 
     void Start()

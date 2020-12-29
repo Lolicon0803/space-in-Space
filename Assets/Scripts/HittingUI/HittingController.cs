@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class HittingController : MonoBehaviour
 {
     public TempoManager audioEngine;
-    public SpriteRenderer hittingArea;
+    public Player player;
+    public SpriteRenderer hintFrame;
     public GameObject notePrefab;
-    public AudioSource audioSource;
-    public AudioClip[] clips;
-    public Sprite[] sprites;
+    public Sprite[] frames;
     public Animator hitAnim;
+    public Animator frameAnim;
     public Canvas canvas;
     public GameObject missPrefab;
 
@@ -33,6 +33,9 @@ public class HittingController : MonoBehaviour
         {
             TouchStates touchState = audioEngine.touchState;
             changeBtnSprite(touchState);
+
+            int recoverCount = player.GetComponent<PlayerLifeSystem>().getRecoverCount();
+            changeHintFrame(recoverCount);
         }
     }
 
@@ -59,10 +62,7 @@ public class HittingController : MonoBehaviour
             {
                 deleteHitNode();
 
-                GameObject newText = Instantiate(missPrefab, canvas.transform);
-                newText.GetComponent<Text>().text = "HIT!";
-                newText.transform.position = transform.position;
-                newText.transform.Translate(new Vector3(0, 0.9f, 0));
+                generateText("HIT!");
 
                 if (hitAnim != null)
                 {
@@ -75,9 +75,7 @@ public class HittingController : MonoBehaviour
         {
             if (isReset)
             {
-                GameObject newText = Instantiate(missPrefab, canvas.transform);
-                newText.transform.position = transform.position;
-                newText.transform.Translate(new Vector3(0, 0.9f, 0));
+                generateText("MISS!");
             }
             isReset = false;
         }
@@ -87,9 +85,31 @@ public class HittingController : MonoBehaviour
         }
     }
 
+    void generateText(string str)
+    {
+        GameObject newText = Instantiate(missPrefab, canvas.transform);
+        newText.GetComponent<Text>().text = str;
+        newText.transform.position = transform.position;
+        newText.transform.Translate(new Vector3(0, 0.9f, 0));
+    }
+
     void deleteHitNode()
     {
-        gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().hit();
-        gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<NoteObject>().hit();
+        // 最靠近的兩個可能還沒跑完動畫
+        if (!gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().isStop)
+        {
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().hit();
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<NoteObject>().hit();
+        }
+        else
+        {
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<NoteObject>().hit();
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(3).GetComponent<NoteObject>().hit();
+        }
+    }
+
+    void changeHintFrame(int recoverAfterShoot)
+    {
+        hintFrame.sprite = frames[recoverAfterShoot];
     }
 }
