@@ -77,15 +77,35 @@ public class Npc : MonoBehaviour
     void Update()
     {
 
+
         if (storyName[0] == "SpaceBoat")
         {
-            float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
-            if (Input.GetKeyDown(KeyCode.F))
+
+            if (DataBase.Singleton.datas.readStories.ContainsKey(postConditionStoryName[0]) &&
+                 DataBase.Singleton.datas.readStories[postConditionStoryName[0]])
             {
-                if (dist < speakRange)
+
+
+                float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
+                if (Input.GetKeyDown(KeyCode.F))
                 {
-                    gameObject.GetComponent<AudioSource>().Play();
-                    StartCoroutine("Move1");
+                    if (dist < speakRange)
+                    {
+                        gameObject.GetComponent<AudioSource>().Play();
+                        StartCoroutine("Move1");
+                    }
+                }
+            }
+            else
+            {
+                float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
+                if (Input.GetKeyDown(KeyCode.F) && dist < speakRange)
+                {
+                    textWriter.GetComponent<TextWriter>().Init();
+                    textWriter.GetComponent<TextWriter>().LoadStory("Kiri-6.txt");
+                    textWriter.GetComponent<TextWriter>().NextStory();
+                    Player.Singleton.movement.StopMove();
+                    Player.Singleton.movement.canInput = false;
                 }
             }
         }
@@ -153,7 +173,7 @@ public class Npc : MonoBehaviour
 
     public void PlayStory()
     {
-
+        Debug.Log("HERE");
 
         //如果完成了前置且沒讀過劇情，放劇情
         if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
@@ -169,6 +189,7 @@ public class Npc : MonoBehaviour
         //如果沒達成前置
         else if (!DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
+            Debug.Log("重複");
             //如果需要重複對話
             if (needReapeat[count])
             {

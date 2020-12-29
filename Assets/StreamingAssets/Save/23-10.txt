@@ -1,3 +1,6 @@
 [
 {"textBoxIndex":0,"speaker":"告示牌","text":"前方可遙望到奇爾星"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看來從這裡往上跳便能離開這顆星球"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"在此之前要好好熟悉火箭背包的操作"},
+{"textBoxIndex":0,"speaker":"旁白","text":"離開星球，嘗試抵達奇爾星吧!"},
 ]
