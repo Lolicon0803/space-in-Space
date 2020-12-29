@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"莎夏……"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【獲得道具:莎夏的項鍊】"},
+]

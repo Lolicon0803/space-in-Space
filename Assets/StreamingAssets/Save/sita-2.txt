@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看起來是很重要的零件，帶上比較好。"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【獲得道具:核心零件E】"},
+]
