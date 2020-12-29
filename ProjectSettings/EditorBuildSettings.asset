@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Beta.unity
     guid: fad618328162a7644a31121f09648510
+  - enabled: 1
+    path: Assets/Scenes/PrimaryToNo17.unity
+    guid: 3998f5f6274cef24a9d22f5b720f907b
   m_configObjects: {}
