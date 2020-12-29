@@ -22,7 +22,7 @@ using UnityEngine.Events;
 public class BigSquid : MonoBehaviour
 {
     public int maxHP;
-    private int nowHP;
+    public int NowHP { get; private set; }
 
     public Bomb bomb;
     public Anemy smallSquid;
@@ -87,17 +87,24 @@ public class BigSquid : MonoBehaviour
     public AudioClip audioDie;
     // --
 
+    // 特殊行為，連續用觸手推動炸彈
+    private bool straightBombAttack;
+    private int straightBombAttackCount;
+    private Vector2 targetBombPos;
+
+    private Transform dieBomb;
+
     private void Awake()
     {
         // 數據初始化--------
-        nowHP = maxHP;
+        NowHP = maxHP;
         wholeCount = 0;
         attackCount = 0;
         bigHandCount = 0;
 
-        maxBombNumber = 7;
+        maxBombNumber = 9;
         nowBombNumber = 0;
-        summonBombNumber = 1;
+        summonBombNumber = 2;
 
         maxSquidNumber = 2;
         nowSquidNumber = 0;
@@ -108,17 +115,22 @@ public class BigSquid : MonoBehaviour
         maxStraightNumber = 2;
 
         isAttackingSector = false;
+
+        straightBombAttack = false;
+        straightBombAttackCount = 0;
         //--------------------
 
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         hand = GetComponentInChildren<BigSquidHand>();
+        dieBomb = transform.GetChild(3);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         OnDie = new UnityAction(() => { });
+        OnDie += hand.RemoveTempoEvent;
     }
 
     public void SetActive()
@@ -127,11 +139,14 @@ public class BigSquid : MonoBehaviour
         //ObjectTempoControl.Singleton.AddToBeatAction(CountHalfTempo, TempoActionType.Half);
         //// 註冊一拍節奏
         ObjectTempoControl.Singleton.AddToBeatAction(CountWholeTempo, TempoActionType.Whole);
+        ObjectTempoControl.Singleton.AddToBeatAction(UseStraightBombAttack, TempoActionType.Half);
     }
 
     private void CountWholeTempo()
     {
-        if (!isAttackingStraight && !isAttackingSector)
+        if (straightBombAttack && !isAttackingStraight)
+            return;
+        else if (!isAttackingStraight && !isAttackingSector)
         {
             // 一拍計數
             wholeCount++;
@@ -139,7 +154,7 @@ public class BigSquid : MonoBehaviour
             if (wholeCount % 6 == 0 && nowSquidNumber < maxSquidNumber)
                 SummonSquid(summonSquidNumber);
             // 扇形
-            else if (wholeCount % 10 == 0)
+            else if (wholeCount % 11 == 0)
                 isAttackingSector = true;
             // 直線
             else if (wholeCount % 3 == 0)
@@ -175,6 +190,31 @@ public class BigSquid : MonoBehaviour
                 bigHandCount = 0;
                 isAttackingSector = false;
             }
+        }
+    }
+
+    private void UseStraightBombAttack()
+    {
+        if (!straightBombAttack)
+            return;
+        straightBombAttackCount++;
+        if (straightBombAttackCount % 2 == 1)
+        {
+            targetBombPos = Player.Singleton.transform.position;
+            targetBombPos.x = -1.5f;
+            SummonBombAt(targetBombPos);
+            hand.RaiseForStraight(0);
+            hand.RaiseForStraight(1, false);
+            hand.SetAttackPosition(targetBombPos);
+        }
+        else
+        {
+            hand.RaiseForStraight(2);
+        }
+        if (straightBombAttackCount == 20)
+        {
+            straightBombAttack = false;
+            ObjectTempoControl.Singleton.RemoveToBeatAction(UseStraightBombAttack, TempoActionType.Half);
         }
     }
 
@@ -242,33 +282,82 @@ public class BigSquid : MonoBehaviour
                 }
             };
             newBomb.gameObject.SetActive(true);
-            newBomb.SetDestination(position, 20);
+            newBomb.SetDestination(position, 20 * TempoManager.Singleton.beatPerMinute / 60.0f);
         }
+    }
+
+    private void SummonBombAt(Vector2 position)
+    {
+        Bomb newBomb = Instantiate(bomb, transform.position, Quaternion.identity);
+        // 炸彈爆炸時減少炸彈數量。
+        newBomb.OnBomb += () => nowBombNumber--;
+        // 死亡時，刪除這顆炸彈。
+        OnDie += () =>
+        {
+            if (newBomb != null)
+            {
+                newBomb.Disappear();
+                nowBombNumber--;
+            }
+        };
+        newBomb.gameObject.SetActive(true);
+        newBomb.SetDestination(position, 40 * TempoManager.Singleton.beatPerMinute / 60.0f);
     }
 
     public void Damaged(int number)
     {
         if (audioHurt != null)
             audioSource.PlayOneShot(audioHurt);
-        nowHP -= number;
+        NowHP -= number;
         if (hpBar != null)
-            hpBar.fillAmount = (float)nowHP / maxHP;
-        if (nowHP < 4)
+            hpBar.fillAmount = (float)NowHP / maxHP;
+        //if (nowHP == 10)
+        //{
+        //    Debug.Break();
+        //    straightBombAttack = true;
+        //    attackStraightNumber = maxStraightNumber;
+        //    ObjectTempoControl.Singleton.AddToBeatAction(UseStraightBombAttack, TempoActionType.Quarter);
+        //}
+        if (NowHP < 4)
         {
-            summonBombNumber = 2;
-            maxBombNumber = 9;
+            summonBombNumber = 3;
+            maxBombNumber = 12;
             maxSquidNumber = 3;
             maxStraightNumber = 3;
         }
-        if (nowHP <= 0)
+        if (NowHP <= 0)
         {
             ObjectTempoControl.Singleton.RemoveToBeatAction(CountWholeTempo, TempoActionType.Whole);
             if (audioDie != null)
                 audioSource.PlayOneShot(audioDie);
             OnDie?.Invoke();
-            Destroy(hpCanvas.gameObject);
-            Destroy(gameObject);
+            NowHP = -1;
         }
+    }
+
+    public IEnumerator ShowDieEffect()
+    {
+        yield return new WaitForSeconds(0.5f);
+        dieBomb.GetChild(0).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.1f);
+        dieBomb.GetChild(1).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.5f);
+        dieBomb.GetChild(2).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.6f);
+        dieBomb.GetChild(3).GetComponent<Animator>().SetTrigger("Explosion");
+        hand.GetComponent<SpriteRenderer>().sprite = hand.dieLie;
+        yield return new WaitForSeconds(0.5f);
+        dieBomb.GetChild(4).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.45f);
+        dieBomb.GetChild(5).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.25f);
+        dieBomb.GetChild(6).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitForSeconds(0.65f);
+        dieBomb.GetChild(7).GetComponent<Animator>().SetTrigger("Explosion");
+        yield return new WaitWhile(() => dieBomb.GetChild(7).GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length < 0.99f);
+        NowHP = -1;
+        Destroy(hpCanvas.gameObject);
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

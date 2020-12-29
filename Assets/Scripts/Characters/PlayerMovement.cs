@@ -179,8 +179,13 @@ public class PlayerMovement : MonoBehaviour
             // 根據bpm改變移動速度
             if (TempoManager.Singleton.beatPerMinute > 60)
             {
-                moveSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
-                slideSpeed *= (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                moveSpeed = originMoveSpeed * (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+                slideSpeed = originSlideSpeed * (float)TempoManager.Singleton.beatPerMinute / 60.0f;
+            }
+            else
+            {
+                moveSpeed = originMoveSpeed;
+                slideSpeed = originSlideSpeed;
             }
         }
         // 對話完後玩家可以輸入
@@ -308,7 +313,8 @@ public class PlayerMovement : MonoBehaviour
         //撞牆情況
         if (hit.collider != null)
         {
-            RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, totalDistance, LayerMask.GetMask("Player"));
+            Debug.Log("會撞牆");
+            RaycastHit2D hit1 = Physics2D.Raycast(hit.point, -MoveDirection, totalDistance * 2, LayerMask.GetMask("Player"));
             float d = Vector2.Distance(hit.point, hit1.point);
             movePoint = (Vector2)transform.position + MoveDirection * (d + 0.05f);
         }
