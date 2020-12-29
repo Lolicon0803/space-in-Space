@@ -64,9 +64,13 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        recoverHeartAnimator = hittingUI.transform.GetChild(5).gameObject.GetComponent<Animator>();
-        recoverFrame = hittingUI.transform.GetChild(3).gameObject;
-        recoverFrameAnimator = recoverFrame.GetComponent<Animator>();
+        Debug.Log("我 = " + gameObject.name);
+        if (hittingUI != null)
+        {
+            recoverHeartAnimator = hittingUI.transform.GetChild(5).gameObject.GetComponent<Animator>();
+            recoverFrame = hittingUI.transform.GetChild(3).gameObject;
+            recoverFrameAnimator = recoverFrame.GetComponent<Animator>();
+        }
         if (blackBgImage != null)
         {
             blackBgImage.rectTransform.offsetMax = Vector2.zero;

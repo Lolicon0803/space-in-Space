@@ -53,7 +53,7 @@ public class BossSceneManager : MonoBehaviour
         //劇情
         else
         {
-            StartCoroutine(AdjustHittingUI());
+            //StartCoroutine(AdjustHittingUI());
             StartCoroutine(StartStory());
         }
         StartCoroutine(WinStory1());
@@ -104,7 +104,8 @@ public class BossSceneManager : MonoBehaviour
     {
         Player.Singleton.movement.StopMove(false);
         Player.Singleton.movement.notMoveYet = true;
-        while (Camera.main.orthographicSize < 10)
+        float size = 10 * (16.0f / 9.0f) / ((float)Screen.width / Screen.height);
+        while (Camera.main.orthographicSize < size)
         {
             Camera.main.orthographicSize += Time.deltaTime;
             Camera.main.transform.position = Vector3.MoveTowards(Camera.main.transform.position, new Vector3(0, -2, -10), 2.8f * Time.deltaTime);
@@ -304,6 +305,6 @@ public class BossSceneManager : MonoBehaviour
         }
         Destroy(player.lifeSystem.lifeCanvas.gameObject);
         Destroy(player.lifeSystem.dieCanvas.gameObject);
-        SceneController.Singleton.LoadSceneAsync(8, true);
+        SceneController.Singleton.LoadSceneAsync(9, true);
     }
 }

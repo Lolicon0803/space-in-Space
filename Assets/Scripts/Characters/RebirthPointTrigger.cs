@@ -22,8 +22,11 @@ public class RebirthPointTrigger : MonoBehaviour
     {
         if (collision.CompareTag("Player") && !triggered)
         {
-            if (Vector2.Distance(Player.Singleton.movement.transform.position, transform.position) < Player.Singleton.movement.NowSpeed * Time.deltaTime)
+            float d = Vector2.Distance(Player.Singleton.movement.transform.position, transform.position);
+            if (d < Player.Singleton.movement.NowSpeed * Time.deltaTime
+                || d < Mathf.Epsilon)
             {
+                Debug.Log("重生點設置");
                 Player.Singleton.lifeSystem.SetStartPosition(sceneIndex, rebirthPoint);
                 DataBase.Singleton.Save();
                 triggered = true;

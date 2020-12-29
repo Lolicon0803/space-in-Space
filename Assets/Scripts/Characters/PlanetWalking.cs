@@ -48,7 +48,8 @@ public class PlanetWalking : MonoBehaviour
         if (player.transform.position.y >= 28 && nextScene[nextSceneIndex] != 0)
         {
             Destroy(player.gameObject);
-            SceneManager.LoadScene(nextScene[nextSceneIndex]);
+            //SceneManager.LoadScene(nextScene[nextSceneIndex]);
+            SceneController.Singleton.LoadSceneAsync(nextScene[nextSceneIndex], true);
         }
     }
     private void TryJump()

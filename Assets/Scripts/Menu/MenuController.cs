@@ -188,7 +188,7 @@ namespace SpeedTutorMainMenuSystem
         {
             if (ButtonType == "Yes")
             {
-                SceneController.GoToScene(newGameIndex);
+                SceneController.Singleton.LoadSceneAsync(newGameIndex, true);
             }
 
             if (ButtonType == "No")

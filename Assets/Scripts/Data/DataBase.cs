@@ -103,12 +103,17 @@ public class DataBase : MonoBehaviour
         }
     }
 
+    public void EnableLoadData()
+    {
+        StartCoroutine(LoadData());
+    }
+
     public bool Load()
     {
         datas = sl.LoadData(typeof(Datas), "PlaySave/save.json", true) as Datas;
         if (datas == null)
             return false;
-        SceneController.Singleton.OnFadeOutStart += () => StartCoroutine(LoadData());
+        SceneController.Singleton.OnFadeOutStart += EnableLoadData;
         SceneController.Singleton.LoadSceneAsync(datas.playerData.rebirthSceneIndex, true);
         return true;
     }
@@ -117,7 +122,7 @@ public class DataBase : MonoBehaviour
     {
         // 先確保其他物件初始化完畢
         yield return null;
-        SceneController.Singleton.OnFadeOutStart -= () => StartCoroutine(LoadData());
+        SceneController.Singleton.OnFadeOutStart -= EnableLoadData;
         if (Player.Singleton != null)
         {
             Player.Singleton.movement.canInput = false;

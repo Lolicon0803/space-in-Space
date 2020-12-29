@@ -119,7 +119,7 @@ public class SceneController : MonoBehaviour
         OnFadeInStart?.Invoke();
         while (fadeInOutImage.color.a < 1)
         {
-            Debug.Log(fadeInOutImage.color);
+            //Debug.Log(fadeInOutImage.color);
             fadeInOutImage.color = new Color(1, 1, 1, fadeInOutImage.color.a + Time.deltaTime * 1.0f);
             yield return null;
         }

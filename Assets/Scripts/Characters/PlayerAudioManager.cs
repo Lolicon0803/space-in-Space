@@ -21,8 +21,8 @@ public class PlayerAudioManager : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         movement = GetComponent<PlayerMovement>();
         lifeSystem = GetComponent<PlayerLifeSystem>();
-
-        bgm = TempoManager.Singleton.transform.GetChild(0).GetComponent<AudioSource>();
+        if (TempoManager.Singleton != null)
+            bgm = TempoManager.Singleton.transform.GetChild(0).GetComponent<AudioSource>();
     }
 
     // Start is called before the first frame update

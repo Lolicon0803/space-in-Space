@@ -37,6 +37,6 @@ public class EndCredit : MonoBehaviour
     }
     void OnEnd()
     {
-        SceneManager.LoadScene(0);
+        SceneController.Singleton.LoadSceneAsync(0, true)
     }
 }

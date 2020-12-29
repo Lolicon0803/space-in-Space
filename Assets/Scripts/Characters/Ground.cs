@@ -35,17 +35,20 @@ public class Ground : MonoBehaviour
 {
     [Header("設定玩家從這個方向來時，玩家會有什麼行為。")]
     public GroundEvent[] groundEvents;
-    
+
     private Collider2D col;
 
     private float timer;
     private bool checker;
+
+    private MovablePlatform platform;
 
     void Awake()
     {
         col = GetComponent<Collider2D>();
         col.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Ground");
+        platform = GetComponent<MovablePlatform>();
         timer = 0;
         checker = false;
     }
@@ -68,12 +71,15 @@ public class Ground : MonoBehaviour
                     Player.Singleton.movement.ZeroMoveDirection();
                     break;
                 case GroundBehavior.Standable:
-                    if (groundEvents[index].hasGravity && ! Player.Singleton.lifeSystem.IsDie)
+                    if (groundEvents[index].hasGravity && !Player.Singleton.lifeSystem.IsDie)
                         Player.Singleton.transform.parent = transform;
                     Player.Singleton.movement.StandOnGround(groundEvents[index].standDirection);
                     break;
                 case GroundBehavior.Rebounce:
-                    Player.Singleton.movement.Knock(groundEvents[index].reboundDirection);
+                    if (platform != null)
+                        Player.Singleton.movement.Knock(groundEvents[index].reboundDirection, 1, platform.moveSpeed);
+                    else
+                        Player.Singleton.movement.Knock(groundEvents[index].reboundDirection);
                     break;
                 default:
                     Player.Singleton.movement.StopMove();
@@ -82,7 +88,10 @@ public class Ground : MonoBehaviour
         }
         else
         {
-            Player.Singleton.movement.Knock(Vector2.zero);
+            if (platform != null)
+                Player.Singleton.movement.Knock(Vector2.zero, 1, platform.moveSpeed);
+            else
+                Player.Singleton.movement.Knock(Vector2.zero);
         }
     }
 

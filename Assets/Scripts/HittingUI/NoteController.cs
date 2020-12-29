@@ -61,9 +61,9 @@ public class NoteController : MonoBehaviour
         {
             GameObject leftNote = Instantiate(notePrefab, transform);
             GameObject rightNote = Instantiate(notePrefab, transform);
-
-            rightNote.transform.Translate(noteInitPositionX, 0, 0);
-            leftNote.transform.Translate(-noteInitPositionX, 0, 0);
+            float scale = Camera.main.orthographicSize / 5.0f;
+            rightNote.transform.Translate(noteInitPositionX * scale, 0, 0);
+            leftNote.transform.Translate(-noteInitPositionX * scale, 0, 0);
 
             correctGenerateSpeed();
 
