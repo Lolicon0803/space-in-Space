@@ -1,0 +1,5 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這是…看起來是太空船的殘骸。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"莎夏的反應越來越明顯，看來方向沒錯。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"你一定要平安無事啊…莎夏。"},
+]

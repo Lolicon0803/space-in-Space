@@ -14,7 +14,7 @@ public enum HeartStatus
 public class PlayerLifeSystem : MonoBehaviour
 {
     public int maxHp;
-    private int nowHp;
+    public int NowHp { get; set; }
 
     // 受傷後無敵時間
     public int invincibleTempo;
@@ -22,22 +22,28 @@ public class PlayerLifeSystem : MonoBehaviour
     public int recoverAfterShoot;
 
     // 復活場景
-    private int startScene;
+    private int startSceneIndex;
     // 復活點。
     private Vector2 startPosition;
 
-    public Canvas canvas;
+    public Canvas lifeCanvas;
+    public CanvasGroup dieCanvas;
     // 受傷紅屏
     public Image redEffectImage;
     // 愛心
     public Image heartImagePrefab;
     // 死亡黑屏
-    public Image blackImage;
+    public Image blackCircleImage;
+    public Image blackBgImage;
 
     public Sprite fullHeart;
     public Sprite breakHeart;
     public Sprite BlackHear;
+    public GameObject hittingUI;
 
+    private Animator recoverHeartAnimator;
+    private Animator recoverFrameAnimator;
+    private GameObject recoverFrame;
     private Image[] heartImages;
 
     // 最後一顆愛心的索引值
@@ -47,51 +53,82 @@ public class PlayerLifeSystem : MonoBehaviour
 
     private PlayerMovement playerMovement;
 
-    private bool isInvincible;
+    public bool IsInvincible { get; set; }
     private int invincibleCount;
     private int recoverCount;
-    private bool isDie;
+    public bool IsDie { get; private set; }
+
+    public delegate void PlayerStatus();
+    public event PlayerStatus OnDie;
 
     // Start is called before the first frame update
     void Start()
     {
-        startScene = -1;
-        startPosition = new Vector2(-16.537f, -8.552f);
-        isDie = false;
-        isInvincible = false;
+        Debug.Log("我 = " + gameObject.name);
+        if (hittingUI != null)
+        {
+            recoverHeartAnimator = hittingUI.transform.GetChild(5).gameObject.GetComponent<Animator>();
+            recoverFrame = hittingUI.transform.GetChild(3).gameObject;
+            recoverFrameAnimator = recoverFrame.GetComponent<Animator>();
+        }
+        if (blackBgImage != null)
+        {
+            blackBgImage.rectTransform.offsetMax = Vector2.zero;
+            blackBgImage.rectTransform.offsetMin = Vector2.zero;
+        }
+        startSceneIndex = -1;
+        startPosition = new Vector2(-16.5f, -8.5f);
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Floor(pos.x) + 0.5f;
+        pos.y = Mathf.Floor(pos.y) + 0.5f;
+        transform.position = pos;
+        IsDie = false;
+        IsInvincible = false;
+        // IsInvincible = true;
         invincibleCount = 0;
         recoverCount = 0;
         playerMovement = GetComponent<PlayerMovement>();
         playerMovement.OnFireBag += Recover;
         playerMovement.OnError += LossLife;
+        NowHp = maxHp;
         InitializeHHeart();
     }
 
-    private void InitializeHHeart()
+    public int getRecoverCount()
     {
-        nowHp = maxHp;
-        int total = nowHp / 2 + nowHp % 2;
+        return recoverCount;
+    }
+
+    public void InitializeHHeart()
+    {
+        if (dieCanvas == null || lifeCanvas == null)
+            return;
+        int total = NowHp / 2 + NowHp % 2;
         if (heartImages == null)
         {
             heartImages = new Image[total];
             for (int i = 0; i < total; i++)
             {
-                heartImages[i] = Instantiate(heartImagePrefab, canvas.transform);
+                heartImages[i] = Instantiate(heartImagePrefab, lifeCanvas.transform);
                 heartImages[i].rectTransform.offsetMin = new Vector2(heartImages[i].rectTransform.offsetMin.x + 75 * i, heartImages[i].rectTransform.offsetMin.y);
                 heartImages[i].rectTransform.offsetMax = new Vector2(heartImages[i].rectTransform.offsetMax.x + 75 * i, heartImages[i].rectTransform.offsetMax.y);
             }
         }
         foreach (Image image in heartImages)
-            image.sprite = fullHeart;
-
-        lastHeartIndex = total - 1;
-        if (nowHp % 2 != 0)
+            image.sprite = BlackHear;
+        lastHeartIndex = -1;
+        for (int i = 0; i < NowHp - 1; i += 2)
         {
+            lastHeartIndex++;
+            heartImages[lastHeartIndex].sprite = fullHeart;
+        }
+        lastHeartState = HeartStatus.Full;
+        if (NowHp % 2 != 0)
+        {
+            lastHeartIndex++;
             heartImages[lastHeartIndex].sprite = breakHeart;
             lastHeartState = HeartStatus.Break;
         }
-        else
-            lastHeartState = HeartStatus.Full;
     }
 
     /// <summary>
@@ -101,7 +138,10 @@ public class PlayerLifeSystem : MonoBehaviour
     public void SetStartPosition(int index, Vector2 position)
     {
         startPosition = position;
-        startScene = index;
+        if (index == -1)
+            startSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        else
+            startSceneIndex = index;
     }
 
     /// <summary>
@@ -109,7 +149,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void LossLife()
     {
-        if (!isDie)
+        if (!IsDie)
         {
             //isInvincible = true;
             //ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
@@ -123,11 +163,11 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void Hurt(int number = 1)
     {
-        if (!isDie && !isInvincible)
+        if (!IsDie && !IsInvincible)
         {
-            isInvincible = true;
+            IsInvincible = true;
             ObjectTempoControl.Singleton.AddToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
-            for (int i = 0; i < number && !isDie; i++)
+            for (int i = 0; i < number && !IsDie; i++)
                 BreakHeart();
             StartCoroutine(ShowRedEffect());
         }
@@ -138,7 +178,7 @@ public class PlayerLifeSystem : MonoBehaviour
         invincibleCount++;
         if (invincibleCount == invincibleTempo)
         {
-            isInvincible = false;
+            IsInvincible = false;
             invincibleCount = 0;
             ObjectTempoControl.Singleton.RemoveToBeatAction(RemoveInvincibleStatus, TempoActionType.Whole);
         }
@@ -149,7 +189,7 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     private void BreakHeart()
     {
-        nowHp--;
+        NowHp--;
         recoverCount = 0;
         if (lastHeartIndex >= 0)
         {
@@ -170,19 +210,28 @@ public class PlayerLifeSystem : MonoBehaviour
             }
         }
         // Gameover.
-        if (nowHp <= 0)
+        if (NowHp <= 0)
             GameOver();
     }
 
     private void Recover(Vector2 direction)
     {
-        if (nowHp != maxHp)
+        if (NowHp != maxHp)
         {
             recoverCount++;
             if (recoverCount == recoverAfterShoot)
             {
+                if (recoverHeartAnimator != null)
+                {
+                    recoverHeartAnimator.Play("Move");
+                }
+                if (recoverFrameAnimator != null)
+                {
+                    recoverFrameAnimator.Play("Recover");
+                }
+
                 recoverCount = 0;
-                nowHp++;
+                NowHp++;
                 // 換圖片用
                 switch (lastHeartState)
                 {
@@ -227,9 +276,10 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void GameOver()
     {
-        isDie = true;
-        transform.localScale = Vector3.zero;
         playerMovement.Die();
+        OnDie?.Invoke();
+        IsDie = true;
+        //transform.localScale = Vector3.zero;
         StartCoroutine(ShowBlackEffect());
     }
 
@@ -239,49 +289,55 @@ public class PlayerLifeSystem : MonoBehaviour
     /// <returns></returns>
     private IEnumerator ShowBlackEffect()
     {
-        // 可能要改。愛心動態生成所以圖層比黑屏高。
-        foreach (Image image in heartImages)
-            image.color = new Color(1, 1, 1, 0);
+        // 黑圈縮小聚焦到玩家上
+        blackCircleImage.rectTransform.sizeDelta = new Vector2(4096, 4096);
+        blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        dieCanvas.alpha = 1;
+        yield return ShowBlackCircle(new Vector2(256, 256));
+        // 播玩家死亡動畫
+        yield return new WaitForSeconds(1.0f);
+        // 黑圈縮到底
+        yield return ShowBlackCircle(Vector2.zero);
 
-        // 黑屏慢慢出現。
-        float alpha = 0;
-        blackImage.color = new Color(0, 0, 0, alpha);
-        while (alpha < 1)
-        {
-            alpha += 0.5f * Time.deltaTime;
-            blackImage.color = new Color(0, 0, 0, alpha);
-            yield return null;
-        }
-
+        NowHp = maxHp;
         InitializeHHeart();
 
         // 玩家回到起始點。
         playerMovement.movePoint = startPosition;
         transform.position = startPosition;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
         // 同場景不轉
         // 等轉場景的程式碼完整再接過去
-        if (startScene != -1 && startScene != SceneManager.GetActiveScene().buildIndex)
+        if (startSceneIndex != -1 && startSceneIndex != SceneManager.GetActiveScene().buildIndex)
         {
-            AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+            AsyncOperation operation = SceneManager.LoadSceneAsync(startSceneIndex);
             while (!operation.isDone)
             {
                 Debug.Log("Wait load scene");
                 yield return null;
             }
         }
+        yield return null;
+        blackCircleImage.rectTransform.position = Camera.main.WorldToScreenPoint(transform.position);
+        // 黑圈打開
+        yield return ShowBlackCircle(new Vector2(256, 256));
+        // 看有沒有復活動畫
+        yield return new WaitForSeconds(1.0f);
+        // 黑圈全開
+        yield return ShowBlackCircle(new Vector2(4096, 4096));
+        dieCanvas.alpha = 0;
+        playerMovement.ResetStatus();
+        IsDie = false;
+    }
 
-        // 黑屏結束
-        while (alpha > 0)
+    private IEnumerator ShowBlackCircle(Vector2 destination)
+    {
+        while (Vector2.Distance(blackCircleImage.rectTransform.sizeDelta, destination) > Mathf.Epsilon)
         {
-            alpha -= 0.5f * Time.deltaTime;
-            blackImage.color = new Color(0, 0, 0, alpha);
+            blackCircleImage.rectTransform.sizeDelta = Vector2.MoveTowards(blackCircleImage.rectTransform.sizeDelta, destination, 4000 * Time.deltaTime);
             yield return null;
         }
-        // 愛心出來。
-        foreach (Image image in heartImages)
-            image.color = new Color(1, 1, 1, 1);
-        blackImage.color = new Color(0, 0, 0, 0);
-        playerMovement.ResetStatus();
-        isDie = false;
+        blackCircleImage.rectTransform.sizeDelta = destination;
     }
 }

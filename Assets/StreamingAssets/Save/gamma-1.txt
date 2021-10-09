@@ -1,0 +1,5 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"這是？"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看起來是某人的配備，掉落在這裡…"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"離這裡最近的衛星，是17號，好，就先去那看看吧!"},
+]

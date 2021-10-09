@@ -11,6 +11,7 @@ TagManager:
   - Bomb
   - Enemy
   - Bullet
+  - Mark
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,8 @@ TagManager:
   - SpaceJunk
   - Anemy
   - Item
-  - 
-  - 
+  - Bomb
+  - NPC
   - 
   - 
   - 
@@ -48,12 +49,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 349829107
+    locked: 0
   - name: Object
     uniqueID: 3032466547
     locked: 0
-  - name: Pause Menu
-    uniqueID: 3764575937
+  - name: Tentacle
+    uniqueID: 986815913
+    locked: 0
+  - name: Enemy
+    uniqueID: 658442403
+    locked: 0
+  - name: HittingUI
+    uniqueID: 2993497477
     locked: 0
   - name: TextBox
     uniqueID: 4047343469
+    locked: 0
+  - name: Pause Menu
+    uniqueID: 3764575937
     locked: 0

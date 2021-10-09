@@ -5,24 +5,28 @@ using UnityEngine;
 public class PlayerAnimationManager : MonoBehaviour
 {
     private Animator animator;
-    private PlayerMovement player;
+    private PlayerMovement movement;
+    public ParticleSystem bagJet;
 
     private bool walkParameter;
     private bool idleParameter;
     private readonly int idle = Animator.StringToHash("Idle");
     private readonly int walkR = Animator.StringToHash("WalkR");
     private readonly int walkL = Animator.StringToHash("WalkL");
+    private readonly int lie = Animator.StringToHash("Lie");
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        player = GetComponent<PlayerMovement>();
-        player.OnFireBag += PlayWalkAnimation;
-        player.OnStop += PlayIdleAnimation;
+        movement = GetComponent<PlayerMovement>();
+
+        movement.OnFireBag += PlayWalkAnimation;
+        movement.OnStop += PlayIdleAnimation;
         walkParameter = false;
         idleParameter = false;
-        ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
+        if (ObjectTempoControl.Singleton != null)
+            ObjectTempoControl.Singleton.AddToBeatAction(PlayIdleAnimation, TempoActionType.Whole);
     }
 
     public void PlayIdleAnimation()
@@ -49,6 +53,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private void PlayWalkAnimation(Vector2 direction)
     {
+        bagJet.Play();
         // Left or right foot.
         walkParameter = !walkParameter;
         if (walkParameter)
@@ -60,10 +65,25 @@ public class PlayerAnimationManager : MonoBehaviour
 
     private IEnumerator WaitPlayerStop()
     {
-        while (Vector2.Distance(transform.position, player.movePoint) >= player.NowSpeed * Time.deltaTime)
+        //while (Vector2.Distance(transform.position, movement.movePoint) >= movement.NowSpeed * Time.deltaTime)
+        yield return null;
+        while (movement.isMoving)
             yield return null;
         animator.SetBool(walkL, false);
         animator.SetBool(walkR, false);
     }
 
+    public void PlayLie()
+    {
+        animator.SetBool(lie, true);
+        ObjectTempoControl.Singleton.AddToBeatAction(PlayStandOnGround, TempoActionType.Half);
+    }
+
+    private void PlayStandOnGround()
+    {
+        //GetComponent<Animation>().Play(,)
+        movement.BackToGrid();
+        animator.SetBool(lie, false);
+        ObjectTempoControl.Singleton.RemoveToBeatAction(PlayStandOnGround, TempoActionType.Half);
+    }
 }

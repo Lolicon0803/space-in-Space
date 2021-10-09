@@ -6,23 +6,23 @@ public class Teleporter : MonoBehaviour
 {
     // 作用節奏
     public TempoActionType activeTempo;
-    // 是入口
+    [Tooltip("是入口")]
     public bool isEntrance;
-    // 出口
+    [Tooltip("出口")]
     public Teleporter exit;
-    // 傳送節奏(幾拍後人出現)
+    [Tooltip("傳送節奏(幾拍後人出現)")]
     public TempoActionType sendTempo;
-    // 是出口
+    [Tooltip("是出口")]
     public bool isExit;
-    // 推人推多遠
+    [Tooltip("出口推人推多遠")]
     public int pushUnit;
-    // 推人時的速度
+    [Tooltip("出口推人時的速度")]
     public float pushSpeed;
-    // 吸人時人的旋轉速度
+    [Tooltip("吸人時人的旋轉速度")]
     public float impactRotationSpeed;
-    // 推人時人的旋轉速度
+    [Tooltip("推人時人的旋轉速度")]
     public float pushRotationSpeed;
-    // 推人方向
+    [Tooltip(" 推人方向")]
     public Vector2 pushDirection;
 
     private AudioSource audioSource;
@@ -32,13 +32,13 @@ public class Teleporter : MonoBehaviour
 
     private void Awake()
     {
-        isActive = false;
+        isActive = true;
         audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
-        ObjectTempoControl.Singleton.AddToBeatAction(Activate, activeTempo);
+        //ObjectTempoControl.Singleton.AddToBeatAction(Activate, activeTempo);
         ObjectTempoControl.Singleton.AddToBeatAction(Teleport, sendTempo);
     }
 
@@ -48,11 +48,16 @@ public class Teleporter : MonoBehaviour
         {
             if (Physics2D.OverlapBox(transform.position, Vector2.one, 0, LayerMask.GetMask("Player")))
             {
-                if (!hasTarget)
+                PlayerMovement player = Player.Singleton.movement;
+                if (Vector2.Distance(player.transform.position, transform.position) < player.moveSpeed * Time.deltaTime)
                 {
-                    Player.Singleton.movement.TeleportIn(this);
-                    hasTarget = true;
-                    audioSource.Play();
+                    if (!hasTarget && !player.isTeleporting)
+                    {
+                        
+                        Player.Singleton.movement.TeleportIn(this);
+                        hasTarget = true;
+                        audioSource.Play();
+                    }
                 }
             }
         }
@@ -75,6 +80,7 @@ public class Teleporter : MonoBehaviour
             Player.Singleton.movement.TeleportOut(exit);
             hasTarget = false;
             audioSource.Play();
+            
         }
     }
 

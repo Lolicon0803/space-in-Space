@@ -55,11 +55,11 @@ public class TempoManager : MonoBehaviour
     {
         improveDelayMode = false;
         BPM = beatPerMinute;
-        delay = -150;
+        delay = 200;
         adjustDelay = 0;
         lastTouchDelayTime = 0;
         touchDelayTimes = new List<double>();
-        bufferTime = MsPB / 8;
+        bufferTime = MsPB / 4;
         SetResetArgs(0.4, 0.6);
         BGM.Play();
         time = MsPB;
@@ -160,6 +160,10 @@ public class TempoManager : MonoBehaviour
         }
         if (improveDelayMode) UpdateAdjustDelay();
         return touchSuccess;
+    }
+    public double getTime()
+    {
+        return this.time;
     }
     private void UpdateAdjustDelay()
     {

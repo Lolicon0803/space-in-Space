@@ -67,7 +67,16 @@ public class SpaceJunk : MonoBehaviour, IObjectBehavier
     {
         if (collider.CompareTag("Player"))
         {
-            collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockPower, knockDistance);
+            Vector2 dir = Player.Singleton.transform.position - transform.position;
+            if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.y))
+                dir.y = 0;
+            else
+                dir.x = 0;
+            dir.Normalize();
+            if (moveDiraction != dir)
+                collider.GetComponent<PlayerMovement>().Knock(Vector2.zero, 1, knockPower);
+            else
+                collider.GetComponent<PlayerMovement>().Knock(moveDiraction, knockDistance, knockPower);
             Debug.Log("撞到敵人");
             gameObject.GetComponent<AudioSource>().Play();
             // Call損血系統

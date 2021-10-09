@@ -1,0 +1,15 @@
+[
+{"textBoxIndex":0,"speaker":"","text":"(Epsilon號船艦內)"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"呼叫指揮中心，Epsilon號已完成14789號任務，準備返航。"},
+{"textBoxIndex":1,"speaker":"指揮中心","text":"收……停……返…(雜訊)。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"呼叫指揮中心，呼叫指揮中心，Epsilon號已完成14789號任務，準備返航。"},
+{"textBoxIndex":1,"speaker":"指揮中心","text":"……小心…取消…不要(雜訊)。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"指揮中心？"},
+{"textBoxIndex":1,"speaker":"指揮中心","text":"………"},
+{"textBoxIndex":1,"speaker":"安傑斯","text":"船長，發生什麼事了？"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"和指揮中心的聯絡出了點狀況，我正在嘗試修復。"},
+{"textBoxIndex":1,"speaker":"安傑斯","text":"也許是這顆星球的地磁影響收訊，我們先離開這顆星球吧，外面那些人看起來快瘋了。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"知道嗎？你是對的。"},
+{"textBoxIndex":1,"speaker":"安傑斯","text":"是，我知道，一直都是。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"晚點我去跟外面那群野獸們宣布這個消息。"},
+]

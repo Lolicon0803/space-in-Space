@@ -1,0 +1,9 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"只要利用方向鍵就能控制火箭背包的方向了!"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"如果沒有使用火箭背包，會朝著前進的方向慢慢漂移"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"但是，如果沒有在正確的時機使用背包，或是長時間沒有吸收暗物質，背包會受損"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"相反的，如果能連續吸收暗物質，背包內的Psi便會回復活力"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"R鍵可以緊急脫逃，遇到無法控制的狀況時可以使用"},
+{"textBoxIndex":0,"speaker":"旁白","text":"如果忘記了，可以隨時回來這裡查看"},
+{"textBoxIndex":0,"speaker":"旁白","text":"跟著暗物質的波動，在隕石帶中前進吧!"},
+]

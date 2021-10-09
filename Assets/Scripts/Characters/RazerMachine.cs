@@ -52,7 +52,7 @@ public class RazerMachine : MonoBehaviour
     {
         if (autoRotation)
         {
-            this.transform.Rotate(Vector3.forward, autoRotationSpeed);
+            this.transform.Rotate(Vector3.forward, autoRotationSpeed * Time.deltaTime);
            // razer.transform.Rotate(Vector3.forward, autoRotationSpeed);
         }
         //if (isShooting)
@@ -77,7 +77,7 @@ public class RazerMachine : MonoBehaviour
 
             // Call損血系統
             Player.Singleton.lifeSystem.Hurt();
-            Player.Singleton.movement.Knock(Vector2.zero);
+            Player.Singleton.movement.Knock(Vector2.zero, 1, 1);
         }
     }
 

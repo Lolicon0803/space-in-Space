@@ -25,7 +25,7 @@ public class Razer : MonoBehaviour
     {
         sprite.size = new Vector2(x, y);
         collider2D.size = new Vector2(sprite.size.x, sprite.size.y - 0.01f);
-        collider2D.offset = new Vector2(sprite.size.x / 2.0f, 0);
+        collider2D.offset = new Vector2(sprite.size.x / 2.01f, 0);
     }
 
     private void OnTriggerStay2D(Collider2D collision)

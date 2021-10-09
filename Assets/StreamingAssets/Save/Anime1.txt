@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"","text":"（某處的地面）"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"......"},
+]

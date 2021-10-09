@@ -1,0 +1,6 @@
+[
+{"textBoxIndex":0,"speaker":"半毀的任務文件","text":"任務內容: 研究阿瑞斯星上的特殊微生物。"},
+{"textBoxIndex":0,"speaker":"半毀的任務文件","text":"執行人員: 夸克戴爾、安傑斯、鮑伯、莎夏、丹、艾克。"},
+{"textBoxIndex":0,"speaker":"半毀的任務文件","text":"執行人員: 進度:已完成。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看起來我們似乎完成了這個任務，再找找其他線索吧。"},
+]

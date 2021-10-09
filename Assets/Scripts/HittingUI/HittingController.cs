@@ -6,79 +6,110 @@ using UnityEngine.UI;
 public class HittingController : MonoBehaviour
 {
     public TempoManager audioEngine;
-    public Text msg;
-    public SpriteRenderer hittingArea;
+    public Player player;
+    public SpriteRenderer hintFrame;
     public GameObject notePrefab;
+    public Sprite[] frames;
+    public Animator hitAnim;
+    public Animator frameAnim;
+    public Canvas canvas;
+    public GameObject missPrefab;
+
+    private bool isStopNow;
+    private bool isReset;
 
     // Start is called before the first frame update
     void Start()
     {
         audioEngine.ResetAdjustArgs();
+        isStopNow = false;
+        isReset = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+        if (!isStopNow)
         {
-            audioEngine.KeyDown();
-        }
+            TouchStates touchState = audioEngine.touchState;
+            changeBtnSprite(touchState);
 
-        TouchStates touchState = audioEngine.touchState;
-        if (msg != null)
-        {
-            changeMsg(touchState);
-        }
-        changeBtnColor(touchState);
-    }
-
-    void changeMsg(TouchStates touchState)
-    {
-        switch (touchState)
-        {
-            case TouchStates.Reset:
-                msg.text = "";
-                break;
-            case TouchStates.Disable:
-                break;
-            case TouchStates.Enable:
-                break;
-            case TouchStates.TimeOut:
-                msg.text = "TimeOut";
-                break;
-            case TouchStates.Touched:
-                msg.text = "Success";
-                break;
-            case TouchStates.TouchFailed:
-                msg.text = "Failed";
-                break;
-            case TouchStates.TimeOutFailed:
-                msg.text = "Failed";
-                break;
+            int recoverCount = player.GetComponent<PlayerLifeSystem>().getRecoverCount();
+            changeHintFrame(recoverCount);
         }
     }
 
-    void changeBtnColor(TouchStates touchState)
+    public void Stop()
     {
-        switch (touchState)
+        isStopNow = true;
+    }
+
+    public void Restart()
+    {
+        isStopNow = false;
+    }
+
+    public bool isStop()
+    {
+        return isStopNow;
+    }
+
+    void changeBtnSprite(TouchStates touchState)
+    {
+        if (touchState == TouchStates.Touched)
         {
-            case TouchStates.Reset:
-                break;
-            case TouchStates.Disable:
-                hittingArea.color = new Color(1, 1, 1, 1);
-                break;
-            case TouchStates.Enable:
-                hittingArea.color = new Color(1, 0, 0, 1);
-                break;
-            case TouchStates.Touched:
-                hittingArea.color = new Color(0, 1, 0, 1);
-                break;
-            case TouchStates.TouchFailed:
-                hittingArea.color = new Color(0, 0, 0, 1);
-                break;
-            case TouchStates.TimeOutFailed:
-                hittingArea.color = new Color(1, 1, 1, 1);
-                break;
+            if (isReset)
+            {
+                deleteHitNode();
+
+                generateText("HIT!");
+
+                if (hitAnim != null)
+                {
+                    hitAnim.SetTrigger("Hit");
+                }
+            }
+            isReset = false;
         }
+        else if (touchState == TouchStates.TouchFailed || touchState == TouchStates.TimeOutFailed || touchState == TouchStates.TimeOut)
+        {
+            if (isReset)
+            {
+                generateText("MISS!");
+            }
+            isReset = false;
+        }
+        else if (touchState == TouchStates.Reset)
+        {
+            isReset = true;
+        }
+    }
+
+    void generateText(string str)
+    {
+        GameObject newText = Instantiate(missPrefab, canvas.transform);
+        newText.GetComponent<Text>().text = str;
+        newText.transform.position = transform.position;
+        newText.transform.Translate(new Vector3(0, 0.9f, 0));
+    }
+
+    void deleteHitNode()
+    {
+        // 最靠近的兩個可能還沒跑完動畫
+        if (!gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().isStop)
+        {
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).GetComponent<NoteObject>().hit();
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(1).GetComponent<NoteObject>().hit();
+        }
+        else
+        {
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(2).GetComponent<NoteObject>().hit();
+            gameObject.transform.GetChild(0).gameObject.transform.GetChild(3).GetComponent<NoteObject>().hit();
+        }
+    }
+
+    void changeHintFrame(int recoverAfterShoot)
+    {
+        hintFrame.sprite = frames[recoverAfterShoot];
     }
 }

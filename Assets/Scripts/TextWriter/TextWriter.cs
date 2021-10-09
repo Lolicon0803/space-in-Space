@@ -12,24 +12,36 @@ enum TextWriterState {
 public class TextWriter : MonoBehaviour
 {
     SaveAndLoad SL;
-    public GameObject[] textBoxs;
     public AudioSource beepSound;
+    public Text text;
+    public Text speakerName;
+    public SpriteRenderer speaker;
+    public SpriteRenderer dialogBox;
+    public SpriteRenderer bigItemFrame;
+    public Sprite[] speakerFrames;
     public UnityEvent onEndStory;
     private int wordIndex;
-    private int paragraghIndex;
+    private int paragraphIndex;
     private Story story;
-    private bool keyDown;
-    private bool isEndOfStory;
+    private bool enterKeyDown;
+    private bool isEndOfParagraph;
     private bool isPrintingStory;
+    private bool isPause;
     private string currentText;
     private string twinkleText;
     private string currentFileName;
+
+    public UnityAction textAction;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
         SL = new SaveAndLoad();
         StartCoroutine(TwinkleString(0.3f));
         isPrintingStory = false;
+        isPause = false;
         Init();
     }
 
@@ -37,15 +49,16 @@ public class TextWriter : MonoBehaviour
     {
         if (isPrintingStory) {  return ; }
         currentFileName = "";
-        isEndOfStory = false;
-        paragraghIndex = 0;
+        paragraphIndex = 0;
         wordIndex = 0;
+        bigItemFrame.sprite = null;
         ClearText();
         ClearSprite();
     }
-    public void LoadStory(string fileName)
+    public void LoadStory(string fileName, Sprite npcBigFrame = null)
     {
         Init();
+        bigItemFrame.sprite = npcBigFrame;
         currentFileName = fileName;
         story = (Story)SL.LoadData(typeof(Story), fileName);
     }
@@ -62,15 +75,14 @@ public class TextWriter : MonoBehaviour
             {
                 ShowSprite();
                 yield return StartCoroutine(PrintWord());
-                float intervalTime = 3.0f;
-                float twinkleTime = 0.3f;
-                if (paragraghIndex + 1 >= story.Count) { isEndOfStory = true; isPrintingStory = false; }
-                yield return StartCoroutine(WaitSignal(intervalTime, twinkleTime));
-                paragraghIndex++;
+                if (paragraphIndex + 1 >= story.Count) {isPrintingStory = false; }
+                yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Return));
+                paragraphIndex++;
                 ClearText();
                 ClearSprite();
                 if (!isPrintingStory)
                 {
+                    bigItemFrame.sprite = null;
                     onEndStory.Invoke();
                     break;
                 }
@@ -79,61 +91,84 @@ public class TextWriter : MonoBehaviour
 
 
     }
-
+    Sprite SpeakerNameToSpeakerFrame(string speakerName)
+    {
+        switch (speakerName)
+        {
+            case "夸克戴爾":
+                if (DataBase.Singleton.datas.collectItems.ContainsKey("bag") &&
+                    DataBase.Singleton.datas.collectItems["bag"])
+                    return speakerFrames[1];
+                else
+                    return speakerFrames[9];
+            case "安傑斯":
+                return speakerFrames[2];
+            case "鮑伯":
+                return speakerFrames[3];
+            case "莎夏":
+                return speakerFrames[4];
+            case "丹":
+                return speakerFrames[5];
+            case "艾克":
+                return speakerFrames[6];
+            case "奇爾星長老":
+                return speakerFrames[7];
+            case "奇爾星通訊兵":
+                return speakerFrames[8];
+            default:
+                return speakerFrames[0];
+        }
+    }
     void ClearText()
     {
         currentText = "";
-        foreach (var textBox in textBoxs)
+        foreach (var text in this.GetComponentsInChildren<Text>())
         {
-            foreach (var text in textBox.GetComponentsInChildren<Text>())
-            {
-                text.text = "";
-            }
+            text.text = "";
         }
     }
     void ClearSprite()
     {
-        currentText = "";
-        foreach (var textBox in textBoxs)
-        {
-            foreach (var sprite in textBox.GetComponentsInChildren<SpriteRenderer>())
-            {
-                sprite.enabled = false;
-            }
-        }
+        speaker.enabled = false;
+        dialogBox.enabled = false;
     }
     void ShowSprite()
     {
-        foreach (var sprite in textBoxs[story[paragraghIndex].textBoxIndex].GetComponentsInChildren<SpriteRenderer>())
-        {
-            sprite.enabled = true;
-        }
+        speaker.enabled = true;
+        speaker.sprite = SpeakerNameToSpeakerFrame(story[paragraphIndex].speaker);
+        dialogBox.enabled = true;
     }
     IEnumerator PrintWord()
     {
         wordIndex = 0;
-        
+        isEndOfParagraph = false;
         while (true)
         {
-            currentText += story[paragraghIndex].text[wordIndex];
-            wordIndex++;
+            while (isPause)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+            if (enterKeyDown)
+            {
+                enterKeyDown = false;
+                wordIndex = story[paragraphIndex].text.Length;
+                currentText = story[paragraphIndex].text;
+                yield return new WaitForSeconds(0.1f);
+            }
+            else
+            {
+                currentText += story[paragraphIndex].text[wordIndex];
+                wordIndex++;
+                yield return new WaitForSeconds(0.1f);
+            }
             beepSound.Play();
-            if (wordIndex >= story[paragraghIndex].text.Length)
+            if (wordIndex >= story[paragraphIndex].text.Length)
             {
                 break;
             }
-            yield return new WaitForSeconds(0.1f);
+
         }
-    }
-    IEnumerator WaitSignal(float intervalTime, float flickerTime)
-    {
-        int textBoxIndex = story[paragraghIndex].textBoxIndex;
-        while ((intervalTime >= 0 || isEndOfStory) && !keyDown )
-        {
-            if (keyDown) { break; }
-            intervalTime -= flickerTime;
-            yield return new WaitForSeconds(flickerTime);
-        }
+        isEndOfParagraph = true;
     }
     IEnumerator TwinkleString(float flickerTime)
     {
@@ -148,18 +183,30 @@ public class TextWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (currentFileName == "" || paragraghIndex >= story.Count )
+        if (currentFileName == "" || paragraphIndex >= story.Count )
         {
         }
         else
         {
-            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(0).GetComponent<Text>().text = story[paragraghIndex].speaker;
-            textBoxs[story[paragraghIndex].textBoxIndex].transform.GetChild(1).GetComponent<Text>().text = currentText + twinkleText;
+            // 展示當前講者及內容
+            speakerName.text = story[paragraphIndex].speaker;
+            text.text = currentText + twinkleText;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPause = !isPause;
+        }
+        if (!isEndOfParagraph && !isPause && Input.GetKeyDown(KeyCode.Return))
+        {
+            enterKeyDown = true;
         }
 
-        if (isEndOfStory && Input.anyKeyDown)
-        {
-            keyDown = true;
-        }
     }
+
+
+    public void resolveLimit()
+    {
+        textAction();
+    }
+
 }

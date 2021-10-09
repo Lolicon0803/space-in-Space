@@ -1,0 +1,4 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看來要想通過這裡就只能打倒他了!"},
+{"textBoxIndex":0,"speaker":"","text":"(一邊躲避大烏賊的攻擊，一邊推動炸彈打倒它吧!)"},
+]

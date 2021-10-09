@@ -1,0 +1,9 @@
+[
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"嗯？這是？"},
+{"textBoxIndex":0,"speaker":"旁白","text":"(四周散落著零碎的殘骸，還有許多大型機體碎片)"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"也許能找到什麼線索也說不定。"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"……"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"…………"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"看我發現了什麼。"},
+{"textBoxIndex":0,"speaker":"旁白","text":"【獲得半毀的任務文件的位置】"},
+]

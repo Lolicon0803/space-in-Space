@@ -28,24 +28,28 @@ public class Player : MonoBehaviour
         if (singleton == null)
         {
             singleton = this;
-            DontDestroyOnLoad(lifeSystem.canvas);
+            if (lifeSystem.lifeCanvas != null)
+                DontDestroyOnLoad(lifeSystem.lifeCanvas.gameObject);
+            if (lifeSystem.dieCanvas != null)
+                DontDestroyOnLoad(lifeSystem.dieCanvas.gameObject);
             DontDestroyOnLoad(gameObject);
         }
         else if (singleton != this)
         {
+            if (lifeSystem.lifeCanvas != null)
+                Destroy(lifeSystem.lifeCanvas.gameObject);
+            if (lifeSystem.dieCanvas != null)
+                Destroy(lifeSystem.dieCanvas.gameObject);
             Destroy(gameObject);
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void DestroyPlayer()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (lifeSystem.lifeCanvas != null)
+            Destroy(lifeSystem.lifeCanvas.gameObject);
+        if (lifeSystem.dieCanvas != null)
+            Destroy(lifeSystem.dieCanvas.gameObject);
+        Destroy(gameObject);
     }
 }

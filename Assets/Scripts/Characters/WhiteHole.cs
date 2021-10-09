@@ -22,12 +22,16 @@ public class WhiteHole : MonoBehaviour
 
     private LayerMask layerMask;
 
+    private Vector2[] fourDirections;
+
     private readonly int activateTrigger = Animator.StringToHash("Activate");
+    private readonly int animSpeed = Animator.StringToHash("Speed");
 
     private void Awake()
     {
         isActive = false;
         layerMask = LayerMask.GetMask("Player");
+        fourDirections = new Vector2[] { Vector2.up, Vector2.right, Vector2.down, Vector2.left };
     }
 
     private void Start()
@@ -35,17 +39,30 @@ public class WhiteHole : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         ObjectTempoControl.Singleton.AddToBeatAction(Activate, actionType);
+        if (TempoManager.Singleton.beatPerMinute > 60.0f)
+            animator.SetFloat(animSpeed, TempoManager.Singleton.beatPerMinute / 60.0f);
     }
 
     private void Update()
     {
-        transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
+        //transform.Rotate(Vector3.forward, 90.0f * Time.deltaTime);
         if (isActive)
         {
             if (Physics2D.OverlapCircle(transform.position, radius, layerMask))
             {
-                Vector2 direction = Player.Singleton.transform.position - transform.position;
-                Player.Singleton.movement.Knock(direction, pushUnit, pushSpeed);
+                Vector2 pos = Player.Singleton.transform.position - transform.position;
+                int pushIndex = 0;
+                float minD = Vector2.Distance(pos, fourDirections[0]);
+                for (int i = 1; i < fourDirections.Length; i++)
+                {
+                    float d = Vector2.Distance(pos, fourDirections[i]);
+                    if (d < minD)
+                    {
+                        minD = d;
+                        pushIndex = i;
+                    }
+                }
+                Player.Singleton.movement.Knock(fourDirections[pushIndex], pushUnit, pushSpeed, false, true);
                 audioSource.PlayOneShot(pushPlayerAudio);
                 isActive = false;
             }
@@ -67,7 +84,7 @@ public class WhiteHole : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
+
     }
 
     private void OnDrawGizmosSelected()

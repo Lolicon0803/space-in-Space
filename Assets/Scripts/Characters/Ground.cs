@@ -35,13 +35,22 @@ public class Ground : MonoBehaviour
 {
     [Header("設定玩家從這個方向來時，玩家會有什麼行為。")]
     public GroundEvent[] groundEvents;
-    
+
     private Collider2D col;
+
+    private float timer;
+    private bool checker;
+
+    private MovablePlatform platform;
 
     void Awake()
     {
         col = GetComponent<Collider2D>();
+        col.isTrigger = true;
         gameObject.layer = LayerMask.NameToLayer("Ground");
+        platform = GetComponent<MovablePlatform>();
+        timer = 0;
+        checker = false;
     }
 
     /// <summary>
@@ -58,20 +67,31 @@ public class Ground : MonoBehaviour
             switch (groundEvents[index].behavior)
             {
                 case GroundBehavior.Stop:
-                    Player.Singleton.movement.StopMove();
+                    Player.Singleton.movement.Knock(Vector2.zero);
+                    Player.Singleton.movement.ZeroMoveDirection();
                     break;
                 case GroundBehavior.Standable:
-                    if (groundEvents[index].hasGravity)
+                    if (groundEvents[index].hasGravity && !Player.Singleton.lifeSystem.IsDie)
                         Player.Singleton.transform.parent = transform;
                     Player.Singleton.movement.StandOnGround(groundEvents[index].standDirection);
                     break;
                 case GroundBehavior.Rebounce:
-                    Player.Singleton.movement.Knock(groundEvents[index].reboundDirection);
+                    if (platform != null)
+                        Player.Singleton.movement.Knock(groundEvents[index].reboundDirection, 1, platform.moveSpeed);
+                    else
+                        Player.Singleton.movement.Knock(groundEvents[index].reboundDirection);
                     break;
                 default:
                     Player.Singleton.movement.StopMove();
                     break;
             }
+        }
+        else
+        {
+            if (platform != null)
+                Player.Singleton.movement.Knock(Vector2.zero, 1, platform.moveSpeed);
+            else
+                Player.Singleton.movement.Knock(Vector2.zero);
         }
     }
 
@@ -91,9 +111,10 @@ public class Ground : MonoBehaviour
             if (angle < 0)
                 angle += 360;
             // 玩家角度
-            float targetAngle = Vector2.SignedAngle(ge.inDirectionRight, -Player.Singleton.movement.MoveDirection);
+            float targetAngle = Vector2.SignedAngle(ge.inDirectionRight, target);
             if (targetAngle < 0)
                 targetAngle += 360;
+            Debug.Log(targetAngle);
             // 小於表示在中間
             if (targetAngle < angle)
                 return index;
@@ -102,12 +123,15 @@ public class Ground : MonoBehaviour
         return -1;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.collider.CompareTag("Player"))
+        if (collision.CompareTag("Player"))
         {
-            Debug.DrawRay(transform.position, -Player.Singleton.movement.MoveDirection, Color.red, 10);
-            ProcessEvent(collision.GetContact(0).point);
+            if (Time.time - timer >= Time.deltaTime * 5)
+            {
+                ProcessEvent(Player.Singleton.transform.position);
+                timer = Time.time;
+            }
         }
     }
 
