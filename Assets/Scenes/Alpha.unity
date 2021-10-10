@@ -831,6 +831,7 @@ MonoBehaviour:
   reapeatStory: []
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &125987859
 BoxCollider2D:
@@ -2916,7 +2917,7 @@ PrefabInstance:
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
       propertyPath: route.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
@@ -5175,6 +5176,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &654680652
 BoxCollider2D:
@@ -6571,6 +6573,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &820342194
 BoxCollider2D:
@@ -7203,6 +7206,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &874176932
 BoxCollider2D:
@@ -7645,7 +7649,7 @@ PrefabInstance:
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
       propertyPath: route.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
@@ -8407,6 +8411,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1045471925
 BoxCollider2D:
@@ -10145,6 +10150,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1243357758
 BoxCollider2D:
@@ -11620,6 +11626,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1459593861
 BoxCollider2D:
@@ -16968,7 +16975,7 @@ PrefabInstance:
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
       propertyPath: route.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
@@ -17013,7 +17020,7 @@ PrefabInstance:
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
       propertyPath: route.Array.data[1].distance
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6487806357656202356, guid: e9ff38d2e31017443a0131405cdeb00f,
         type: 3}
@@ -17137,6 +17144,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1710402279
 BoxCollider2D:
@@ -17672,6 +17680,7 @@ MonoBehaviour:
   - repeat-alpha-1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1776352611
 BoxCollider2D:
@@ -18017,6 +18026,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1791821536
 BoxCollider2D:
@@ -18916,6 +18926,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1881937451
 BoxCollider2D:
@@ -19204,6 +19215,7 @@ MonoBehaviour:
   reapeatStory: []
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1927138729
 BoxCollider2D:
@@ -19326,6 +19338,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &1949692243
 BoxCollider2D:
@@ -24160,6 +24173,7 @@ MonoBehaviour:
   - A1
   isdestroy: 0
   item: 
+  bigFrame: {fileID: 0}
   obj1: {fileID: 0}
 --- !u!61 &2027108049
 BoxCollider2D:

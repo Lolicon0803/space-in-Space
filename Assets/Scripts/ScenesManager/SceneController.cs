@@ -33,6 +33,8 @@ public class SceneController : MonoBehaviour
 
     public List<int> storyScene = new List<int>() { 2, 3 };
 
+    public bool isChangingScene = false;
+
     void Awake()
     {
         if (singleton == null)
@@ -79,6 +81,8 @@ public class SceneController : MonoBehaviour
     /// <param name="useFadeInOut">是否使用淡入淡出效果</param>
     public void LoadSceneAsync(int index, bool useFadeInOut)
     {
+        if (isChangingScene)
+            return;
         UseFadeInout = useFadeInOut;
         StartCoroutine(LoadSceneAsync(index));
     }
@@ -90,17 +94,25 @@ public class SceneController : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(int index)
     {
+        isChangingScene = true;
         operation = SceneManager.LoadSceneAsync(index);
         operation.allowSceneActivation = false;
 
         if (UseFadeInout)
             yield return StartCoroutine(ShowFadeIn());
-
+        if (ObjectTempoControl.Singleton != null)
+        {
+            ObjectTempoControl.Singleton.ClearToBeatAction(TempoActionType.Half);
+            ObjectTempoControl.Singleton.ClearToBeatAction(TempoActionType.Whole);
+            ObjectTempoControl.Singleton.ClearToBeatAction(TempoActionType.Quarter);
+            ObjectTempoControl.Singleton.ClearToBeatAction(TempoActionType.TimeOut);
+        }
         operation.allowSceneActivation = true;
         yield return new WaitUntil(() => operation.isDone);
 
         if (UseFadeInout)
             yield return StartCoroutine(ShowFadeOut());
+        isChangingScene = false;
     }
 
     public void FadeIn()

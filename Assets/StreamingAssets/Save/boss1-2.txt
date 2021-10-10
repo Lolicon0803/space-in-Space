@@ -1,5 +1,5 @@
 [
 {"textBoxIndex":0,"speaker":"???","text":"!!!!!!!!!!!!"},
-{"textBoxIndex":0,"speaker":"夸克戴爾","text":"從沒看過如此巨大的烏賊!"},
+{"textBoxIndex":0,"speaker":"夸克戴爾","text":"從沒看過如此巨大的魷魚!"},
 {"textBoxIndex":0,"speaker":"???","text":"!!!!!!!!!!!!"},
 ]

@@ -608,6 +608,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: map
       objectReference: {fileID: 0}
+    - target: {fileID: 9206449971215940030, guid: 5373b5425eacfc448b404d795e81d45f,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 20.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 9206449971215940030, guid: 5373b5425eacfc448b404d795e81d45f,
+        type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 11.77
+      objectReference: {fileID: 0}
     - target: {fileID: 9206449971215940031, guid: 5373b5425eacfc448b404d795e81d45f,
         type: 3}
       propertyPath: storyName.Array.size

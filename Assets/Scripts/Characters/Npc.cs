@@ -27,6 +27,7 @@ public class Npc : MonoBehaviour
     // 暫，對話完可以拿到的物品
     public string item;
     private int count = 0;
+    public Sprite bigFrame;
 
     private bool isSpace = false;
     public void canSpace()
@@ -86,6 +87,7 @@ public class Npc : MonoBehaviour
             {
 
 
+
                 float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
                 if (Input.GetKeyDown(KeyCode.F))
                 {
@@ -98,6 +100,7 @@ public class Npc : MonoBehaviour
             }
             else
             {
+
                 float dist = Vector3.Distance(Player.Singleton.transform.position, transform.position);
                 if (Input.GetKeyDown(KeyCode.F) && dist < speakRange)
                 {
@@ -125,7 +128,6 @@ public class Npc : MonoBehaviour
             {
                 gameObject.transform.GetChild(0).gameObject.SetActive(false);
             }
-
 
 
             //提示任務
@@ -179,7 +181,7 @@ public class Npc : MonoBehaviour
         if (!DataBase.Singleton.datas.readStories[storyName[count]] && DataBase.Singleton.datas.readStories[postConditionStoryName[count]])
         {
             textWriter.GetComponent<TextWriter>().Init();
-            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt");
+            textWriter.GetComponent<TextWriter>().LoadStory(storyName[count] + ".txt", bigFrame);
             textWriter.GetComponent<TextWriter>().NextStory();
             Player.Singleton.movement.StopMove(false);
             Player.Singleton.movement.canInput = false;

@@ -64,7 +64,6 @@ public class PlayerLifeSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("我 = " + gameObject.name);
         if (hittingUI != null)
         {
             recoverHeartAnimator = hittingUI.transform.GetChild(5).gameObject.GetComponent<Animator>();
@@ -163,6 +162,8 @@ public class PlayerLifeSystem : MonoBehaviour
     /// </summary>
     public void Hurt(int number = 1)
     {
+        if (playerMovement.debugStrong)
+            return;
         if (!IsDie && !IsInvincible)
         {
             IsInvincible = true;

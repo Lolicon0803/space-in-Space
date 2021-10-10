@@ -13868,6 +13868,11 @@ PrefabInstance:
       propertyPath: isDestroyPlayer
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7606234009245405541, guid: 2a54fc864381df34aae4bf7e2cac90fa,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a54fc864381df34aae4bf7e2cac90fa, type: 3}
 --- !u!4 &2097834993 stripped

@@ -47,7 +47,7 @@ public class PlanetWalking : MonoBehaviour
         int nextSceneIndex = GetNextSceneIndex();
         if (player.transform.position.y >= 28 && nextScene[nextSceneIndex] != 0)
         {
-            Destroy(player.gameObject);
+            Player.Singleton.DestroyPlayer();
             //SceneManager.LoadScene(nextScene[nextSceneIndex]);
             SceneController.Singleton.LoadSceneAsync(nextScene[nextSceneIndex], true);
         }
