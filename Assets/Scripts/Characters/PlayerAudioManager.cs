@@ -30,7 +30,7 @@ public class PlayerAudioManager : MonoBehaviour
     {
         movement.OnFireBag += (Vector2 direction) => audioSource.PlayOneShot(fireBag);
         movement.OnFallIntoBlackHole += () => audioSource.PlayOneShot(fallIntoBlackHole);
-        movement.OnError += () => audioSource.PlayOneShot(error);
+        //movement.OnError += () => audioSource.PlayOneShot(error);
         lifeSystem.OnDie += () =>
         {
             audioSource.PlayOneShot(gameOver);

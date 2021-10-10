@@ -80,9 +80,17 @@ public class PlayerMovement : MonoBehaviour
 
     private new CapsuleCollider2D collider;
 
+    public bool debugStrong = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(Initialize());
+    }
+
+    private IEnumerator Initialize()
+    {
+        yield return null;
         originMoveSpeed = moveSpeed;
         originSlideSpeed = slideSpeed;
         animationManager = GetComponent<PlayerAnimationManager>();
@@ -162,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void RegisterTempo(Scene arg0, LoadSceneMode arg1)
+    public void RegisterTempo(Scene arg0, LoadSceneMode arg1)
     {
         if (ObjectTempoControl.Singleton != null)
         {
@@ -215,6 +223,14 @@ public class PlayerMovement : MonoBehaviour
     {
         while (true)
         {
+            if (Input.GetKey(KeyCode.F) && Input.GetKey(KeyCode.E) && Input.GetKey(KeyCode.N) && Input.GetKey(KeyCode.G))
+            {
+                debugStrong = true;
+            }
+            else if (Input.GetKey(KeyCode.L))
+            {
+                debugStrong = false;
+            }
             if (!isOnPlanet && canInput && !isDie)
             {
                 float x = 0;
@@ -235,7 +251,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     notMoveYet = false;
                     // 打在節拍上
-                    if (TempoManager.Singleton.KeyDown())
+                    if (TempoManager.Singleton.KeyDown() || debugStrong)
                     {
                         // 如果自殺
                         if (r)
@@ -526,7 +542,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void StopMove(bool enableInput = true)
     {
-        StopCoroutine(coroutineShoot);
+        if (coroutineShoot != null)
+            StopCoroutine(coroutineShoot);
         OnStop?.Invoke();
         MoveDirection = Vector2.zero;
         canInput = enableInput;

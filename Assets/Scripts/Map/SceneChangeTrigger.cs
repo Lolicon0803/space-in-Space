@@ -33,7 +33,7 @@ public class SceneChangeTrigger : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("場景警: " + targetIndex);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -48,12 +48,10 @@ public class SceneChangeTrigger : MonoBehaviour
                         targetPosition.x = Player.Singleton.transform.position.x;
                     if (sameY)
                         targetPosition.y = Player.Singleton.transform.position.y;
-                    Player.Singleton.transform.position = targetPosition;
-                    Debug.Log("Scene Trigger");
+                    //Player.Singleton.transform.position = targetPosition;
                     if (isDestroyPlayer)
                         Player.Singleton.DestroyPlayer();
                 }
-                Debug.Log("場警索引直: " + targetIndex);
                 SceneController.Singleton.LoadSceneAsync(targetIndex, useFadeInOut);
             }
             //else

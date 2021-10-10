@@ -1010,6 +1010,11 @@ PrefabInstance:
       propertyPath: blackImage
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355841, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355845, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: m_Name
@@ -1080,6 +1085,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: ccbcfdfc0235a134ba7eaf140b52e6a9, type: 2}
+    - target: {fileID: 4222905995013355870, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4222905995013355871, guid: e1436d5db8a52c84e8ebb608e4c5535c,
         type: 3}
       propertyPath: moveSpeed
@@ -1094,6 +1104,11 @@ PrefabInstance:
         type: 3}
       propertyPath: distance
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4222905995013355871, guid: e1436d5db8a52c84e8ebb608e4c5535c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1436d5db8a52c84e8ebb608e4c5535c, type: 3}
@@ -7225,7 +7240,7 @@ PrefabInstance:
     - target: {fileID: 9206449971215940031, guid: 5373b5425eacfc448b404d795e81d45f,
         type: 3}
       propertyPath: postConditionStoryName.Array.data[0]
-      value: delta-2
+      value: true
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5373b5425eacfc448b404d795e81d45f, type: 3}

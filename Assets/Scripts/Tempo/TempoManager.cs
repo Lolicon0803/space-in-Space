@@ -105,7 +105,7 @@ public class TempoManager : MonoBehaviour
             if (touchState == TouchStates.Enable)
             {
                 touchState = TouchStates.TimeOut;
-                tempoActions[TempoActionType.TimeOut]();
+                tempoActions[TempoActionType.TimeOut]?.Invoke();
 
             }
             // reset結束
@@ -122,15 +122,15 @@ public class TempoManager : MonoBehaviour
     }
     void WholeTimer()
     {
-        tempoActions[TempoActionType.Whole]();
+        tempoActions[TempoActionType.Whole]?.Invoke();
     }
     void HalfTimer()
     {
-        tempoActions[TempoActionType.Half]();
+        tempoActions[TempoActionType.Half]?.Invoke();
     }
     void QuarterTimer()
     {
-        tempoActions[TempoActionType.Quarter]();
+        tempoActions[TempoActionType.Quarter]?.Invoke();
     }
 
     // 打擊更改State
@@ -256,6 +256,10 @@ public class TempoManager : MonoBehaviour
             return singleton;
         }
 
+    }
+    private void OnDestroy()
+    {
+        
     }
 
 }

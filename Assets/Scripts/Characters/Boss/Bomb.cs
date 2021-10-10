@@ -66,7 +66,6 @@ public class Bomb : MonoBehaviour
     {
         if (countdownText != null)
             countdownText.text = tempoToExplosion.ToString();
-        ObjectTempoControl.Singleton.AddToBeatAction(Count, actionType);
     }
 
     private void Update()

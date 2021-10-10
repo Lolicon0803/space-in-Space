@@ -151,12 +151,12 @@ public class BossSceneManager : MonoBehaviour
         Player.Singleton.movement.StopMove(false);
         Player.Singleton.movement.notMoveYet = true;
         Camera.main.GetComponent<CameraAspect>().originSize = 10;
-        Camera.main.orthographicSize = 10;
+        float size = 10 * (16.0f / 9.0f) / ((float)Screen.width / Screen.height);
+        Camera.main.orthographicSize = size;
         Camera.main.GetComponent<CameraAspect>().UpdateAspect();
         Camera.main.transform.position = new Vector3(0, -2, -10);
-        Player.Singleton.transform.position = new Vector3(-14.5f, -3.5f, 0);
+        Player.Singleton.transform.position = new Vector3(-14.5f, -5.5f, 0);
         Player.Singleton.movement.StopMove(false);
-        FindObjectOfType<HittingController>().transform.localPosition = new Vector3(0, -6, 10);
         textWriter.onEndStory.RemoveListener(action);
         action = new UnityAction(() => StartBoss());
         textWriter.onEndStory.AddListener(action);
@@ -305,6 +305,7 @@ public class BossSceneManager : MonoBehaviour
         }
         Destroy(player.lifeSystem.lifeCanvas.gameObject);
         Destroy(player.lifeSystem.dieCanvas.gameObject);
+        Destroy(player.gameObject);
         SceneController.Singleton.LoadSceneAsync(9, true);
     }
 }
